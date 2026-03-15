@@ -51,9 +51,7 @@ async function apiRequest(endpoint) {
 // ================================
 
 export async function getStore(slug) {
-
   return await apiRequest(`/stores/${slug}`);
-
 }
 
 
