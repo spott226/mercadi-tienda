@@ -3,33 +3,36 @@ import { loadProducts } from "./products.js";
 
 let storeData = null;
 
-// URL base backend
+// =================================
+// URL BASE BACKEND
+// =================================
+
 const BACKEND_URL = "https://mercadia-back-production.up.railway.app/uploads/";
 
 // =================================
 // OBTENER SLUG DESDE DOMINIO
 // =================================
 
-function getSlugFromDomain() {
+function getSlugFromDomain(){
 
-    const host = window.location.hostname;
+const host = window.location.hostname;
 
-    console.log("HOST:", host);
+console.log("HOST:",host);
 
-    // entorno local
-    if (host === "localhost" || host === "127.0.0.1") {
+// entorno local
+if(host === "localhost" || host === "127.0.0.1"){
 
-        console.log("LOCAL ENVIRONMENT");
-        return "chelispa";
+console.log("LOCAL ENVIRONMENT");
+return "chelispa";
 
-    }
+}
 
-    const parts = host.split(".");
-    const slug = parts[0];
+const parts = host.split(".");
+const slug = parts[0];
 
-    console.log("DETECTED SLUG:", slug);
+console.log("DETECTED SLUG:",slug);
 
-    return slug;
+return slug;
 
 }
 
@@ -38,132 +41,140 @@ function getSlugFromDomain() {
 // INICIALIZAR TIENDA
 // =================================
 
-async function initStore() {
+async function initStore(){
 
-    try {
+try{
 
-        const slug = getSlugFromDomain();
+const slug = getSlugFromDomain();
 
-        console.log("LOADING STORE:", slug);
+console.log("LOADING STORE:",slug);
 
-        const store = await getStore(slug);
+const store = await getStore(slug);
 
-        if (!store) {
+if(!store){
 
-            document.body.innerHTML = `
-                <div style="text-align:center;margin-top:100px;font-family:sans-serif;">
-                    <h1>Tienda no encontrada</h1>
-                    <p>El dominio no corresponde a ninguna tienda.</p>
-                </div>
-            `;
+document.body.innerHTML = `
+<div style="text-align:center;margin-top:100px;font-family:sans-serif;">
+<h1>Tienda no encontrada</h1>
+<p>El dominio no corresponde a ninguna tienda.</p>
+</div>
+`;
 
-            return;
+return;
 
-        }
+}
 
-        storeData = store;
+storeData = store;
 
-        // ================================
-        // VARIABLES GLOBALES
-        // ================================
 
-        window.store = store;
-        window.store_id = store.id;
-        window.store_whatsapp = store.whatsapp;
+// =================================
+// VARIABLES GLOBALES
+// =================================
 
-        console.log("STORE DATA:", store);
+window.store = store;
+window.store_id = store.id;
+window.store_whatsapp = store.whatsapp;
 
-        // ================================
-        // TITULO PAGINA
-        // ================================
+console.log("STORE DATA:",store);
 
-        document.title = store.name || "Mercadia";
 
-        // ================================
-        // APLICAR TEMA DESDE DATABASE
-        // ================================
+// =================================
+// TITULO PAGINA
+// =================================
 
-        if (store.theme) {
+document.title = store.name || "Mercadia";
 
-            document.body.classList.add(`theme-${store.theme}`);
 
-            console.log("THEME APPLIED:", store.theme);
+// =================================
+// APLICAR THEME DESDE DATABASE
+// =================================
 
-        }
+if(store.theme && store.theme !== ""){
 
-        // ================================
-        // NOMBRE DE LA TIENDA
-        // ================================
+document.body.classList.add(`theme-${store.theme}`);
 
-        const title = document.getElementById("store-name");
+console.log("THEME APPLIED:",store.theme);
 
-        if (title && store.name) {
+}
 
-            title.textContent = store.name;
 
-        }
+// =================================
+// NOMBRE DE LA TIENDA
+// =================================
 
-        // ================================
-        // LOGO DINAMICO
-        // ================================
+const title = document.getElementById("store-name");
 
-        const logo = document.getElementById("store-logo");
+if(title && store.name){
 
-        if (logo && store.logo) {
+title.textContent = store.name;
 
-            logo.src = BACKEND_URL + store.logo;
+}
 
-        }
 
-        // ================================
-        // HERO TEXT
-        // ================================
+// =================================
+// LOGO DINAMICO
+// =================================
 
-        const heroTitle = document.getElementById("hero-title");
-        const heroText = document.getElementById("hero-text");
+const logo = document.getElementById("store-logo");
 
-        if (heroTitle && store.hero_title) {
+if(logo && store.logo){
 
-            heroTitle.textContent = store.hero_title;
+logo.src = BACKEND_URL + store.logo;
 
-        }
+}
 
-        if (heroText && store.hero_text) {
 
-            heroText.textContent = store.hero_text;
+// =================================
+// HERO TEXT
+// =================================
 
-        }
+const heroTitle = document.getElementById("hero-title");
+const heroText = document.getElementById("hero-text");
 
-        // ================================
-        // HERO IMAGEN
-        // ================================
+if(heroTitle && store.hero_title){
 
-        const hero = document.getElementById("hero-image");
+heroTitle.textContent = store.hero_title;
 
-        if (hero && store.hero) {
+}
 
-            hero.src = BACKEND_URL + store.hero;
+if(heroText && store.hero_text){
 
-        }
+heroText.textContent = store.hero_text;
 
-        // ================================
-        // CARGAR PRODUCTOS
-        // ================================
+}
 
-        await loadProducts(slug);
 
-    } catch (error) {
+// =================================
+// HERO IMAGEN
+// =================================
 
-        console.error("STORE INIT ERROR:", error);
+const hero = document.getElementById("hero-image");
 
-        document.body.innerHTML = `
-            <div style="text-align:center;margin-top:100px;font-family:sans-serif;">
-                <h1>Error cargando tienda</h1>
-                <p>Intenta recargar la página.</p>
-            </div>
-        `;
+if(hero && store.hero){
 
-    }
+hero.src = BACKEND_URL + store.hero;
+
+}
+
+
+// =================================
+// CARGAR PRODUCTOS
+// =================================
+
+await loadProducts(slug);
+
+}catch(error){
+
+console.error("STORE INIT ERROR:",error);
+
+document.body.innerHTML = `
+<div style="text-align:center;margin-top:100px;font-family:sans-serif;">
+<h1>Error cargando tienda</h1>
+<p>Intenta recargar la página.</p>
+</div>
+`;
+
+}
 
 }
 
@@ -172,4 +183,4 @@ async function initStore() {
 // INICIO
 // =================================
 
-document.addEventListener("DOMContentLoaded", initStore);
+document.addEventListener("DOMContentLoaded",initStore);
