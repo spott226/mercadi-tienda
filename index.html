@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MERCADIA</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet" href="/public/css/styles.css">
+
+</head>
+
+<body class="bg-gray-100">
+
+<header class="bg-white shadow p-4 flex justify-between items-center">
+
+<h1 id="store-name" class="text-xl font-bold">
+Tienda
+</h1>
+
+<div class="relative">
+
+<button onclick="checkout()" class="bg-black text-white px-4 py-2 rounded">
+
+Carrito
+
+<span id="cart-count" class="ml-2 bg-red-500 text-white px-2 rounded">
+0
+</span>
+
+</button>
+
+</div>
+
+</header>
+
+<main class="p-6">
+
+<div 
+id="products"
+class="grid grid-cols-2 md:grid-cols-4 gap-6"
+>
+</div>
+
+</main>
+
+<script type="module" src="/public/js/store.js"></script>
+<script type="module" src="/public/js/products.js"></script>
+<script type="module" src="/public/js/cart.js"></script>
+
+</body>
+
+</html>
