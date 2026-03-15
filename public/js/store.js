@@ -81,6 +81,21 @@ async function initStore() {
             title.textContent = store.name;
         }
 
+        // =============================
+// HERO TEXT DINÁMICO
+// =============================
+
+const heroTitle = document.getElementById("hero-title");
+const heroText = document.getElementById("hero-text");
+
+if (heroTitle && store.hero_title) {
+    heroTitle.textContent = store.hero_title;
+}
+
+if (heroText && store.hero_text) {
+    heroText.textContent = store.hero_text;
+}
+
         // =================================
         // HERO DINÁMICO
         // =================================
