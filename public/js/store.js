@@ -17,17 +17,19 @@ function getSlugFromDomain() {
     if (host === "localhost" || host === "127.0.0.1") {
 
         console.log("LOCAL ENVIRONMENT");
-        return "chelispa"; // slug de prueba
+        return "chelispa";
 
     }
 
     const parts = host.split(".");
 
+    // ejemplo: chelispa.mercadia.mx
     const slug = parts[0];
 
     console.log("DETECTED SLUG:", slug);
 
     return slug;
+
 }
 
 
@@ -53,66 +55,84 @@ async function initStore() {
                     <p>El dominio no corresponde a ninguna tienda.</p>
                 </div>
             `;
+
             return;
 
         }
 
         storeData = store;
 
-        // guardar globalmente
+        // variables globales
         window.store = store;
         window.store_id = store.id;
         window.store_whatsapp = store.whatsapp;
 
         console.log("STORE DATA:", store);
 
-        // título del sitio
-        document.title = store.name;
+        // ================================
+        // TITULO
+        // ================================
 
-        // aplicar tema
+        document.title = store.name || "Mercadia";
+
+        // ================================
+        // TEMA
+        // ================================
+
         if (store.theme) {
+
             document.body.classList.add(`theme-${store.theme}`);
+
         }
 
-        // nombre de tienda en header
+        // ================================
+        // NOMBRE TIENDA
+        // ================================
+
         const title = document.getElementById("store-name");
 
-        if (title) {
+        if (title && store.name) {
+
             title.textContent = store.name;
+
         }
 
-        // =============================
-// LOGO DINÁMICO
-// =============================
+        // ================================
+        // LOGO DINAMICO
+        // ================================
 
-const logo = document.getElementById("store-logo");
+        const logo = document.getElementById("store-logo");
 
-if (logo && store.logo) {
+        if (logo && store.logo) {
 
-    logo.src =
-        "https://mercadia-back-production.up.railway.app/uploads/" +
-        store.logo;
+            logo.src =
+                "https://mercadia-back-production.up.railway.app/uploads/" +
+                store.logo;
 
-}
+        }
 
-        // =============================
-// HERO TEXT DINÁMICO
-// =============================
+        // ================================
+        // HERO TEXT
+        // ================================
 
-const heroTitle = document.getElementById("hero-title");
-const heroText = document.getElementById("hero-text");
+        const heroTitle = document.getElementById("hero-title");
+        const heroText = document.getElementById("hero-text");
 
-if (heroTitle && store.hero_title) {
-    heroTitle.textContent = store.hero_title;
-}
+        if (heroTitle && store.hero_title) {
 
-if (heroText && store.hero_text) {
-    heroText.textContent = store.hero_text;
-}
+            heroTitle.textContent = store.hero_title;
 
-        // =================================
-        // HERO DINÁMICO
-        // =================================
+        }
+
+        if (heroText && store.hero_text) {
+
+            heroText.textContent = store.hero_text;
+
+        }
+
+        // ================================
+        // HERO IMAGEN
+        // ================================
 
         const hero = document.getElementById("hero-image");
 
@@ -124,9 +144,9 @@ if (heroText && store.hero_text) {
 
         }
 
-        // =============================
-        // CARGAR PRODUCTOS (POR SLUG)
-        // =============================
+        // ================================
+        // CARGAR PRODUCTOS
+        // ================================
 
         await loadProducts(slug);
 

@@ -3,9 +3,17 @@ import { addToCart } from "./cart.js";
 
 const BACKEND_URL = "https://mercadia-back-production.up.railway.app";
 
+/* =================================
+CARGAR PRODUCTOS
+================================= */
+
 export async function loadProducts(slug) {
 
-  const container = document.getElementById("products");
+  // detecta si estamos en index o products
+  const container =
+    document.getElementById("products") ||
+    document.getElementById("products-list");
+
   if (!container) return;
 
   container.innerHTML = "Cargando productos...";
@@ -21,6 +29,7 @@ export async function loadProducts(slug) {
           No hay productos disponibles
         </div>
       `;
+
       return;
     }
 
@@ -29,21 +38,24 @@ export async function loadProducts(slug) {
     products.forEach(product => {
 
       const card = document.createElement("div");
-      card.className = "product-card bg-white p-4 rounded shadow hover:shadow-lg transition";
 
-      // ===== URL DE IMAGEN =====
+      card.className =
+        "product-card bg-white p-4 rounded shadow hover:shadow-lg transition";
+
+      /* =============================
+      URL DE IMAGEN
+      ============================= */
+
       let imageUrl = "/assets/images/default.jpg";
 
       if (product.image) {
 
-        // si ya es URL completa
         if (product.image.startsWith("http")) {
 
           imageUrl = product.image;
 
         } else {
 
-          // si solo viene el nombre del archivo
           imageUrl = `${BACKEND_URL}/uploads/${product.image}`;
 
         }
@@ -51,8 +63,9 @@ export async function loadProducts(slug) {
       }
 
       card.innerHTML = `
-        <img 
-          src="${imageUrl}" 
+
+        <img
+          src="${imageUrl}"
           class="w-full h-40 object-cover rounded mb-3"
           loading="lazy"
           onerror="this.src='/assets/images/default.jpg'"
@@ -66,7 +79,7 @@ export async function loadProducts(slug) {
           $${Number(product.price).toLocaleString()}
         </p>
 
-        <button 
+        <button
           class="add-cart bg-black text-white px-4 py-2 rounded w-full hover:opacity-80 transition"
           data-id="${product.id}"
           data-name="${product.name}"
@@ -74,21 +87,27 @@ export async function loadProducts(slug) {
         >
           Añadir
         </button>
+
       `;
 
       container.appendChild(card);
 
     });
 
-    // ===== EVENTOS DEL CARRITO =====
+    /* =============================
+    EVENTOS DEL CARRITO
+    ============================= */
+
     document.querySelectorAll(".add-cart").forEach(btn => {
 
       btn.addEventListener("click", () => {
 
         const product = {
+
           id: Number(btn.dataset.id),
           name: btn.dataset.name,
           price: Number(btn.dataset.price)
+
         };
 
         addToCart(product);
