@@ -4,7 +4,8 @@
 
 // detectar si estamos en desarrollo o producción
 const API_BASE =
-  window.location.hostname === "localhost"
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
     ? "http://localhost:3000/api"
     : "https://mercadia-back-production.up.railway.app/api";
 
@@ -25,7 +26,8 @@ async function apiRequest(endpoint) {
 
     if (!response.ok) {
 
-      console.error("HTTP ERROR:", response.status);
+      console.error("HTTP ERROR:", response.status, response.statusText);
+
       return null;
 
     }
@@ -39,6 +41,7 @@ async function apiRequest(endpoint) {
   } catch (error) {
 
     console.error("API ERROR:", error);
+
     return null;
 
   }
@@ -52,6 +55,14 @@ async function apiRequest(endpoint) {
 
 export async function getStore(slug) {
 
+  if (!slug) {
+
+    console.error("STORE ERROR: slug vacío");
+
+    return null;
+
+  }
+
   return await apiRequest(`/stores/${slug}`);
 
 }
@@ -62,6 +73,14 @@ export async function getStore(slug) {
 // ================================
 
 export async function getProducts(slug) {
+
+  if (!slug) {
+
+    console.error("PRODUCTS ERROR: slug vacío");
+
+    return [];
+
+  }
 
   return await apiRequest(`/stores/${slug}/products`);
 

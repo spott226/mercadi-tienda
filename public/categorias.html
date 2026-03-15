@@ -40,7 +40,7 @@ Tienda
 
 <nav class="hidden md:flex gap-8 text-sm font-medium">
 
-<a href="/" class="hover:opacity-70">Inicio</a>
+<a href="/index.html" class="hover:opacity-70">Inicio</a>
 <a href="/products.html" class="hover:opacity-70">Productos</a>
 <a href="/categories.html" class="hover:opacity-70">Categorías</a>
 
@@ -88,44 +88,31 @@ Powered by Mercadia
 
 
 <!-- =========================
-SCRIPT
+SCRIPTS
 ========================= -->
 
+<script type="module" src="/js/store.js"></script>
 <script type="module">
 
-import { getStore, getProducts } from "/js/api.js";
+import { getProducts } from "/js/api.js";
 
-
-function getStoreFromDomain(){
+function getSlugFromDomain(){
 
 const host = window.location.hostname;
 
-if(host.includes("localhost")){
-return "demo";
+if(host === "localhost" || host === "127.0.0.1"){
+return "chelispa";
 }
 
 return host.split(".")[0];
 
 }
 
-
 async function loadCategories(){
 
-const slug = getStoreFromDomain();
+const slug = getSlugFromDomain();
 
-const store = await getStore(slug);
 const products = await getProducts(slug);
-
-if(store){
-
-document.getElementById("store-name").innerText = store.name;
-
-if(store.logo){
-document.getElementById("store-logo").src =
-`https://mercadia-back-production.up.railway.app/uploads/${store.logo}`;
-}
-
-}
 
 if(!products) return;
 

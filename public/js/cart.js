@@ -85,6 +85,16 @@ container.innerHTML = "";
 
 let total = 0;
 
+if(cart.length === 0){
+
+container.innerHTML = `
+<p class="text-center text-gray-500 py-4">
+Tu carrito está vacío
+</p>
+`;
+
+}
+
 cart.forEach((p,index)=>{
 
 const subtotal = p.price * p.qty;
@@ -93,7 +103,7 @@ total += subtotal;
 
 container.innerHTML += `
 
-<div class="flex justify-between border-b py-3">
+<div class="flex justify-between items-center border-b py-3">
 
 <div>
 
@@ -105,13 +115,13 @@ $${p.price} x ${p.qty}
 
 </div>
 
-<div class="flex items-center gap-2">
+<div class="flex items-center gap-3">
 
 <span class="font-bold">$${subtotal}</span>
 
 <button
 onclick="removeItem(${index})"
-class="text-red-500 text-sm"
+class="text-red-500 text-sm hover:underline"
 >
 Eliminar
 </button>
@@ -124,9 +134,21 @@ Eliminar
 
 });
 
-document.getElementById("cart-total").innerText = "$" + total;
+const totalElement = document.getElementById("cart-total");
 
-document.getElementById("cart-modal").classList.remove("hidden");
+if(totalElement){
+
+totalElement.innerText = "$" + total;
+
+}
+
+const modal = document.getElementById("cart-modal");
+
+if(modal){
+
+modal.classList.remove("hidden");
+
+}
 
 }
 
@@ -138,7 +160,13 @@ document.getElementById("cart-modal").classList.remove("hidden");
 
 export function closeCart(){
 
-document.getElementById("cart-modal").classList.add("hidden");
+const modal = document.getElementById("cart-modal");
+
+if(modal){
+
+modal.classList.add("hidden");
+
+}
 
 }
 
@@ -156,9 +184,9 @@ cart.splice(index,1);
 
 saveCart(cart);
 
-openCart();
-
 updateCartCount();
+
+openCart();
 
 }
 
@@ -208,7 +236,9 @@ return;
 
 }
 
-const url = `https://wa.me/${whatsapp}?text=${message}`;
+const phone = String(whatsapp).replace(/\D/g,"");
+
+const url = `https://wa.me/${phone}?text=${message}`;
 
 window.open(url,"_blank");
 

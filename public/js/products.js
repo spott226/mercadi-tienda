@@ -4,139 +4,172 @@ import { addToCart } from "./cart.js";
 const BACKEND_URL = "https://mercadia-back-production.up.railway.app";
 
 /* =================================
+OBTENER PARAMETRO DE URL
+================================= */
+
+function getQueryParam(name){
+
+const params = new URLSearchParams(window.location.search);
+
+return params.get(name);
+
+}
+
+
+/* =================================
 CARGAR PRODUCTOS
 ================================= */
 
-export async function loadProducts(slug) {
+export async function loadProducts(slug){
 
-  const featuredContainer = document.getElementById("products");       // index
-  const allContainer = document.getElementById("products-list");       // products.html
+const featuredContainer = document.getElementById("products");     // index
+const allContainer = document.getElementById("products-list");     // products.html
 
-  const container = featuredContainer || allContainer;
+const container = featuredContainer || allContainer;
 
-  if (!container) return;
+if(!container) return;
 
-  container.innerHTML = "Cargando productos...";
+container.innerHTML = "Cargando productos...";
 
-  try {
+try{
 
-    const products = await getProducts(slug);
+const products = await getProducts(slug);
 
-    if (!products || products.length === 0) {
+if(!products || products.length === 0){
 
-      container.innerHTML = `
-        <div class="text-center p-10 opacity-60">
-          No hay productos disponibles
-        </div>
-      `;
+container.innerHTML = `
+<div class="text-center p-10 opacity-60">
+No hay productos disponibles
+</div>
+`;
 
-      return;
+return;
 
-    }
+}
 
-    container.innerHTML = "";
+container.innerHTML = "";
 
-    /* =================================
-    FILTRO FEATURED SOLO EN INDEX
-    ================================= */
 
-    let productsToShow = products;
+/* =================================
+FILTRO FEATURED EN INDEX
+================================= */
 
-    if (featuredContainer) {
+let productsToShow = products;
 
-      productsToShow = products.filter(p => p.featured === true);
+if(featuredContainer){
 
-    }
+const featured = products.filter(p => p.featured === true);
 
-    /* =================================
-    RENDER PRODUCTOS
-    ================================= */
+productsToShow = featured.length ? featured : products.slice(0,4);
 
-    productsToShow.forEach(product => {
+}
 
-      const card = document.createElement("div");
 
-      card.className =
-        "product-card bg-white p-4 rounded shadow hover:shadow-lg transition";
+/* =================================
+FILTRO POR CATEGORIA
+================================= */
 
-      let imageUrl = "/assets/images/default.jpg";
+const categoryFilter = getQueryParam("category");
 
-      if (product.image) {
+if(categoryFilter){
 
-        if (product.image.startsWith("http")) {
+productsToShow = productsToShow.filter(p =>
+p.category?.toLowerCase() === categoryFilter.toLowerCase()
+);
 
-          imageUrl = product.image;
+}
 
-        } else {
 
-          imageUrl = `${BACKEND_URL}/uploads/${product.image}`;
+/* =================================
+RENDER PRODUCTOS
+================================= */
 
-        }
+productsToShow.forEach(product => {
 
-      }
+const card = document.createElement("div");
 
-      card.innerHTML = `
-        <img
-          src="${imageUrl}"
-          class="w-full h-40 object-cover rounded mb-3"
-          loading="lazy"
-          onerror="this.src='/assets/images/default.jpg'"
-        >
+card.className =
+"product-card bg-white p-4 rounded shadow hover:shadow-lg transition";
 
-        <h3 class="text-lg font-semibold mb-1">
-          ${product.name}
-        </h3>
+let imageUrl = "/assets/images/default.jpg";
 
-        <p class="text-sm opacity-70 mb-3">
-          $${Number(product.price).toLocaleString()}
-        </p>
+if(product.image){
 
-        <button
-          class="add-cart bg-black text-white px-4 py-2 rounded w-full hover:opacity-80 transition"
-          data-id="${product.id}"
-          data-name="${product.name}"
-          data-price="${product.price}"
-        >
-          Añadir
-        </button>
-      `;
+if(product.image.startsWith("http")){
 
-      container.appendChild(card);
+imageUrl = product.image;
 
-    });
+}else{
 
-    /* =================================
-    EVENTOS CARRITO
-    ================================= */
+imageUrl = `${BACKEND_URL}/uploads/${product.image}`;
 
-    document.querySelectorAll(".add-cart").forEach(btn => {
+}
 
-      btn.addEventListener("click", () => {
+}
 
-        const product = {
+card.innerHTML = `
+<img
+src="${imageUrl}"
+class="w-full h-40 object-cover rounded mb-3"
+loading="lazy"
+onerror="this.src='/assets/images/default.jpg'"
+>
 
-          id: Number(btn.dataset.id),
-          name: btn.dataset.name,
-          price: Number(btn.dataset.price)
+<h3 class="text-lg font-semibold mb-1">
+${product.name}
+</h3>
 
-        };
+<p class="text-sm opacity-70 mb-3">
+$${Number(product.price).toLocaleString()}
+</p>
 
-        addToCart(product);
+<button
+class="add-cart bg-black text-white px-4 py-2 rounded w-full hover:opacity-80 transition"
+data-id="${product.id}"
+data-name="${product.name}"
+data-price="${product.price}"
+>
+Añadir
+</button>
+`;
 
-      });
+container.appendChild(card);
 
-    });
+});
 
-  } catch (error) {
 
-    console.error("Error cargando productos:", error);
+/* =================================
+EVENTOS CARRITO
+================================= */
 
-    container.innerHTML = `
-      <div class="text-center p-10 text-red-500">
-        Error cargando productos
-      </div>
-    `;
+container.querySelectorAll(".add-cart").forEach(btn => {
 
-  }
+btn.addEventListener("click", () => {
+
+const product = {
+
+id:Number(btn.dataset.id),
+name:btn.dataset.name,
+price:Number(btn.dataset.price)
+
+};
+
+addToCart(product);
+
+});
+
+});
+
+}catch(error){
+
+console.error("Error cargando productos:",error);
+
+container.innerHTML = `
+<div class="text-center p-10 text-red-500">
+Error cargando productos
+</div>
+`;
+
+}
 
 }

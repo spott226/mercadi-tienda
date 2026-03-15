@@ -1,6 +1,8 @@
-function initChatbot() {
+function initChatbot(){
 
 const container = document.getElementById("chatbot-container");
+
+if(!container) return;
 
 const options = window.store?.chatbot_options || [];
 
@@ -51,11 +53,15 @@ ${buttonsHTML}
 const fab = document.getElementById("chatbot-fab");
 const box = document.getElementById("chatbot-box");
 
+if(fab && box){
+
 fab.addEventListener("click", () => {
 
 box.classList.toggle("chatbot-hidden");
 
 });
+
+}
 
 document.querySelectorAll(".chatbot-option").forEach(button => {
 
@@ -79,3 +85,15 @@ window.open(`https://wa.me/${phone}?text=${text}`,"_blank");
 });
 
 }
+
+
+
+// =======================
+// INIT
+// =======================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+setTimeout(initChatbot, 500);
+
+});

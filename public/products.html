@@ -55,7 +55,7 @@ Tienda
 
 <div class="flex items-center gap-4">
 
-<button onclick="checkout()" class="bg-black text-white px-4 py-2 rounded flex items-center">
+<button onclick="openCart()" class="bg-black text-white px-4 py-2 rounded flex items-center">
 
 Carrito
 
@@ -127,6 +127,43 @@ Powered by Mercadia
 </div>
 
 </footer>
+
+
+
+<!-- =========================
+CARRITO MODAL
+========================= -->
+
+<div id="cart-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+<div class="bg-white p-6 rounded w-[400px] max-w-[90%]">
+
+<h2 class="text-xl font-bold mb-4">Tu carrito</h2>
+
+<div id="cart-items"></div>
+
+<div class="flex justify-between mt-4 font-bold">
+
+<span>Total</span>
+<span id="cart-total">$0</span>
+
+</div>
+
+<div class="flex gap-3 mt-6">
+
+<button onclick="closeCart()" class="flex-1 border p-2 rounded">
+Cerrar
+</button>
+
+<button onclick="checkout()" class="flex-1 bg-black text-white p-2 rounded">
+Enviar pedido
+</button>
+
+</div>
+
+</div>
+
+</div>
 
 
 
