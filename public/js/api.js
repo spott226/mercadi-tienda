@@ -51,7 +51,9 @@ async function apiRequest(endpoint) {
 // ================================
 
 export async function getStore(slug) {
+
   return await apiRequest(`/stores/${slug}`);
+
 }
 
 
@@ -59,8 +61,8 @@ export async function getStore(slug) {
 // PRODUCTS
 // ================================
 
-export async function getProducts(store_id) {
+export async function getProducts(slug) {
 
-  return await apiRequest(`/products/${store_id}`);
+  return await apiRequest(`/stores/${slug}/products`);
 
 }
