@@ -42,7 +42,7 @@ Tienda
 
 <a href="/index.html" class="hover:opacity-70">Inicio</a>
 <a href="/products.html" class="hover:opacity-70">Productos</a>
-<a href="/categories.html" class="hover:opacity-70">Categorías</a>
+<a href="/categorias.html" class="hover:opacity-70">Categorías</a>
 
 </nav>
 
@@ -62,7 +62,7 @@ Categorías
 </h2>
 
 <div
-id="categories"
+id="categorias"
 class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
 >
 </div>
@@ -108,7 +108,7 @@ return host.split(".")[0];
 
 }
 
-async function loadCategories(){
+async function loadCategorias(){
 
 const slug = getSlugFromDomain();
 
@@ -116,13 +116,13 @@ const products = await getProducts(slug);
 
 if(!products) return;
 
-const categories = [...new Set(products.map(p => p.category))];
+const categorias = [...new Set(products.map(p => p.category))];
 
-const container = document.getElementById("categories");
+const container = document.getElementById("categorias");
 
 container.innerHTML = "";
 
-categories.forEach(cat => {
+categorias.forEach(cat => {
 
 container.innerHTML += `
 
@@ -138,7 +138,7 @@ container.innerHTML += `
 
 }
 
-loadCategories();
+loadCategorias();
 
 </script>
 
