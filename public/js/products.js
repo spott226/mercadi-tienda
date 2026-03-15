@@ -1,6 +1,8 @@
 import { getProducts } from "./api.js";
 import { addToCart } from "./cart.js";
 
+const BACKEND_URL = "https://mercadia-back-production.up.railway.app";
+
 export async function loadProducts(store_id) {
 
     const container = document.getElementById("products");
@@ -9,81 +11,109 @@ export async function loadProducts(store_id) {
 
     container.innerHTML = "Cargando productos...";
 
-    const products = await getProducts(store_id);
+    try {
 
-    if (!products || products.length === 0) {
+        const products = await getProducts(store_id);
 
-        container.innerHTML = `
-        <div class="text-center p-10 opacity-60">
-            No hay productos disponibles
-        </div>
-        `;
+        if (!products || products.length === 0) {
 
-        return;
-    }
+            container.innerHTML = `
+                <div class="text-center p-10 opacity-60">
+                    No hay productos disponibles
+                </div>
+            `;
 
-    container.innerHTML = "";
+            return;
+        }
 
-    products.forEach(product => {
+        container.innerHTML = "";
 
-        const card = document.createElement("div");
+        products.forEach(product => {
 
-        card.className = "product-card bg-white p-4 rounded shadow";
+            const card = document.createElement("div");
 
-        // imagen segura
-        const imageUrl = product.image
-            ? product.image
-            : "/assets/images/default.jpg";
+            card.className = "product-card bg-white p-4 rounded shadow hover:shadow-lg transition";
 
-        card.innerHTML = `
+            // ======================
+            // URL DE IMAGEN
+            // ======================
 
-        <img 
-        src="${imageUrl}" 
-        class="w-full h-40 object-cover rounded mb-3"
-        loading="lazy"
-        >
+            let imageUrl = "/assets/images/default.jpg";
 
-        <h3 class="text-lg font-semibold mb-1">
-        ${product.name}
-        </h3>
+            if (product.image) {
 
-        <p class="text-sm opacity-70 mb-3">
-        $${Number(product.price).toLocaleString()}
-        </p>
+                if (product.image.startsWith("http")) {
+                    imageUrl = product.image;
+                } else {
+                    imageUrl = BACKEND_URL + product.image;
+                }
 
-        <button 
-        class="add-cart bg-black text-white px-4 py-2 rounded w-full hover:opacity-80 transition"
-        data-id="${product.id}"
-        data-name="${product.name}"
-        data-price="${product.price}"
-        >
-        Añadir
-        </button>
+            }
 
-        `;
+            card.innerHTML = `
 
-        container.appendChild(card);
+                <img 
+                src="${imageUrl}" 
+                class="w-full h-40 object-cover rounded mb-3"
+                loading="lazy"
+                >
 
-    });
+                <h3 class="text-lg font-semibold mb-1">
+                ${product.name}
+                </h3>
 
+                <p class="text-sm opacity-70 mb-3">
+                $${Number(product.price).toLocaleString()}
+                </p>
 
-    // eventos carrito
-    document.querySelectorAll(".add-cart").forEach(btn => {
+                <button 
+                class="add-cart bg-black text-white px-4 py-2 rounded w-full hover:opacity-80 transition"
+                data-id="${product.id}"
+                data-name="${product.name}"
+                data-price="${product.price}"
+                >
+                Añadir
+                </button>
 
-        btn.addEventListener("click", () => {
+            `;
 
-            const product = {
-
-                id: Number(btn.dataset.id),
-                name: btn.dataset.name,
-                price: Number(btn.dataset.price)
-
-            };
-
-            addToCart(product);
+            container.appendChild(card);
 
         });
 
-    });
+
+        // ======================
+        // EVENTOS CARRITO
+        // ======================
+
+        document.querySelectorAll(".add-cart").forEach(btn => {
+
+            btn.addEventListener("click", () => {
+
+                const product = {
+
+                    id: Number(btn.dataset.id),
+                    name: btn.dataset.name,
+                    price: Number(btn.dataset.price)
+
+                };
+
+                addToCart(product);
+
+            });
+
+        });
+
+    } catch (error) {
+
+        console.error("Error cargando productos:", error);
+
+        container.innerHTML = `
+            <div class="text-center p-10 text-red-500">
+                Error cargando productos
+            </div>
+        `;
+
+    }
 
 }
