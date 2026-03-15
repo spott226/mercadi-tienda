@@ -82,6 +82,20 @@ async function initStore() {
         }
 
         // =============================
+// LOGO DINÁMICO
+// =============================
+
+const logo = document.getElementById("store-logo");
+
+if (logo && store.logo) {
+
+    logo.src =
+        "https://mercadia-back-production.up.railway.app/uploads/" +
+        store.logo;
+
+}
+
+        // =============================
 // HERO TEXT DINÁMICO
 // =============================
 
