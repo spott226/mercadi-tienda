@@ -9,10 +9,10 @@ CARGAR PRODUCTOS
 
 export async function loadProducts(slug) {
 
-  // detecta si estamos en index o products
-  const container =
-    document.getElementById("products") ||
-    document.getElementById("products-list");
+  const featuredContainer = document.getElementById("products");       // index
+  const allContainer = document.getElementById("products-list");       // products.html
+
+  const container = featuredContainer || allContainer;
 
   if (!container) return;
 
@@ -31,20 +31,33 @@ export async function loadProducts(slug) {
       `;
 
       return;
+
     }
 
     container.innerHTML = "";
 
-    products.forEach(product => {
+    /* =================================
+    FILTRO FEATURED SOLO EN INDEX
+    ================================= */
+
+    let productsToShow = products;
+
+    if (featuredContainer) {
+
+      productsToShow = products.filter(p => p.featured === true);
+
+    }
+
+    /* =================================
+    RENDER PRODUCTOS
+    ================================= */
+
+    productsToShow.forEach(product => {
 
       const card = document.createElement("div");
 
       card.className =
         "product-card bg-white p-4 rounded shadow hover:shadow-lg transition";
-
-      /* =============================
-      URL DE IMAGEN
-      ============================= */
 
       let imageUrl = "/assets/images/default.jpg";
 
@@ -63,7 +76,6 @@ export async function loadProducts(slug) {
       }
 
       card.innerHTML = `
-
         <img
           src="${imageUrl}"
           class="w-full h-40 object-cover rounded mb-3"
@@ -87,16 +99,15 @@ export async function loadProducts(slug) {
         >
           Añadir
         </button>
-
       `;
 
       container.appendChild(card);
 
     });
 
-    /* =============================
-    EVENTOS DEL CARRITO
-    ============================= */
+    /* =================================
+    EVENTOS CARRITO
+    ================================= */
 
     document.querySelectorAll(".add-cart").forEach(btn => {
 
