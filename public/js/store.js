@@ -3,6 +3,9 @@ import { loadProducts } from "./products.js";
 
 let storeData = null;
 
+// URL base backend
+const BACKEND_URL = "https://mercadia-back-production.up.railway.app/uploads/";
+
 // =================================
 // OBTENER SLUG DESDE DOMINIO
 // =================================
@@ -22,8 +25,6 @@ function getSlugFromDomain() {
     }
 
     const parts = host.split(".");
-
-    // ejemplo: chelispa.mercadia.mx
     const slug = parts[0];
 
     console.log("DETECTED SLUG:", slug);
@@ -62,7 +63,10 @@ async function initStore() {
 
         storeData = store;
 
-        // variables globales
+        // ================================
+        // VARIABLES GLOBALES
+        // ================================
+
         window.store = store;
         window.store_id = store.id;
         window.store_whatsapp = store.whatsapp;
@@ -70,23 +74,25 @@ async function initStore() {
         console.log("STORE DATA:", store);
 
         // ================================
-        // TITULO
+        // TITULO PAGINA
         // ================================
 
         document.title = store.name || "Mercadia";
 
         // ================================
-        // TEMA
+        // APLICAR TEMA DESDE DATABASE
         // ================================
 
         if (store.theme) {
 
             document.body.classList.add(`theme-${store.theme}`);
 
+            console.log("THEME APPLIED:", store.theme);
+
         }
 
         // ================================
-        // NOMBRE TIENDA
+        // NOMBRE DE LA TIENDA
         // ================================
 
         const title = document.getElementById("store-name");
@@ -105,9 +111,7 @@ async function initStore() {
 
         if (logo && store.logo) {
 
-            logo.src =
-                "https://mercadia-back-production.up.railway.app/uploads/" +
-                store.logo;
+            logo.src = BACKEND_URL + store.logo;
 
         }
 
@@ -138,9 +142,7 @@ async function initStore() {
 
         if (hero && store.hero) {
 
-            hero.src =
-                "https://mercadia-back-production.up.railway.app/uploads/" +
-                store.hero;
+            hero.src = BACKEND_URL + store.hero;
 
         }
 
