@@ -12,7 +12,6 @@ export async function loadProducts(slug) {
 
   try {
 
-    // ahora se consulta por slug: /api/stores/:slug/products
     const products = await getProducts(slug);
 
     if (!products || products.length === 0) {
@@ -36,9 +35,19 @@ export async function loadProducts(slug) {
       let imageUrl = "/assets/images/default.jpg";
 
       if (product.image) {
-        imageUrl = product.image.startsWith("http")
-          ? product.image
-          : BACKEND_URL + product.image;
+
+        // si ya es URL completa
+        if (product.image.startsWith("http")) {
+
+          imageUrl = product.image;
+
+        } else {
+
+          // si solo viene el nombre del archivo
+          imageUrl = `${BACKEND_URL}/uploads/${product.image}`;
+
+        }
+
       }
 
       card.innerHTML = `
@@ -46,6 +55,7 @@ export async function loadProducts(slug) {
           src="${imageUrl}" 
           class="w-full h-40 object-cover rounded mb-3"
           loading="lazy"
+          onerror="this.src='/assets/images/default.jpg'"
         >
 
         <h3 class="text-lg font-semibold mb-1">
