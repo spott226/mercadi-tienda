@@ -82,8 +82,11 @@ async function initStore() {
             title.textContent = store.name;
         }
 
-        // cargar productos
-        await loadProducts(store.id);
+        // =============================
+        // CARGAR PRODUCTOS (POR SLUG)
+        // =============================
+
+        await loadProducts(slug);
 
     } catch (error) {
 
