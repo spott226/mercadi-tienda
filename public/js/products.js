@@ -3,6 +3,7 @@ import { addToCart } from "./cart.js";
 
 const BACKEND_URL = "https://mercadia-back-production.up.railway.app";
 
+
 /* =================================
 OBTENER PARAMETRO DE URL
 ================================= */
@@ -51,10 +52,15 @@ container.innerHTML = "";
 
 
 /* =================================
-FILTRO FEATURED EN INDEX
+PRODUCTOS A MOSTRAR
 ================================= */
 
 let productsToShow = products;
+
+
+/* =================================
+FEATURED SOLO EN INDEX
+================================= */
 
 if(featuredContainer){
 
@@ -73,9 +79,26 @@ const categoryFilter = getQueryParam("category");
 
 if(categoryFilter){
 
-productsToShow = productsToShow.filter(p =>
-p.category?.toLowerCase() === categoryFilter.toLowerCase()
+productsToShow = products.filter(p =>
+String(p.category).toLowerCase() === categoryFilter.toLowerCase()
 );
+
+}
+
+
+/* =================================
+SIN RESULTADOS
+================================= */
+
+if(productsToShow.length === 0){
+
+container.innerHTML = `
+<div class="text-center p-10 opacity-60">
+No hay productos en esta categoría
+</div>
+`;
+
+return;
 
 }
 
