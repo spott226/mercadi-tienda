@@ -17,7 +17,9 @@
 <body class="bg-gray-100">
 
 
-<!-- NAVBAR -->
+<!-- =========================
+NAVBAR
+========================= -->
 
 <header class="bg-white shadow">
 
@@ -36,7 +38,6 @@ Tienda
 
 </nav>
 
-
 <button onclick="checkout()" class="bg-black text-white px-4 py-2 rounded flex items-center">
 
 Carrito
@@ -53,28 +54,32 @@ Carrito
 
 
 
-<!-- HERO -->
+<!-- =========================
+HERO
+========================= -->
 
 <section class="relative h-[420px] flex items-center justify-center text-center text-white">
 
 <img
-src="/assets/images/hero.jpg"
+id="hero-image"
+src="/assets/images/default-hero.jpg"
 class="absolute inset-0 w-full h-full object-cover"
+onerror="this.src='/assets/images/default-hero.jpg'"
 >
 
 <div class="absolute inset-0 bg-black/40"></div>
 
-<div class="relative z-10">
+<div class="relative z-10 max-w-xl">
 
 <h2 id="hero-title" class="text-4xl font-bold mb-3">
 Bienvenido
 </h2>
 
-<p class="opacity-80 mb-6">
+<p class="opacity-90 mb-6">
 Productos seleccionados con el mejor estilo
 </p>
 
-<a href="#products" class="bg-white text-black px-6 py-3 rounded">
+<a href="#products" class="bg-white text-black px-6 py-3 rounded hover:opacity-90 transition">
 Ver catálogo
 </a>
 
@@ -84,7 +89,9 @@ Ver catálogo
 
 
 
-<!-- PRODUCTOS -->
+<!-- =========================
+PRODUCTOS
+========================= -->
 
 <section class="max-w-7xl mx-auto p-8">
 
@@ -102,7 +109,9 @@ class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
 
 
 
-<!-- FOOTER -->
+<!-- =========================
+FOOTER
+========================= -->
 
 <footer class="bg-black text-white mt-20">
 
@@ -118,17 +127,23 @@ Powered by Mercadia
 
 
 
-<!-- CHATBOT -->
+<!-- =========================
+CHATBOT
+========================= -->
 
 <div class="fixed bottom-6 right-6">
 
-<button class="bg-black text-white p-4 rounded-full shadow-lg">
+<button class="bg-black text-white p-4 rounded-full shadow-lg hover:opacity-90">
 💬
 </button>
 
 </div>
 
 
+
+<!-- =========================
+SCRIPTS
+========================= -->
 
 <script type="module" src="/js/store.js"></script>
 <script type="module" src="/js/products.js"></script>
