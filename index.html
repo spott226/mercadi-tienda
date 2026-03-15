@@ -4,7 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>MERCADIA</title>
@@ -17,15 +16,28 @@
 
 <body class="bg-gray-100">
 
-<header class="bg-white shadow p-4 flex justify-between items-center">
 
-<h1 id="store-name" class="text-xl font-bold">
+<!-- NAVBAR -->
+
+<header class="bg-white shadow">
+
+<div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+
+<h1 id="store-name" class="text-2xl font-bold">
 Tienda
 </h1>
 
-<div class="relative">
+<nav class="hidden md:flex gap-6 text-sm">
 
-<button onclick="checkout()" class="bg-black text-white px-4 py-2 rounded">
+<a href="#" class="hover:opacity-70">Inicio</a>
+<a href="#products" class="hover:opacity-70">Productos</a>
+<a href="#" class="hover:opacity-70">Categorías</a>
+<a href="#" class="hover:opacity-70">Contacto</a>
+
+</nav>
+
+
+<button onclick="checkout()" class="bg-black text-white px-4 py-2 rounded flex items-center">
 
 Carrito
 
@@ -39,20 +51,90 @@ Carrito
 
 </header>
 
-<main class="p-6">
+
+
+<!-- HERO -->
+
+<section class="relative h-[420px] flex items-center justify-center text-center text-white">
+
+<img
+src="/public/assets/images/hero.jpg"
+class="absolute inset-0 w-full h-full object-cover"
+>
+
+<div class="absolute inset-0 bg-black/40"></div>
+
+<div class="relative z-10">
+
+<h2 id="hero-title" class="text-4xl font-bold mb-3">
+Bienvenido
+</h2>
+
+<p class="opacity-80 mb-6">
+Productos seleccionados con el mejor estilo
+</p>
+
+<a href="#products" class="bg-white text-black px-6 py-3 rounded">
+Ver catálogo
+</a>
+
+</div>
+
+</section>
+
+
+
+<!-- PRODUCTOS -->
+
+<section class="max-w-7xl mx-auto p-8">
+
+<h2 class="text-3xl font-bold mb-8 text-center">
+Productos destacados
+</h2>
 
 <div 
 id="products"
-class="grid grid-cols-2 md:grid-cols-4 gap-6"
+class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
 >
 </div>
 
-</main>
+</section>
+
+
+
+<!-- FOOTER -->
+
+<footer class="bg-black text-white mt-20">
+
+<div class="max-w-7xl mx-auto p-8 text-center opacity-80">
+
+<p id="store-footer">
+Powered by Mercadia
+</p>
+
+</div>
+
+</footer>
+
+
+
+<!-- CHATBOT -->
+
+<div class="fixed bottom-6 right-6">
+
+<button class="bg-black text-white p-4 rounded-full shadow-lg">
+
+💬
+
+</button>
+
+</div>
+
+
 
 <script type="module" src="/public/js/store.js"></script>
 <script type="module" src="/public/js/products.js"></script>
 <script type="module" src="/public/js/cart.js"></script>
 
 </body>
-
 </html>
