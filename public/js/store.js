@@ -3,7 +3,6 @@ import { loadProducts } from "./products.js";
 
 let storeData = null;
 
-
 // =================================
 // OBTENER SLUG DESDE DOMINIO
 // =================================
@@ -80,6 +79,20 @@ async function initStore() {
 
         if (title) {
             title.textContent = store.name;
+        }
+
+        // =================================
+        // HERO DINÁMICO
+        // =================================
+
+        const hero = document.getElementById("hero-image");
+
+        if (hero && store.hero) {
+
+            hero.src =
+                "https://mercadia-back-production.up.railway.app/uploads/" +
+                store.hero;
+
         }
 
         // =============================
