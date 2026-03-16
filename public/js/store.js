@@ -1,5 +1,6 @@
 import { getStore } from "./api.js";
 import { loadProducts } from "./products.js";
+import { initChatbot } from "./chatbot.js";
 
 let storeData = null;
 
@@ -190,9 +191,7 @@ await loadProducts(slug);
 // INICIAR CHATBOT (POR TIENDA)
 // =================================
 
-if(typeof initChatbot === "function"){
 initChatbot();
-}
 
 }catch(error){
 

@@ -1,4 +1,4 @@
-function initChatbot(){
+export function initChatbot(){
 
 const container = document.getElementById("chatbot-container");
 
