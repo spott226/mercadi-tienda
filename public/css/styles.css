@@ -345,14 +345,10 @@ THEME MODERN
 
 }
 
-/* FIX: textos que se veían azul oscuro */
+/* SOLO HERO BLANCO */
 
-.theme-modern h1,
-.theme-modern h2,
-.theme-modern h3,
-.theme-modern p,
-.theme-modern span,
-.theme-modern a{
+.theme-modern #hero-title,
+.theme-modern #hero-text{
 color:#ffffff;
 }
 
