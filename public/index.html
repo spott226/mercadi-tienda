@@ -53,7 +53,6 @@ Tienda
 
 <div class="flex items-center gap-4">
 
-
 <button onclick="openCart()" class="relative bg-black text-white w-12 h-12 rounded flex items-center justify-center">
 
 <span class="text-lg">🛒</span>
@@ -66,7 +65,6 @@ class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 rounded
 </span>
 
 </button>
-
 
 <button id="menu-btn" class="md:hidden text-2xl">
 ☰
@@ -139,32 +137,6 @@ Productos destacados
 id="products"
 class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8"
 >
-
-<!--
-Las cards se insertan dinámicamente desde products.js
-Estructura esperada:
-
-<div class="product-card">
-
-<div class="product-image">
-<img src="imagen.jpg">
-</div>
-
-<div class="product-info">
-
-<div class="product-title">Nombre producto</div>
-
-<div class="product-price">$350</div>
-
-<button class="product-btn">
-Añadir
-</button>
-
-</div>
-
-</div>
-
--->
 
 </div>
 
@@ -239,10 +211,10 @@ Enviar pedido
 SCRIPTS
 ========================= -->
 
+<script type="module" src="/js/chatbot.js"></script>
 <script type="module" src="/js/store.js"></script>
 <script type="module" src="/js/products.js"></script>
 <script type="module" src="/js/cart.js"></script>
-<script type="module" src="/js/chatbot.js"></script>
 
 <script>
 
