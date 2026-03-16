@@ -24,7 +24,11 @@ export function addToCart(product){
 
 const cart = getCart();
 
-const existing = cart.find(p => p.id === product.id);
+const existing = cart.find(p => 
+p.id === product.id &&
+p.color === product.color &&
+p.size === product.size
+);
 
 if(existing){
 
@@ -36,7 +40,9 @@ cart.push({
 id:product.id,
 name:product.name,
 price:Number(product.price),
-qty:1
+qty:1,
+color:product.color || null,
+size:product.size || null
 });
 
 }
@@ -110,6 +116,8 @@ container.innerHTML += `
 <p class="font-semibold">${p.name}</p>
 
 <p class="text-sm opacity-70">
+${p.color ? `Color: ${p.color}<br>` : ""}
+${p.size ? `Talla: ${p.size}<br>` : ""}
 $${p.price} x ${p.qty}
 </p>
 
@@ -219,6 +227,15 @@ const subtotal = p.price * p.qty;
 total += subtotal;
 
 message += `• ${p.name}%0A`;
+
+if(p.color){
+message += `Color: ${p.color}%0A`;
+}
+
+if(p.size){
+message += `Talla: ${p.size}%0A`;
+}
+
 message += `Cantidad: ${p.qty}%0A`;
 message += `Subtotal: $${subtotal}%0A%0A`;
 
