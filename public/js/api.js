@@ -82,6 +82,13 @@ export async function getProducts(slug) {
 
   }
 
-  return await apiRequest(`/stores/${slug}/products`);
+  const store = await getStore(slug);
+
+  if(!store || !store.id){
+    console.error("STORE NOT FOUND");
+    return [];
+  }
+
+  return await apiRequest(`/products/${store.id}`);
 
 }
