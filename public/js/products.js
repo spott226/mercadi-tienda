@@ -3,9 +3,6 @@ import { addToCart } from "./cart.js";
 
 const BACKEND_URL = "https://mercadia-back-production.up.railway.app";
 
-/* =================================
-OBTENER PARAMETRO DE URL
-================================= */
 
 function getQueryParam(name){
   const params = new URLSearchParams(window.location.search);
@@ -19,15 +16,14 @@ MODAL VARIANTES
 
 function openVariantModal(product){
 
-  // crear fondo modal
   const overlay = document.createElement("div");
   overlay.className = "fixed inset-0 bg-black/40 flex items-center justify-center z-50";
 
-  // colores únicos
   const colors = [...new Set(product.variants.map(v => v.color).filter(Boolean))];
-
-  // tallas únicas
   const sizes = [...new Set(product.variants.map(v => v.size).filter(Boolean))];
+
+  // variante inicial
+  const firstVariant = product.variants[0];
 
   overlay.innerHTML = `
   <div class="bg-white p-6 rounded w-[420px] max-w-[90%]">
@@ -35,6 +31,10 @@ function openVariantModal(product){
     <h2 class="text-lg font-bold mb-4">
       ${product.name}
     </h2>
+
+    <div class="mb-4 text-center">
+      <img id="variant-image" src="${firstVariant.image || product.image}" style="max-height:180px;margin:auto;">
+    </div>
 
     ${colors.length ? `
     <div class="mb-4">
@@ -71,12 +71,31 @@ function openVariantModal(product){
 
   document.body.appendChild(overlay);
 
-  // cancelar
+  const img = overlay.querySelector("#variant-image");
+
+  function updateImage(){
+
+    const color = document.getElementById("variant-color")?.value;
+    const size = document.getElementById("variant-size")?.value;
+
+    const variant = product.variants.find(v =>
+      (color ? v.color === color : true) &&
+      (size ? v.size === size : true)
+    );
+
+    if(variant && variant.image){
+      img.src = variant.image;
+    }
+
+  }
+
+  overlay.querySelector("#variant-color")?.addEventListener("change",updateImage);
+  overlay.querySelector("#variant-size")?.addEventListener("change",updateImage);
+
   overlay.querySelector("#variant-cancel").onclick = () => {
     overlay.remove();
   };
 
-  // agregar carrito
   overlay.querySelector("#variant-add").onclick = () => {
 
     const color = document.getElementById("variant-color")?.value || null;
@@ -91,6 +110,7 @@ function openVariantModal(product){
       id: product.id,
       name: product.name,
       price: variant?.price || product.price,
+      image: variant?.image || product.image,
       color,
       size
     };
@@ -137,17 +157,7 @@ export async function loadProducts(slug){
 
     container.innerHTML = "";
 
-
-    /* =================================
-    PRODUCTOS A MOSTRAR
-    ================================= */
-
     let productsToShow = products;
-
-
-    /* =================================
-    FEATURED SOLO EN INDEX
-    ================================= */
 
     if(featuredContainer){
 
@@ -156,11 +166,6 @@ export async function loadProducts(slug){
       productsToShow = featured.length ? featured : products.slice(0,4);
 
     }
-
-
-    /* =================================
-    FILTRO POR CATEGORIA
-    ================================= */
 
     const categoryFilter = getQueryParam("category");
 
@@ -171,11 +176,6 @@ export async function loadProducts(slug){
       );
 
     }
-
-
-    /* =================================
-    SIN RESULTADOS
-    ================================= */
 
     if(productsToShow.length === 0){
 
@@ -188,11 +188,6 @@ export async function loadProducts(slug){
       return;
 
     }
-
-
-    /* =================================
-    RENDER PRODUCTOS
-    ================================= */
 
     productsToShow.forEach(product => {
 
@@ -247,7 +242,6 @@ export async function loadProducts(slug){
 
       btn.addEventListener("click", () => {
 
-        // si tiene variantes
         if(product.variants && product.variants.length){
 
           openVariantModal(product);
@@ -255,11 +249,11 @@ export async function loadProducts(slug){
 
         }
 
-        // producto normal
         const cartProduct = {
           id:product.id,
           name:product.name,
-          price:product.price
+          price:product.price,
+          image:product.image
         };
 
         addToCart(cartProduct);
