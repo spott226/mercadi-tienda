@@ -113,14 +113,3 @@ window.open(`https://wa.me/${phone}?text=${text}`,"_blank");
 });
 
 }
-
-
-// =======================
-// INIT
-// =======================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-setTimeout(initChatbot, 500);
-
-});

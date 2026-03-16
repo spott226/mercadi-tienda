@@ -185,6 +185,15 @@ hero.src = "/assets/images/hero-default.jpg";
 
 await loadProducts(slug);
 
+
+// =================================
+// INICIAR CHATBOT (POR TIENDA)
+// =================================
+
+if(typeof initChatbot === "function"){
+initChatbot();
+}
+
 }catch(error){
 
 console.error("STORE INIT ERROR:", error);
