@@ -331,25 +331,28 @@ background:#c8a96a;
 
 
 /* =====================================================
-THEME MODERN
+THEME MODERN (GRIS CLARO)
 ===================================================== */
 
 .theme-modern{
 
 --primary:#2563eb;
---background:#0f172a;
---card:#111827;
---text:#ffffff;
---border:#1f2937;
+--background:#f3f4f6;
+--card:#ffffff;
+--text:#111827;
+--border:#e5e7eb;
 --accent:#3b82f6;
 
 }
 
 /* SOLO HERO BLANCO */
 
-.theme-modern #hero-title,
-.theme-modern #hero-text{
+.theme-modern #hero-title{
 color:#ffffff;
+}
+
+.theme-modern #hero-text{
+color:#e5e7eb;
 }
 
 .theme-modern .product-card:hover{
