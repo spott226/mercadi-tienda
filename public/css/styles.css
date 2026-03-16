@@ -69,6 +69,7 @@ object-fit:cover;
 
 .product-info{
 padding:14px;
+color:var(--text);
 }
 
 .product-title{
@@ -111,6 +112,7 @@ border-radius:8px;
 
 text-align:center;
 font-weight:600;
+color:var(--text);
 
 transition:.2s;
 
@@ -158,12 +160,15 @@ padding:24px;
 
 box-shadow:0 20px 40px rgba(0,0,0,.2);
 
+color:var(--text);
+
 }
 
 .cart-title{
 font-size:20px;
 font-weight:600;
 margin-bottom:18px;
+color:var(--text);
 }
 
 .cart-item{
@@ -172,6 +177,8 @@ display:flex;
 justify-content:space-between;
 border-bottom:1px solid var(--border);
 padding:10px 0;
+
+color:var(--text);
 
 }
 
@@ -182,6 +189,7 @@ justify-content:space-between;
 margin-top:14px;
 
 font-weight:700;
+color:var(--text);
 
 }
 
@@ -202,6 +210,9 @@ padding:10px;
 border-radius:6px;
 cursor:pointer;
 
+background:transparent;
+color:var(--text);
+
 }
 
 .cart-checkout{
@@ -219,7 +230,7 @@ cursor:pointer;
 
 
 /* =====================================================
-CHATBOT  (CORREGIDO)
+CHATBOT
 ===================================================== */
 
 .chatbot-fab{
@@ -270,6 +281,8 @@ overflow:hidden;
 
 z-index:9999;
 
+color:var(--text);
+
 }
 
 .chatbot-hidden{
@@ -306,6 +319,10 @@ background:#161616;
 
 .theme-luxury .cart-box{
 background:#161616;
+}
+
+.theme-luxury .cart-close{
+border:1px solid rgba(200,169,106,.2);
 }
 
 .theme-luxury .chatbot-fab{
@@ -387,15 +404,12 @@ background:#f3f4f6;
 .theme-minimal .product-card{
 
 background:#fafafa;
-
 border:1px solid #dcdcdc;
 
 }
 
 .theme-minimal .product-card:hover{
-
 box-shadow:0 8px 20px rgba(0,0,0,.1);
-
 }
 
 .theme-minimal .category-card{
