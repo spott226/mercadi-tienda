@@ -216,6 +216,39 @@ return;
 
 }
 
+
+// =======================
+// DATOS DE ENVÍO
+// =======================
+
+const name = prompt("Nombre completo:");
+if(!name) return;
+
+const phoneClient = prompt("Teléfono:");
+if(!phoneClient) return;
+
+const address = prompt("Calle y número:");
+if(!address) return;
+
+const colony = prompt("Colonia:");
+if(!colony) return;
+
+const city = prompt("Ciudad o municipio:");
+if(!city) return;
+
+const state = prompt("Estado:");
+if(!state) return;
+
+const postal = prompt("Código postal:");
+if(!postal) return;
+
+const reference = prompt("Referencia (opcional):") || "";
+
+
+// =======================
+// MENSAJE PEDIDO
+// =======================
+
 let message = "Hola, quiero pedir:%0A%0A";
 
 let total = 0;
@@ -241,7 +274,25 @@ message += `Subtotal: $${subtotal}%0A%0A`;
 
 });
 
-message += `TOTAL: $${total}`;
+message += `TOTAL: $${total}%0A%0A`;
+
+message += `DATOS DE ENVÍO%0A`;
+message += `Nombre: ${name}%0A`;
+message += `Teléfono: ${phoneClient}%0A`;
+message += `Dirección: ${address}%0A`;
+message += `Colonia: ${colony}%0A`;
+message += `Ciudad: ${city}%0A`;
+message += `Estado: ${state}%0A`;
+message += `CP: ${postal}%0A`;
+
+if(reference){
+message += `Referencia: ${reference}%0A`;
+}
+
+
+// =======================
+// WHATSAPP
+// =======================
 
 const whatsapp = window.store?.whatsapp;
 
