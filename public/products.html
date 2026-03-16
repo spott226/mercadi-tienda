@@ -40,8 +40,6 @@ Tienda
 </div>
 
 
-<!-- MENU DESKTOP -->
-
 <nav class="hidden md:flex gap-8 text-sm font-medium">
 
 <a href="/index.html" class="hover:opacity-70">Inicio</a>
@@ -53,11 +51,7 @@ Tienda
 </nav>
 
 
-<!-- BOTONES DERECHA -->
-
 <div class="flex items-center gap-4">
-
-<!-- CARRITO -->
 
 <button onclick="openCart()" class="relative bg-black text-white w-12 h-12 rounded flex items-center justify-center">
 
@@ -73,8 +67,6 @@ class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 rounded
 </button>
 
 
-<!-- MENU MOBILE -->
-
 <button id="menu-btn" class="md:hidden text-2xl">
 ☰
 </button>
@@ -83,8 +75,6 @@ class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 rounded
 
 </div>
 
-
-<!-- MOBILE MENU -->
 
 <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
 
@@ -113,8 +103,40 @@ Todos los productos
 
 <div
 id="products-list"
-class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8"
 >
+
+<!--
+Las cards de producto se renderizan desde products.js
+
+Estructura esperada:
+
+<div class="product-card">
+
+<div class="product-image">
+<img src="URL_IMAGEN">
+</div>
+
+<div class="product-info">
+
+<div class="product-title">
+Nombre del producto
+</div>
+
+<div class="product-price">
+$350
+</div>
+
+<button class="product-btn">
+Añadir al carrito
+</button>
+
+</div>
+
+</div>
+
+-->
+
 </div>
 
 </section>

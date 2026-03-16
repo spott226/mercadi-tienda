@@ -11,7 +11,6 @@ OBTENER PARAMETRO DE URL
 function getQueryParam(name){
 
 const params = new URLSearchParams(window.location.search);
-
 return params.get(name);
 
 }
@@ -23,8 +22,8 @@ CARGAR PRODUCTOS
 
 export async function loadProducts(slug){
 
-const featuredContainer = document.getElementById("products");     // index
-const allContainer = document.getElementById("products-list");     // products.html
+const featuredContainer = document.getElementById("products");
+const allContainer = document.getElementById("products-list");
 
 const container = featuredContainer || allContainer;
 
@@ -111,8 +110,8 @@ productsToShow.forEach(product => {
 
 const card = document.createElement("div");
 
-card.className =
-"product-card bg-white p-4 rounded shadow hover:shadow-lg transition";
+card.className = "product-card";
+
 
 let imageUrl = "/assets/images/default.jpg";
 
@@ -130,30 +129,40 @@ imageUrl = `${BACKEND_URL}/uploads/${product.image}`;
 
 }
 
+
 card.innerHTML = `
+
+<div class="product-image">
+
 <img
 src="${imageUrl}"
-class="w-full h-40 object-cover rounded mb-3"
 loading="lazy"
 onerror="this.src='/assets/images/default.jpg'"
 >
 
-<h3 class="text-lg font-semibold mb-1">
-${product.name}
-</h3>
+</div>
 
-<p class="text-sm opacity-70 mb-3">
+<div class="product-info">
+
+<div class="product-title">
+${product.name}
+</div>
+
+<div class="product-price">
 $${Number(product.price).toLocaleString()}
-</p>
+</div>
 
 <button
-class="add-cart bg-black text-white px-4 py-2 rounded w-full hover:opacity-80 transition"
+class="product-btn add-cart"
 data-id="${product.id}"
 data-name="${product.name}"
 data-price="${product.price}"
 >
 Añadir
 </button>
+
+</div>
+
 `;
 
 container.appendChild(card);

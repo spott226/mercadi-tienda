@@ -3,11 +3,8 @@ import { loadProducts } from "./products.js";
 
 let storeData = null;
 
-// =================================
-// URL BASE BACKEND
-// =================================
-
 const BACKEND_URL = "https://mercadia-back-production.up.railway.app/uploads/";
+
 
 // =================================
 // OBTENER SLUG DESDE DOMINIO
@@ -17,7 +14,7 @@ function getSlugFromDomain(){
 
 const host = window.location.hostname;
 
-console.log("HOST:",host);
+console.log("HOST:", host);
 
 // entorno local
 if(host === "localhost" || host === "127.0.0.1"){
@@ -28,9 +25,11 @@ return "chelispa";
 }
 
 const parts = host.split(".");
+
+// si hay más subdominios tomar el primero
 const slug = parts[0];
 
-console.log("DETECTED SLUG:",slug);
+console.log("DETECTED SLUG:", slug);
 
 return slug;
 
@@ -47,7 +46,7 @@ try{
 
 const slug = getSlugFromDomain();
 
-console.log("LOADING STORE:",slug);
+console.log("LOADING STORE:", slug);
 
 const store = await getStore(slug);
 
@@ -75,7 +74,7 @@ window.store = store;
 window.store_id = store.id;
 window.store_whatsapp = store.whatsapp;
 
-console.log("STORE DATA:",store);
+console.log("STORE DATA:", store);
 
 
 // =================================
@@ -86,20 +85,27 @@ document.title = store.name || "Mercadia";
 
 
 // =================================
-// APLICAR THEME DESDE DATABASE
+// THEME DESDE DATABASE
 // =================================
 
-if(store.theme && store.theme !== ""){
+const validThemes = [
+"luxury",
+"modern",
+"street",
+"minimal"
+];
+
+if(store.theme && validThemes.includes(store.theme)){
 
 document.body.classList.add(`theme-${store.theme}`);
 
-console.log("THEME APPLIED:",store.theme);
+console.log("THEME APPLIED:", store.theme);
 
 }
 
 
 // =================================
-// NOMBRE DE LA TIENDA
+// NOMBRE TIENDA
 // =================================
 
 const title = document.getElementById("store-name");
@@ -112,20 +118,28 @@ title.textContent = store.name;
 
 
 // =================================
-// LOGO DINAMICO
+// LOGO
 // =================================
 
 const logo = document.getElementById("store-logo");
 
-if(logo && store.logo){
+if(logo){
+
+if(store.logo){
 
 logo.src = BACKEND_URL + store.logo;
+
+}else{
+
+logo.src = "/assets/images/default-logo.png";
+
+}
 
 }
 
 
 // =================================
-// HERO TEXT
+// HERO TEXTO
 // =================================
 
 const heroTitle = document.getElementById("hero-title");
@@ -150,9 +164,17 @@ heroText.textContent = store.hero_text;
 
 const hero = document.getElementById("hero-image");
 
-if(hero && store.hero){
+if(hero){
+
+if(store.hero){
 
 hero.src = BACKEND_URL + store.hero;
+
+}else{
+
+hero.src = "/assets/images/hero-default.jpg";
+
+}
 
 }
 
@@ -165,7 +187,7 @@ await loadProducts(slug);
 
 }catch(error){
 
-console.error("STORE INIT ERROR:",error);
+console.error("STORE INIT ERROR:", error);
 
 document.body.innerHTML = `
 <div style="text-align:center;margin-top:100px;font-family:sans-serif;">
@@ -183,4 +205,4 @@ document.body.innerHTML = `
 // INICIO
 // =================================
 
-document.addEventListener("DOMContentLoaded",initStore);
+document.addEventListener("DOMContentLoaded", initStore);
