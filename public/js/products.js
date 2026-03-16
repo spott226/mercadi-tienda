@@ -9,10 +9,8 @@ OBTENER PARAMETRO DE URL
 ================================= */
 
 function getQueryParam(name){
-
-const params = new URLSearchParams(window.location.search);
-return params.get(name);
-
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
 }
 
 
@@ -22,186 +20,177 @@ CARGAR PRODUCTOS
 
 export async function loadProducts(slug){
 
-const featuredContainer = document.getElementById("products");
-const allContainer = document.getElementById("products-list");
+  const featuredContainer = document.getElementById("products");      // index
+  const allContainer = document.getElementById("products-list");      // products.html
 
-const container = featuredContainer || allContainer;
+  const container = featuredContainer || allContainer;
 
-if(!container) return;
+  if(!container) return;
 
-container.innerHTML = "Cargando productos...";
+  container.innerHTML = "Cargando productos...";
 
-try{
+  try{
 
-const products = await getProducts(slug);
+    const products = await getProducts(slug);
 
-if(!products || products.length === 0){
+    if(!products || products.length === 0){
 
-container.innerHTML = `
-<div class="text-center p-10 opacity-60">
-No hay productos disponibles
-</div>
-`;
+      container.innerHTML = `
+      <div class="text-center p-10 opacity-60">
+        No hay productos disponibles
+      </div>
+      `;
 
-return;
+      return;
 
-}
+    }
 
-container.innerHTML = "";
+    container.innerHTML = "";
 
 
-/* =================================
-PRODUCTOS A MOSTRAR
-================================= */
+    /* =================================
+    PRODUCTOS A MOSTRAR
+    ================================= */
 
-let productsToShow = products;
+    let productsToShow = products;
 
 
-/* =================================
-FEATURED SOLO EN INDEX
-================================= */
+    /* =================================
+    FEATURED SOLO EN INDEX
+    ================================= */
 
-if(featuredContainer){
+    if(featuredContainer){
 
-const featured = products.filter(p => p.featured === true);
+      const featured = products.filter(p => p.featured === true);
 
-productsToShow = featured.length ? featured : products.slice(0,4);
+      productsToShow = featured.length ? featured : products.slice(0,4);
 
-}
+    }
 
 
-/* =================================
-FILTRO POR CATEGORIA
-================================= */
+    /* =================================
+    FILTRO POR CATEGORIA
+    ================================= */
 
-const categoryFilter = getQueryParam("category");
+    const categoryFilter = getQueryParam("category");
 
-if(categoryFilter){
+    if(categoryFilter){
 
-productsToShow = products.filter(p =>
-String(p.category).toLowerCase() === categoryFilter.toLowerCase()
-);
+      productsToShow = products.filter(p =>
+        String(p.category).toLowerCase() === categoryFilter.toLowerCase()
+      );
 
-}
+    }
 
 
-/* =================================
-SIN RESULTADOS
-================================= */
+    /* =================================
+    SIN RESULTADOS
+    ================================= */
 
-if(productsToShow.length === 0){
+    if(productsToShow.length === 0){
 
-container.innerHTML = `
-<div class="text-center p-10 opacity-60">
-No hay productos en esta categoría
-</div>
-`;
+      container.innerHTML = `
+      <div class="text-center p-10 opacity-60">
+        No hay productos en esta categoría
+      </div>
+      `;
 
-return;
+      return;
 
-}
+    }
 
 
-/* =================================
-RENDER PRODUCTOS
-================================= */
+    /* =================================
+    RENDER PRODUCTOS
+    ================================= */
 
-productsToShow.forEach(product => {
+    productsToShow.forEach(product => {
 
-const card = document.createElement("div");
+      const card = document.createElement("div");
+      card.className = "product-card";
 
-card.className = "product-card";
 
+      let imageUrl = "/assets/images/default.jpg";
 
-let imageUrl = "/assets/images/default.jpg";
+      if(product.image){
 
-if(product.image){
+        if(product.image.startsWith("http")){
+          imageUrl = product.image;
+        }else{
+          imageUrl = `${BACKEND_URL}/uploads/${product.image}`;
+        }
 
-if(product.image.startsWith("http")){
+      }
 
-imageUrl = product.image;
 
-}else{
+      card.innerHTML = `
 
-imageUrl = `${BACKEND_URL}/uploads/${product.image}`;
+        <div class="product-image">
+          <img
+            src="${imageUrl}"
+            loading="lazy"
+            onerror="this.src='/assets/images/default.jpg'"
+          >
+        </div>
 
-}
+        <div class="product-info">
 
-}
+          <div class="product-title">
+            ${product.name}
+          </div>
 
+          <div class="product-price">
+            $${Number(product.price).toLocaleString()}
+          </div>
 
-card.innerHTML = `
+          <button
+            class="product-btn add-cart"
+            data-id="${product.id}"
+            data-name="${product.name}"
+            data-price="${product.price}"
+          >
+            Añadir
+          </button>
 
-<div class="product-image">
+        </div>
 
-<img
-src="${imageUrl}"
-loading="lazy"
-onerror="this.src='/assets/images/default.jpg'"
->
+      `;
 
-</div>
+      container.appendChild(card);
 
-<div class="product-info">
+    });
 
-<div class="product-title">
-${product.name}
-</div>
 
-<div class="product-price">
-$${Number(product.price).toLocaleString()}
-</div>
+    /* =================================
+    EVENTOS CARRITO
+    ================================= */
 
-<button
-class="product-btn add-cart"
-data-id="${product.id}"
-data-name="${product.name}"
-data-price="${product.price}"
->
-Añadir
-</button>
+    container.querySelectorAll(".add-cart").forEach(btn => {
 
-</div>
+      btn.addEventListener("click", () => {
 
-`;
+        const product = {
+          id:Number(btn.dataset.id),
+          name:btn.dataset.name,
+          price:Number(btn.dataset.price)
+        };
 
-container.appendChild(card);
+        addToCart(product);
 
-});
+      });
 
+    });
 
-/* =================================
-EVENTOS CARRITO
-================================= */
+  }catch(error){
 
-container.querySelectorAll(".add-cart").forEach(btn => {
+    console.error("Error cargando productos:",error);
 
-btn.addEventListener("click", () => {
+    container.innerHTML = `
+    <div class="text-center p-10 text-red-500">
+      Error cargando productos
+    </div>
+    `;
 
-const product = {
-
-id:Number(btn.dataset.id),
-name:btn.dataset.name,
-price:Number(btn.dataset.price)
-
-};
-
-addToCart(product);
-
-});
-
-});
-
-}catch(error){
-
-console.error("Error cargando productos:",error);
-
-container.innerHTML = `
-<div class="text-center p-10 text-red-500">
-Error cargando productos
-</div>
-`;
-
-}
+  }
 
 }
