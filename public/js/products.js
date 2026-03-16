@@ -22,7 +22,6 @@ function openVariantModal(product){
   const colors = [...new Set(product.variants.map(v => v.color).filter(Boolean))];
   const sizes = [...new Set(product.variants.map(v => v.size).filter(Boolean))];
 
-  // variante inicial
   const firstVariant = product.variants[0];
 
   overlay.innerHTML = `
@@ -83,8 +82,14 @@ function openVariantModal(product){
       (size ? v.size === size : true)
     );
 
-    if(variant && variant.image){
-      img.src = variant.image;
+    if(variant){
+
+      if(variant.image){
+        img.src = variant.image;
+      }else{
+        img.src = product.image;
+      }
+
     }
 
   }
