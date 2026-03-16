@@ -38,6 +38,7 @@ Tienda
 
 </div>
 
+
 <!-- MENU DESKTOP -->
 
 <nav class="hidden md:flex gap-8 text-sm font-medium">
@@ -50,19 +51,27 @@ Tienda
 
 </nav>
 
+
 <!-- BOTONES DERECHA -->
 
 <div class="flex items-center gap-4">
 
-<button onclick="openCart()" class="bg-black text-white px-4 py-2 rounded flex items-center gap-2">
 
-🛒
+<!-- BOTON CARRITO CORREGIDO -->
 
-<span id="cart-count" class="bg-red-500 text-white px-2 rounded">
+<button onclick="openCart()" class="relative bg-black text-white w-12 h-12 rounded flex items-center justify-center">
+
+<span class="text-lg">🛒</span>
+
+<span 
+id="cart-count"
+class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 rounded-full"
+>
 0
 </span>
 
 </button>
+
 
 <!-- BOTON HAMBURGUESA -->
 
@@ -73,6 +82,7 @@ Tienda
 </div>
 
 </div>
+
 
 <!-- MENU MOBILE -->
 
@@ -165,7 +175,6 @@ Powered by Mercadia
 
 <!-- =========================
 CHATBOT CONTAINER
-IMPORTANTE para que el JS cree el chatbot
 ========================= -->
 
 <div id="chatbot-container"></div>

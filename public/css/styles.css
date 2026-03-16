@@ -337,12 +337,23 @@ THEME MODERN
 .theme-modern{
 
 --primary:#2563eb;
---background:#f3f4f6;
---card:#ffffff;
---text:#111827;
---border:#e5e7eb;
+--background:#0f172a;
+--card:#111827;
+--text:#ffffff;
+--border:#1f2937;
 --accent:#3b82f6;
 
+}
+
+/* FIX: textos que se veían azul oscuro */
+
+.theme-modern h1,
+.theme-modern h2,
+.theme-modern h3,
+.theme-modern p,
+.theme-modern span,
+.theme-modern a{
+color:#ffffff;
 }
 
 .theme-modern .product-card:hover{
@@ -422,67 +433,4 @@ background:#f8f8f8;
 
 .theme-minimal .chatbot-fab{
 background:#1f2937;
-}
-
-/* ===============================
-FIX GLOBAL TEXT COLORS
-================================ */
-
-body{
-color:var(--text);
-}
-
-/* secciones principales */
-
-section,
-.container,
-.content,
-.products,
-.categories{
-color:var(--text);
-}
-
-/* links del menú */
-
-nav a{
-color:var(--text);
-}
-
-/* menú móvil */
-
-.mobile-menu{
-background:var(--card);
-color:var(--text);
-}
-
-.mobile-menu a{
-color:var(--text);
-border-bottom:1px solid var(--border);
-}
-
-/* títulos */
-
-h1,h2,h3,h4,h5{
-color:var(--text);
-}
-
-/* botones */
-
-button{
-color:inherit;
-}
-
-/* carrito */
-
-.cart-box{
-background:var(--card);
-color:var(--text);
-}
-
-/* tablas o listas */
-
-table,
-td,
-th{
-color:var(--text);
 }

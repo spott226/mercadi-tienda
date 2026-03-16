@@ -53,18 +53,27 @@ Tienda
 </nav>
 
 
+<!-- BOTONES DERECHA -->
+
 <div class="flex items-center gap-4">
 
-<button onclick="openCart()" class="bg-black text-white px-4 py-2 rounded flex items-center gap-2">
+<!-- CARRITO -->
 
-🛒
+<button onclick="openCart()" class="relative bg-black text-white w-12 h-12 rounded flex items-center justify-center">
 
-<span id="cart-count" class="bg-red-500 text-white px-2 rounded">
+<span class="text-lg">🛒</span>
+
+<span 
+id="cart-count"
+class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 rounded-full"
+>
 0
 </span>
 
 </button>
 
+
+<!-- MENU MOBILE -->
 
 <button id="menu-btn" class="md:hidden text-2xl">
 ☰
@@ -174,6 +183,7 @@ SCRIPTS
 <script type="module" src="/js/store.js"></script>
 <script type="module" src="/js/products.js"></script>
 <script type="module" src="/js/cart.js"></script>
+
 
 <script>
 
