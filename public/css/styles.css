@@ -97,7 +97,7 @@ margin-bottom:6px;
 
 .product-price{
 font-weight:700;
-color:var(--primary);
+color:#111; /* siempre negro */
 }
 
 .product-btn{
@@ -105,14 +105,19 @@ color:var(--primary);
 margin-top:10px;
 width:100%;
 
-background:var(--primary);
+background:#111; /* botón siempre negro */
 color:white;
 
 padding:8px;
 border-radius:6px;
 
 cursor:pointer;
+transition:.2s;
 
+}
+
+.product-btn:hover{
+opacity:.9;
 }
 
 
@@ -236,7 +241,7 @@ color:var(--text);
 .cart-checkout{
 
 flex:1;
-background:var(--primary);
+background:#111;
 color:white;
 
 padding:10px;
@@ -261,7 +266,7 @@ right:20px;
 width:56px;
 height:56px;
 
-background:var(--primary);
+background:#111;
 color:white;
 
 border-radius:50%;
@@ -314,7 +319,6 @@ THEME LUXURY
 
 .theme-luxury{
 
---primary:#c8a96a;
 --background:#0b0b0b;
 --card:#161616;
 --text:#f2f2f2;
@@ -341,113 +345,4 @@ background:#161616;
 
 .theme-luxury .cart-close{
 border:1px solid rgba(200,169,106,.2);
-}
-
-.theme-luxury .chatbot-fab{
-background:#c8a96a;
-}
-
-
-/* =====================================================
-THEME MODERN (GRIS CLARO)
-===================================================== */
-
-.theme-modern{
-
---primary:#2563eb;
---background:#f3f4f6;
---card:#ffffff;
---text:#111827;
---border:#e5e7eb;
---accent:#3b82f6;
-
-}
-
-/* SOLO HERO BLANCO */
-
-.theme-modern #hero-title{
-color:#ffffff;
-}
-
-.theme-modern #hero-text{
-color:#e5e7eb;
-}
-
-.theme-modern .product-card:hover{
-box-shadow:0 12px 24px rgba(0,0,0,.12);
-}
-
-.theme-modern .chatbot-fab{
-background:#2563eb;
-}
-
-
-/* =====================================================
-THEME STREET
-===================================================== */
-
-.theme-street{
-
---primary:#ff4d00;
---background:#111;
---card:#1a1a1a;
---text:#f5f5f5;
---border:#333;
---accent:#ff7a33;
-
-}
-
-.theme-street header{
-background:#000;
-}
-
-.theme-street .product-card{
-background:#1a1a1a;
-}
-
-.theme-street .chatbot-fab{
-background:#ff4d00;
-}
-
-
-/* =====================================================
-THEME MINIMAL
-===================================================== */
-
-.theme-minimal{
-
---primary:#1f2937;
---background:#e9eaec;
---card:#f8f8f8;
---text:#1f2937;
---border:#d6d7d9;
---accent:#6b7280;
-
-}
-
-.theme-minimal header{
-background:#f3f4f6;
-}
-
-.theme-minimal .product-card{
-
-background:#fafafa;
-border:1px solid #dcdcdc;
-
-}
-
-.theme-minimal .product-card:hover{
-box-shadow:0 8px 20px rgba(0,0,0,.1);
-}
-
-.theme-minimal .category-card{
-background:#f3f4f6;
-}
-
-.theme-minimal .cart-box{
-background:#f8f8f8;
-}
-
-.theme-minimal .chatbot-fab{
-background:#1f2937;
 }
