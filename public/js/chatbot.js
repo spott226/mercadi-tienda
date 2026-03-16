@@ -13,9 +13,11 @@ let buttonsHTML = "";
 options.forEach(opt => {
 
 buttonsHTML += `
-<button 
+<button
 class="chatbot-option w-full text-left border border-gray-200 rounded-xl p-3 hover:bg-gray-50"
-data-message="${opt.message}">
+data-action="${opt.action || "whatsapp"}"
+data-message="${opt.message || ""}"
+data-response="${opt.response || ""}">
 ${opt.label}
 </button>
 `;
@@ -67,6 +69,30 @@ document.querySelectorAll(".chatbot-option").forEach(button => {
 
 button.addEventListener("click", () => {
 
+const action = button.dataset.action;
+
+if(action === "products"){
+
+const section = document.getElementById("products");
+
+if(section){
+section.scrollIntoView({behavior:"smooth"});
+}else{
+window.location.href = "#products";
+}
+
+}
+
+else if(action === "message"){
+
+const response = button.dataset.response;
+
+alert(response);
+
+}
+
+else if(action === "whatsapp"){
+
 if(!window.store?.whatsapp){
 
 alert("No se encontró el WhatsApp de la tienda.");
@@ -80,12 +106,13 @@ const text = encodeURIComponent(button.dataset.message);
 
 window.open(`https://wa.me/${phone}?text=${text}`,"_blank");
 
+}
+
 });
 
 });
 
 }
-
 
 
 // =======================
