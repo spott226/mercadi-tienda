@@ -2,7 +2,6 @@
 // API CONFIG
 // ================================
 
-// detectar si estamos en desarrollo o producción
 const API_BASE =
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
@@ -11,10 +10,10 @@ const API_BASE =
 
 
 // ================================
-// REQUEST GENERICO
+// REQUEST GENERICO (MEJORADO)
 // ================================
 
-async function apiRequest(endpoint) {
+async function apiRequest(endpoint, options = {}) {
 
   try {
 
@@ -22,11 +21,19 @@ async function apiRequest(endpoint) {
 
     console.log("API CALL:", url);
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      },
+      ...options
+    });
 
     if (!response.ok) {
 
-      console.error("HTTP ERROR:", response.status, response.statusText);
+      const text = await response.text();
+
+      console.error("HTTP ERROR:", response.status, text);
 
       return null;
 
@@ -56,11 +63,8 @@ async function apiRequest(endpoint) {
 export async function getStore(slug) {
 
   if (!slug) {
-
     console.error("STORE ERROR: slug vacío");
-
     return null;
-
   }
 
   return await apiRequest(`/stores/${slug}`);
@@ -75,11 +79,8 @@ export async function getStore(slug) {
 export async function getProducts(slug) {
 
   if (!slug) {
-
     console.error("PRODUCTS ERROR: slug vacío");
-
     return [];
-
   }
 
   const store = await getStore(slug);
@@ -89,6 +90,21 @@ export async function getProducts(slug) {
     return [];
   }
 
-  return await apiRequest(`/products/${store.id}`);
+  const products = await apiRequest(`/products/${store.id}`);
+
+  if(!products){
+    return [];
+  }
+
+  // 🔥 NORMALIZAR IMÁGENES (CLAVE)
+  return products.map(p => {
+
+    // asegurar estructura
+    p.images = p.images || [];
+    p.variants = p.variants || [];
+
+    return p;
+
+  });
 
 }

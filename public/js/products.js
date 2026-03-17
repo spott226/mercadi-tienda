@@ -22,7 +22,9 @@ function openVariantModal(product){
   const colors = [...new Set(product.variants.map(v => v.color).filter(Boolean))];
   const sizes = [...new Set(product.variants.map(v => v.size).filter(Boolean))];
 
-  const firstVariant = product.variants[0];
+  // 🔥 IMAGEN INICIAL POR COLOR
+  const firstColor = colors[0];
+  const firstImage = product.images?.find(img => img.color === firstColor);
 
   overlay.innerHTML = `
   <div class="bg-white p-6 rounded w-[420px] max-w-[90%]">
@@ -32,7 +34,7 @@ function openVariantModal(product){
     </h2>
 
     <div class="mb-4 text-center">
-      <img id="variant-image" src="${firstVariant.image || product.image}" style="max-height:180px;margin:auto;">
+      <img id="variant-image" src="${firstImage?.image_url || product.image}" style="max-height:180px;margin:auto;">
     </div>
 
     ${colors.length ? `
@@ -72,30 +74,24 @@ function openVariantModal(product){
 
   const img = overlay.querySelector("#variant-image");
 
+  // 🔥 CAMBIO DE IMAGEN POR COLOR
   function updateImage(){
 
     const color = document.getElementById("variant-color")?.value;
-    const size = document.getElementById("variant-size")?.value;
 
-    const variant = product.variants.find(v =>
-      (color ? v.color === color : true) &&
-      (size ? v.size === size : true)
-    );
+    if(!color) return;
 
-    if(variant){
+    const imgByColor = product.images?.find(img => img.color === color);
 
-      if(variant.image){
-        img.src = variant.image;
-      }else{
-        img.src = product.image;
-      }
-
+    if(imgByColor){
+      img.src = imgByColor.image_url;
+    }else{
+      img.src = product.image;
     }
 
   }
 
   overlay.querySelector("#variant-color")?.addEventListener("change",updateImage);
-  overlay.querySelector("#variant-size")?.addEventListener("change",updateImage);
 
   overlay.querySelector("#variant-cancel").onclick = () => {
     overlay.remove();
@@ -111,11 +107,13 @@ function openVariantModal(product){
       (size ? v.size === size : true)
     );
 
+    const imgByColor = product.images?.find(img => img.color === color);
+
     const cartProduct = {
       id: product.id,
       name: product.name,
       price: variant?.price || product.price,
-      image: variant?.image || product.image,
+      image: imgByColor?.image_url || product.image,
       color,
       size
     };
@@ -201,14 +199,11 @@ export async function loadProducts(slug){
 
       let imageUrl = "/assets/images/default.jpg";
 
-      if(product.image){
-
-        if(product.image.startsWith("http")){
-          imageUrl = product.image;
-        }else{
-          imageUrl = `${BACKEND_URL}/uploads/${product.image}`;
-        }
-
+      // 🔥 USAR PRIMERA IMAGEN POR COLOR SI EXISTE
+      if(product.images && product.images.length){
+        imageUrl = product.images[0].image_url;
+      } else if(product.image){
+        imageUrl = product.image;
       }
 
       card.innerHTML = `
@@ -231,9 +226,7 @@ export async function loadProducts(slug){
             $${Number(product.price).toLocaleString()}
           </div>
 
-          <button
-            class="product-btn add-cart"
-          >
+          <button class="product-btn add-cart">
             Añadir
           </button>
 
@@ -248,17 +241,15 @@ export async function loadProducts(slug){
       btn.addEventListener("click", () => {
 
         if(product.variants && product.variants.length){
-
           openVariantModal(product);
           return;
-
         }
 
         const cartProduct = {
           id:product.id,
           name:product.name,
           price:product.price,
-          image:product.image
+          image:imageUrl
         };
 
         addToCart(cartProduct);
