@@ -70,7 +70,11 @@ function openVariantModal(product){
         <div class="font-semibold mb-2">Color</div>
         <select id="variant-color" class="w-full border p-2 rounded">
           <option value="">Selecciona color</option>
-          ${colors.map(c=>`<option value="${c}">${c}</option>`).join("")}
+          ${colors.map(c=>`
+            <option value="${c}" ${c === currentColor ? "selected" : ""}>
+              ${c}
+            </option>
+          `).join("")}
         </select>
       </div>
       ` : ""}
@@ -78,10 +82,14 @@ function openVariantModal(product){
       <div class="mb-4">
         <div class="font-semibold mb-2">Talla</div>
         <select id="variant-size" class="w-full border p-2 rounded">
-        <option value="">Selecciona una talla</option>
+          <option value="">Selecciona una talla</option>
           ${
             sizes.length
-            ? sizes.map(s=>`<option value="${s}">${s}</option>`).join("")
+            ? sizes.map(s=>`
+                <option value="${s}" ${s === currentSize ? "selected" : ""}>
+                  ${s}
+                </option>
+              `).join("")
             : `<option value="">Selecciona color primero</option>`
           }
         </select>
@@ -101,8 +109,6 @@ function openVariantModal(product){
 
     </div>
     `;
-
-    // ✅ FIX AQUÍ (USAR overlay.querySelector)
 
     overlay.querySelector("#variant-color")?.addEventListener("change",(e)=>{
       currentColor = e.target.value || null;
