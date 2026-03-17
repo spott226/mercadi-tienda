@@ -43,7 +43,7 @@ function openVariantModal(product){
 
   function render(){
 
-    let image = product.image; // 🔥 SIEMPRE PRINCIPAL
+    let image = product.image;
     let sizes = [];
 
     if(currentColor){
@@ -101,23 +101,23 @@ function openVariantModal(product){
     </div>
     `;
 
-    // EVENTOS
+    // ✅ FIX AQUÍ (USAR overlay.querySelector)
 
-    document.getElementById("variant-color")?.addEventListener("change",(e)=>{
+    overlay.querySelector("#variant-color")?.addEventListener("change",(e)=>{
       currentColor = e.target.value || null;
       currentSize = null;
       render();
     });
 
-    document.getElementById("variant-size")?.addEventListener("change",(e)=>{
+    overlay.querySelector("#variant-size")?.addEventListener("change",(e)=>{
       currentSize = e.target.value || null;
     });
 
-    document.getElementById("variant-cancel").onclick = () => {
+    overlay.querySelector("#variant-cancel").onclick = () => {
       overlay.remove();
     };
 
-    document.getElementById("variant-add").onclick = () => {
+    overlay.querySelector("#variant-add").onclick = () => {
 
       if(!currentColor){
         alert("Selecciona un color");
@@ -225,7 +225,6 @@ export async function loadProducts(slug){
       const card = document.createElement("div");
       card.className = "product-card";
 
-      // 🔥 SIEMPRE IMAGEN PRINCIPAL
       let imageUrl = product.image || "/assets/images/default.jpg";
 
       card.innerHTML = `
