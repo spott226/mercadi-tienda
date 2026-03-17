@@ -11,6 +11,28 @@ function getQueryParam(name){
 
 
 /* =================================
+AGRUPAR VARIANTES POR COLOR
+================================= */
+
+function groupVariants(variants){
+
+  const grouped = {};
+
+  variants.forEach(v => {
+
+    if(!grouped[v.color]){
+      grouped[v.color] = [];
+    }
+
+    grouped[v.color].push(v);
+
+  });
+
+  return grouped;
+}
+
+
+/* =================================
 MODAL VARIANTES
 ================================= */
 
@@ -19,110 +41,121 @@ function openVariantModal(product){
   const overlay = document.createElement("div");
   overlay.className = "fixed inset-0 bg-black/40 flex items-center justify-center z-50";
 
-  const colors = [...new Set(product.variants.map(v => v.color).filter(Boolean))];
-  const sizes = [...new Set(product.variants.map(v => v.size).filter(Boolean))];
+  const grouped = groupVariants(product.variants || []);
+  const colors = Object.keys(grouped);
 
-  // 🔥 IMAGEN INICIAL POR COLOR
-  const firstColor = colors[0];
-  const firstImage = product.images?.find(img => img.color === firstColor);
+  let currentColor = null; // 🔥 inicia sin color
 
-  overlay.innerHTML = `
-  <div class="bg-white p-6 rounded w-[420px] max-w-[90%]">
+  function render(){
 
-    <h2 class="text-lg font-bold mb-4">
-      ${product.name}
-    </h2>
+    let image = product.image; // 🔥 SIEMPRE principal al inicio
+    let sizes = [];
 
-    <div class="mb-4 text-center">
-      <img id="variant-image" src="${firstImage?.image_url || product.image}" style="max-height:180px;margin:auto;">
-    </div>
+    if(currentColor){
+      const variants = grouped[currentColor] || [];
+      sizes = variants.map(v => v.size);
 
-    ${colors.length ? `
-    <div class="mb-4">
-      <div class="font-semibold mb-2">Color</div>
-      <select id="variant-color" class="w-full border p-2 rounded">
-        ${colors.map(c=>`<option value="${c}">${c}</option>`).join("")}
-      </select>
-    </div>
-    ` : ""}
-
-    ${sizes.length ? `
-    <div class="mb-4">
-      <div class="font-semibold mb-2">Talla</div>
-      <select id="variant-size" class="w-full border p-2 rounded">
-        ${sizes.map(s=>`<option value="${s}">${s}</option>`).join("")}
-      </select>
-    </div>
-    ` : ""}
-
-    <div class="flex gap-3 mt-6">
-
-      <button id="variant-cancel" class="flex-1 border p-2 rounded">
-        Cancelar
-      </button>
-
-      <button id="variant-add" class="flex-1 bg-black text-white p-2 rounded">
-        Añadir
-      </button>
-
-    </div>
-
-  </div>
-  `;
-
-  document.body.appendChild(overlay);
-
-  const img = overlay.querySelector("#variant-image");
-
-  // 🔥 CAMBIO DE IMAGEN POR COLOR
-  function updateImage(){
-
-    const color = document.getElementById("variant-color")?.value;
-
-    if(!color) return;
-
-    const imgByColor = product.images?.find(img => img.color === color);
-
-    if(imgByColor){
-      img.src = imgByColor.image_url;
-    }else{
-      img.src = product.image;
+      const imgByColor = product.images?.find(img => img.color === currentColor);
+      if(imgByColor){
+        image = imgByColor.image_url;
+      }
     }
+
+    overlay.innerHTML = `
+    <div class="bg-white p-6 rounded w-[420px] max-w-[90%]">
+
+      <h2 class="text-lg font-bold mb-4">
+        ${product.name}
+      </h2>
+
+      <div class="mb-4 text-center">
+        <img src="${image}" style="max-height:180px;margin:auto;">
+      </div>
+
+      ${colors.length ? `
+      <div class="mb-4">
+        <div class="font-semibold mb-2">Color</div>
+        <select id="variant-color" class="w-full border p-2 rounded">
+          <option value="">Selecciona color</option>
+          ${colors.map(c=>`
+            <option value="${c}" ${c===currentColor?"selected":""}>${c}</option>
+          `).join("")}
+        </select>
+      </div>
+      ` : ""}
+
+      <div class="mb-4">
+        <div class="font-semibold mb-2">Talla</div>
+        <select id="variant-size" class="w-full border p-2 rounded">
+          ${
+            sizes.length
+            ? sizes.map(s=>`<option value="${s}">${s}</option>`).join("")
+            : `<option>Selecciona color primero</option>`
+          }
+        </select>
+      </div>
+
+      <div class="flex gap-3 mt-6">
+
+        <button id="variant-cancel" class="flex-1 border p-2 rounded">
+          Cancelar
+        </button>
+
+        <button id="variant-add" class="flex-1 bg-black text-white p-2 rounded">
+          Añadir
+        </button>
+
+      </div>
+
+    </div>
+    `;
+
+    // 🔥 EVENTOS
+
+    document.getElementById("variant-color")?.addEventListener("change",(e)=>{
+      currentColor = e.target.value || null;
+      render();
+    });
+
+    document.getElementById("variant-cancel").onclick = () => {
+      overlay.remove();
+    };
+
+    document.getElementById("variant-add").onclick = () => {
+
+      const color = currentColor;
+      const size = document.getElementById("variant-size")?.value || null;
+
+      let variant = null;
+
+      if(color){
+        variant = product.variants.find(v =>
+          v.color === color && v.size === size
+        );
+      }
+
+      const imgByColor = product.images?.find(img => img.color === color);
+
+      const cartProduct = {
+        id: product.id,
+        name: product.name,
+        price: variant?.price || product.price,
+        image: imgByColor?.image_url || product.image,
+        color,
+        size
+      };
+
+      addToCart(cartProduct);
+
+      overlay.remove();
+
+    };
 
   }
 
-  overlay.querySelector("#variant-color")?.addEventListener("change",updateImage);
+  render();
 
-  overlay.querySelector("#variant-cancel").onclick = () => {
-    overlay.remove();
-  };
-
-  overlay.querySelector("#variant-add").onclick = () => {
-
-    const color = document.getElementById("variant-color")?.value || null;
-    const size = document.getElementById("variant-size")?.value || null;
-
-    const variant = product.variants.find(v =>
-      (color ? v.color === color : true) &&
-      (size ? v.size === size : true)
-    );
-
-    const imgByColor = product.images?.find(img => img.color === color);
-
-    const cartProduct = {
-      id: product.id,
-      name: product.name,
-      price: variant?.price || product.price,
-      image: imgByColor?.image_url || product.image,
-      color,
-      size
-    };
-
-    addToCart(cartProduct);
-
-    overlay.remove();
-
-  };
+  document.body.appendChild(overlay);
 
 }
 
@@ -197,14 +230,8 @@ export async function loadProducts(slug){
       const card = document.createElement("div");
       card.className = "product-card";
 
-      let imageUrl = "/assets/images/default.jpg";
-
-      // 🔥 USAR PRIMERA IMAGEN POR COLOR SI EXISTE
-      if(product.images && product.images.length){
-        imageUrl = product.images[0].image_url;
-      } else if(product.image){
-        imageUrl = product.image;
-      }
+      // 🔥 SIEMPRE IMAGEN PRINCIPAL
+      let imageUrl = product.image || "/assets/images/default.jpg";
 
       card.innerHTML = `
 
