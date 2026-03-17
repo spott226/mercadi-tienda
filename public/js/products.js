@@ -11,23 +11,17 @@ function getQueryParam(name){
 
 
 /* =================================
-AGRUPAR VARIANTES POR COLOR
+AGRUPAR VARIANTES
 ================================= */
 
 function groupVariants(variants){
-
   const grouped = {};
-
-  variants.forEach(v => {
-
+  (variants || []).forEach(v=>{
     if(!grouped[v.color]){
       grouped[v.color] = [];
     }
-
     grouped[v.color].push(v);
-
   });
-
   return grouped;
 }
 
@@ -41,21 +35,22 @@ function openVariantModal(product){
   const overlay = document.createElement("div");
   overlay.className = "fixed inset-0 bg-black/40 flex items-center justify-center z-50";
 
-  const grouped = groupVariants(product.variants || []);
+  const grouped = groupVariants(product.variants);
   const colors = Object.keys(grouped);
 
-  let currentColor = null; // 🔥 inicia sin color
+  let currentColor = null;
+  let currentSize = null;
 
   function render(){
 
-    let image = product.image; // 🔥 SIEMPRE principal al inicio
+    let image = product.image; // 🔥 SIEMPRE PRINCIPAL
     let sizes = [];
 
     if(currentColor){
       const variants = grouped[currentColor] || [];
       sizes = variants.map(v => v.size);
 
-      const imgByColor = product.images?.find(img => img.color === currentColor);
+      const imgByColor = product.images?.find(i => i.color === currentColor);
       if(imgByColor){
         image = imgByColor.image_url;
       }
@@ -64,9 +59,7 @@ function openVariantModal(product){
     overlay.innerHTML = `
     <div class="bg-white p-6 rounded w-[420px] max-w-[90%]">
 
-      <h2 class="text-lg font-bold mb-4">
-        ${product.name}
-      </h2>
+      <h2 class="text-lg font-bold mb-4">${product.name}</h2>
 
       <div class="mb-4 text-center">
         <img src="${image}" style="max-height:180px;margin:auto;">
@@ -77,9 +70,7 @@ function openVariantModal(product){
         <div class="font-semibold mb-2">Color</div>
         <select id="variant-color" class="w-full border p-2 rounded">
           <option value="">Selecciona color</option>
-          ${colors.map(c=>`
-            <option value="${c}" ${c===currentColor?"selected":""}>${c}</option>
-          `).join("")}
+          ${colors.map(c=>`<option value="${c}">${c}</option>`).join("")}
         </select>
       </div>
       ` : ""}
@@ -90,7 +81,7 @@ function openVariantModal(product){
           ${
             sizes.length
             ? sizes.map(s=>`<option value="${s}">${s}</option>`).join("")
-            : `<option>Selecciona color primero</option>`
+            : `<option value="">Selecciona color primero</option>`
           }
         </select>
       </div>
@@ -110,11 +101,16 @@ function openVariantModal(product){
     </div>
     `;
 
-    // 🔥 EVENTOS
+    // EVENTOS
 
     document.getElementById("variant-color")?.addEventListener("change",(e)=>{
       currentColor = e.target.value || null;
+      currentSize = null;
       render();
+    });
+
+    document.getElementById("variant-size")?.addEventListener("change",(e)=>{
+      currentSize = e.target.value || null;
     });
 
     document.getElementById("variant-cancel").onclick = () => {
@@ -123,32 +119,32 @@ function openVariantModal(product){
 
     document.getElementById("variant-add").onclick = () => {
 
-      const color = currentColor;
-      const size = document.getElementById("variant-size")?.value || null;
-
-      let variant = null;
-
-      if(color){
-        variant = product.variants.find(v =>
-          v.color === color && v.size === size
-        );
+      if(!currentColor){
+        alert("Selecciona un color");
+        return;
       }
 
-      const imgByColor = product.images?.find(img => img.color === color);
+      if(!currentSize){
+        alert("Selecciona una talla");
+        return;
+      }
+
+      const variant = (grouped[currentColor] || []).find(v => v.size === currentSize);
+
+      const imgByColor = product.images?.find(i => i.color === currentColor);
 
       const cartProduct = {
         id: product.id,
         name: product.name,
         price: variant?.price || product.price,
         image: imgByColor?.image_url || product.image,
-        color,
-        size
+        color: currentColor,
+        size: currentSize
       };
 
       addToCart(cartProduct);
 
       overlay.remove();
-
     };
 
   }
@@ -198,7 +194,6 @@ export async function loadProducts(slug){
     if(featuredContainer){
 
       const featured = products.filter(p => p.featured === true);
-
       productsToShow = featured.length ? featured : products.slice(0,4);
 
     }
