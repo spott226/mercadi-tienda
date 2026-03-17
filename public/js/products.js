@@ -78,6 +78,7 @@ function openVariantModal(product){
       <div class="mb-4">
         <div class="font-semibold mb-2">Talla</div>
         <select id="variant-size" class="w-full border p-2 rounded">
+        <option value="">Selecciona una talla</option>
           ${
             sizes.length
             ? sizes.map(s=>`<option value="${s}">${s}</option>`).join("")
