@@ -105,17 +105,6 @@ HERO
 
   <div class="relative z-10 max-w-xl px-6 mb-16">
 
-    <!-- TEXTO ELIMINADO -->
-    <!--
-    <h2 id="hero-title" class="text-3xl md:text-4xl font-bold mb-3">
-      Bienvenido
-    </h2>
-
-    <p id="hero-text" class="opacity-90 mb-6">
-      Productos seleccionados con el mejor estilo
-    </p>
-    -->
-
     <a href="/products.html" class="bg-white text-black px-6 py-3 rounded hover:opacity-90 transition">
       Ver catálogo
     </a>
@@ -179,16 +168,13 @@ CARRITO
 
   <div class="bg-white rounded w-[400px] max-w-[90%] max-h-[90vh] flex flex-col">
 
-    <!-- HEADER -->
     <div class="p-4 border-b flex justify-between items-center">
       <h2 class="text-xl font-bold">Tu carrito</h2>
       <button onclick="closeCart()">✕</button>
     </div>
 
-    <!-- ITEMS (SCROLL) -->
     <div id="cart-items" class="flex-1 overflow-y-auto p-4"></div>
 
-    <!-- FOOTER FIJO -->
     <div class="p-4 border-t">
 
       <div class="flex justify-between font-bold mb-3">
@@ -214,6 +200,39 @@ CARRITO
 
 </div>
 
+
+<!-- =========================
+FORMULARIO CHECKOUT (NUEVO)
+========================= -->
+
+<div id="checkout-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+  <div class="bg-white rounded-lg w-[400px] max-w-[90%] p-6">
+
+    <h2 class="text-xl font-bold mb-4">Datos de envío</h2>
+
+    <input id="c-name" placeholder="Nombre completo" class="w-full border p-2 mb-2 rounded">
+    <input id="c-phone" placeholder="Teléfono" class="w-full border p-2 mb-2 rounded">
+    <input id="c-address" placeholder="Calle y número" class="w-full border p-2 mb-2 rounded">
+    <input id="c-colony" placeholder="Colonia" class="w-full border p-2 mb-2 rounded">
+    <input id="c-city" placeholder="Ciudad" class="w-full border p-2 mb-2 rounded">
+    <input id="c-state" placeholder="Estado" class="w-full border p-2 mb-2 rounded">
+    <input id="c-postal" placeholder="Código postal" class="w-full border p-2 mb-2 rounded">
+    <input id="c-ref" placeholder="Referencia (opcional)" class="w-full border p-2 mb-4 rounded">
+
+    <button onclick="sendCheckout()" class="bg-black text-white w-full py-2 rounded">
+      Enviar pedido
+    </button>
+
+    <button onclick="closeCheckout()" class="mt-2 w-full text-gray-500">
+      Cancelar
+    </button>
+
+  </div>
+
+</div>
+
+
 <!-- =========================
 SCRIPTS
 ========================= -->
@@ -229,9 +248,7 @@ const btn = document.getElementById("menu-btn")
 const menu = document.getElementById("mobile-menu")
 
 btn.addEventListener("click", () => {
-
-menu.classList.toggle("hidden")
-
+  menu.classList.toggle("hidden")
 })
 
 </script>

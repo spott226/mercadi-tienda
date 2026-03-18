@@ -25,11 +25,8 @@ export function addToCart(product){
   );
 
   if(existing){
-
     existing.qty += 1;
-
   }else{
-
     cart.push({
       id: product.id,
       name: product.name,
@@ -37,9 +34,8 @@ export function addToCart(product){
       qty: 1,
       color: product.color || null,
       size: product.size || null,
-      image: product.image || null // 🔥 FIX IMPORTANTE
+      image: product.image || null
     });
-
   }
 
   saveCart(cart);
@@ -59,7 +55,6 @@ export function updateCartCount(){
   if(!counter) return;
 
   const totalItems = cart.reduce((acc,item)=>acc + item.qty,0);
-
   counter.textContent = totalItems;
 }
 
@@ -178,7 +173,7 @@ export function removeItem(index){
 
 
 /* =======================
-CHECKOUT WHATSAPP
+ABRIR FORM CHECKOUT
 ======================= */
 
 export function checkout(){
@@ -190,31 +185,49 @@ export function checkout(){
     return;
   }
 
-  // DATOS CLIENTE
-  const name = prompt("Nombre completo:");
-  if(!name) return;
+  const modal = document.getElementById("checkout-modal");
 
-  const phoneClient = prompt("Teléfono:");
-  if(!phoneClient) return;
+  if(modal){
+    modal.classList.remove("hidden");
+  }
 
-  const address = prompt("Calle y número:");
-  if(!address) return;
+}
 
-  const colony = prompt("Colonia:");
-  if(!colony) return;
 
-  const city = prompt("Ciudad o municipio:");
-  if(!city) return;
+/* =======================
+CERRAR FORM
+======================= */
 
-  const state = prompt("Estado:");
-  if(!state) return;
+export function closeCheckout(){
+  const modal = document.getElementById("checkout-modal");
+  if(modal){
+    modal.classList.add("hidden");
+  }
+}
 
-  const postal = prompt("Código postal:");
-  if(!postal) return;
 
-  const reference = prompt("Referencia (opcional):") || "";
+/* =======================
+ENVIAR A WHATSAPP
+======================= */
 
-  // MENSAJE
+export function sendCheckout(){
+
+  const cart = getCart();
+
+  const name = document.getElementById("c-name").value;
+  const phoneClient = document.getElementById("c-phone").value;
+  const address = document.getElementById("c-address").value;
+  const colony = document.getElementById("c-colony").value;
+  const city = document.getElementById("c-city").value;
+  const state = document.getElementById("c-state").value;
+  const postal = document.getElementById("c-postal").value;
+  const reference = document.getElementById("c-ref").value;
+
+  if(!name || !phoneClient || !address){
+    alert("Completa los datos obligatorios");
+    return;
+  }
+
   let message = "Hola, quiero pedir:%0A%0A";
   let total = 0;
 
@@ -253,7 +266,6 @@ export function checkout(){
     message += `Referencia: ${reference}%0A`;
   }
 
-  // WHATSAPP
   const whatsapp = window.store?.whatsapp;
 
   if(!whatsapp){
@@ -280,3 +292,5 @@ window.openCart = openCart;
 window.closeCart = closeCart;
 window.removeItem = removeItem;
 window.checkout = checkout;
+window.closeCheckout = closeCheckout;
+window.sendCheckout = sendCheckout;
