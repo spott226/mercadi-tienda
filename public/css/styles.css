@@ -425,3 +425,63 @@ body.theme-black .chatbot-box{
 background:#0d0d0d;
 color:#fff;
 }
+
+/* =====================================================
+GLOBAL MODALS FIX (THEME BLACK)
+===================================================== */
+
+body.theme-black .cart-box,
+body.theme-black .modal,
+body.theme-black .modal-box{
+
+background:#0d0d0d !important;
+color:#fff !important;
+}
+
+/* TEXTOS */
+body.theme-black label,
+body.theme-black p,
+body.theme-black span,
+body.theme-black h1,
+body.theme-black h2,
+body.theme-black h3{
+color:#fff !important;
+}
+
+/* INPUTS */
+body.theme-black input,
+body.theme-black select{
+background:#111 !important;
+color:#fff !important;
+border:1px solid #333 !important;
+}
+
+/* PLACEHOLDER */
+body.theme-black input::placeholder{
+color:#777;
+}
+
+/* BOTONES SECUNDARIOS */
+body.theme-black button{
+color:inherit;
+}
+
+/* BOTÓN CANCELAR */
+body.theme-black button.bg-gray-200{
+background:#1a1a1a !important;
+color:#fff !important;
+border:1px solid #333;
+}
+
+/* BOTÓN PRINCIPAL */
+body.theme-black button.bg-black{
+background:#fff !important;
+color:#000 !important;
+}
+
+/* BORDES GENERALES */
+body.theme-black hr,
+body.theme-black .border,
+body.theme-black .border-b{
+border-color:#222 !important;
+}
