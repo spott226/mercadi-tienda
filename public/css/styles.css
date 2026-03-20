@@ -46,14 +46,11 @@ PRODUCT CARDS
 ===================================================== */
 
 .product-card{
-
 background:var(--card);
 border-radius:var(--radius);
 overflow:hidden;
 border:1px solid var(--border);
-
 transition:.2s;
-
 }
 
 .product-card:hover{
@@ -63,7 +60,7 @@ box-shadow:0 10px 20px rgba(0,0,0,.08);
 
 .product-image{
 width:100%;
-aspect-ratio:1/1;   /* mantiene proporción cuadrada */
+aspect-ratio:1/1;
 overflow:hidden;
 background:#f1f1f1;
 }
@@ -71,7 +68,7 @@ background:#f1f1f1;
 .product-image img{
 width:100%;
 height:100%;
-object-fit:cover;   /* llena la card sin deformarse */
+object-fit:cover;
 display:block;
 }
 
@@ -87,23 +84,18 @@ margin-bottom:6px;
 
 .product-price{
 font-weight:700;
-color:#111; /* siempre negro */
+color:#111;
 }
 
 .product-btn{
-
 margin-top:10px;
 width:100%;
-
-background:#111; /* botón siempre negro */
+background:#111;
 color:white;
-
 padding:8px;
 border-radius:6px;
-
 cursor:pointer;
 transition:.2s;
-
 }
 
 .product-btn:hover{
@@ -116,46 +108,34 @@ CATEGORIES
 ===================================================== */
 
 .category-card{
-
 background:var(--card);
 border:1px solid var(--border);
 padding:18px;
-
 border-radius:8px;
-
 text-align:center;
 font-weight:600;
 color:var(--text);
-
 transition:.2s;
-
 }
 
 .category-card:hover{
-
 border-color:var(--primary);
 box-shadow:0 6px 14px rgba(0,0,0,.08);
-
 }
 
 
 /* =====================================================
-CART MODAL
+CART MODAL (FIX REAL)
 ===================================================== */
 
 .cart-modal{
-
 position:fixed;
 inset:0;
-
 background:rgba(0,0,0,.4);
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 z-index:999;
-
 }
 
 .hidden{
@@ -163,82 +143,91 @@ display:none;
 }
 
 .cart-box{
-
 background:var(--card);
 width:420px;
 max-width:92%;
 
+/* 🔥 FIX CLAVE */
+max-height:90vh;
+display:flex;
+flex-direction:column;
+
 border-radius:10px;
-padding:24px;
+padding:0; /* quitamos padding para controlar mejor layout */
 
 box-shadow:0 20px 40px rgba(0,0,0,.2);
-
 color:var(--text);
-
 }
 
+/* HEADER */
 .cart-title{
 font-size:20px;
 font-weight:600;
-margin-bottom:18px;
-color:var(--text);
+padding:20px;
+border-bottom:1px solid var(--border);
 }
 
-.cart-item{
+/* ITEMS SCROLL */
+#cart-items{
+flex:1;
+overflow-y:auto;
+padding:16px;
+}
 
+/* ITEMS */
+.cart-item{
 display:flex;
 justify-content:space-between;
 border-bottom:1px solid var(--border);
 padding:10px 0;
-
 color:var(--text);
+}
 
+/* FOOTER FIJO */
+.cart-footer{
+padding:16px;
+border-top:1px solid var(--border);
+background:var(--card);
 }
 
 .cart-total{
-
 display:flex;
 justify-content:space-between;
-margin-top:14px;
-
+margin-bottom:12px;
 font-weight:700;
 color:var(--text);
-
 }
 
 .cart-actions{
-
 display:flex;
 gap:10px;
-margin-top:18px;
-
 }
 
 .cart-close{
-
 flex:1;
 border:1px solid var(--border);
 padding:10px;
-
 border-radius:6px;
 cursor:pointer;
-
 background:transparent;
 color:var(--text);
-
 }
 
 .cart-checkout{
-
 flex:1;
 background:#111;
 color:white;
-
 padding:10px;
 border-radius:6px;
-
 cursor:pointer;
+}
 
+
+/* 📱 FIX iPhone */
+@supports (height: 100dvh){
+  .cart-box{
+    max-height:90dvh;
+  }
 }
 
 
@@ -247,55 +236,34 @@ CHATBOT
 ===================================================== */
 
 .chatbot-fab{
-
 position:fixed;
-
 bottom:20px;
 right:20px;
-
 width:56px;
 height:56px;
-
 background:#111;
 color:white;
-
 border-radius:50%;
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 font-size:22px;
-
 box-shadow:0 6px 20px rgba(0,0,0,.2);
-
 cursor:pointer;
-
 z-index:9999;
-
 }
 
 .chatbot-box{
-
 position:fixed;
-
 bottom:90px;
 right:20px;
-
 width:300px;
-
 background:var(--card);
-
 border-radius:12px;
-
 box-shadow:0 10px 30px rgba(0,0,0,.2);
-
 overflow:hidden;
-
 z-index:9999;
-
 color:var(--text);
-
 }
 
 .chatbot-hidden{
@@ -304,17 +272,98 @@ display:none;
 
 
 /* =====================================================
+THEME DARK MODERN
+===================================================== */
+
+.theme-dark{
+
+--primary:#1a1a1a;
+--background:#2b2b2b;
+--card:#333333;
+--text:#f5f5f5;
+--border:#444;
+--accent:#999;
+
+}
+
+/* NAVBAR */
+.theme-dark header{
+background:#1f1f1f;
+border-bottom:1px solid var(--border);
+}
+
+/* PRODUCT CARDS */
+.theme-dark .product-card{
+background:var(--card);
+border:1px solid var(--border);
+}
+
+.theme-dark .product-card:hover{
+box-shadow:0 10px 20px rgba(0,0,0,.5);
+}
+
+.theme-dark .product-title{
+color:var(--text);
+}
+
+.theme-dark .product-price{
+color:#ffffff;
+}
+
+.theme-dark .product-btn{
+background:#555;
+color:white;
+}
+
+.theme-dark .product-btn:hover{
+background:#777;
+}
+
+/* CATEGORIES */
+.theme-dark .category-card{
+background:var(--card);
+border:1px solid var(--border);
+color:var(--text);
+}
+
+/* CART */
+.theme-dark .cart-box{
+background:var(--card);
+color:var(--text);
+}
+
+.theme-dark .cart-close{
+border:1px solid var(--border);
+color:var(--text);
+}
+
+.theme-dark .cart-checkout{
+background:#555;
+color:white;
+}
+
+/* CHATBOT */
+.theme-dark .chatbot-fab{
+background:#555;
+color:white;
+}
+
+.theme-dark .chatbot-box{
+background:var(--card);
+color:var(--text);
+}
+
+
+/* =====================================================
 THEME LUXURY
 ===================================================== */
 
 .theme-luxury{
-
 --background:#0b0b0b;
 --card:#161616;
 --text:#f2f2f2;
 --border:rgba(200,169,106,.2);
 --accent:#e6c88c;
-
 }
 
 .theme-luxury header{
