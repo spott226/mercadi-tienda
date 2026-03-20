@@ -14,14 +14,14 @@
 
 </head>
 
-<body class="bg-gray-100">
+<body>
 
 
 <!-- =========================
 NAVBAR
 ========================= -->
 
-<header class="bg-white shadow sticky top-0 z-50">
+<header class="shadow sticky top-0 z-50">
 
 <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
 
@@ -53,7 +53,7 @@ Tienda
 
 <div class="flex items-center gap-4">
 
-<button onclick="openCart()" class="relative bg-black text-white w-12 h-12 rounded flex items-center justify-center">
+<button onclick="openCart()" class="relative w-12 h-12 rounded flex items-center justify-center">
 
 <span class="text-lg">🛒</span>
 
@@ -75,7 +75,7 @@ class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 rounded
 </div>
 
 
-<div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+<div id="mobile-menu" class="hidden md:hidden border-t">
 
 <a href="/" class="block p-4 border-b">Inicio</a>
 
@@ -105,7 +105,7 @@ HERO
 
   <div class="relative z-10 max-w-xl px-6 mb-16">
 
-    <a href="/products.html" class="bg-white text-black px-6 py-3 rounded hover:opacity-90 transition">
+    <a href="/products.html" class="px-6 py-3 rounded hover:opacity-90 transition">
       Ver catálogo
     </a>
 
@@ -138,7 +138,7 @@ class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8"
 FOOTER
 ========================= -->
 
-<footer class="bg-black text-white mt-20">
+<footer class="mt-20">
 
 <div class="max-w-7xl mx-auto p-8 text-center opacity-80">
 
@@ -166,7 +166,7 @@ CARRITO
 
 <div id="cart-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-  <div class="bg-white rounded w-[400px] max-w-[90%] max-h-[90vh] flex flex-col">
+  <div class="rounded w-[400px] max-w-[90%] max-h-[90vh] flex flex-col">
 
     <div class="p-4 border-b flex justify-between items-center">
       <h2 class="text-xl font-bold">Tu carrito</h2>
@@ -188,7 +188,7 @@ CARRITO
           Cerrar
         </button>
 
-        <button onclick="checkout()" class="flex-1 bg-black text-white p-2 rounded">
+        <button onclick="checkout()" class="flex-1 p-2 rounded">
           Enviar pedido
         </button>
 
@@ -207,7 +207,7 @@ FORMULARIO CHECKOUT (NUEVO)
 
 <div id="checkout-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
-  <div class="bg-white rounded-lg w-[400px] max-w-[90%] p-6">
+  <div class="rounded-lg w-[400px] max-w-[90%] p-6">
 
     <h2 class="text-xl font-bold mb-4">Datos de envío</h2>
 
@@ -220,11 +220,11 @@ FORMULARIO CHECKOUT (NUEVO)
     <input id="c-postal" placeholder="Código postal" class="w-full border p-2 mb-2 rounded">
     <input id="c-ref" placeholder="Referencia (opcional)" class="w-full border p-2 mb-4 rounded">
 
-    <button onclick="sendCheckout()" class="bg-black text-white w-full py-2 rounded">
+    <button onclick="sendCheckout()" class="w-full py-2 rounded">
       Enviar pedido
     </button>
 
-    <button onclick="closeCheckout()" class="mt-2 w-full text-gray-500">
+    <button onclick="closeCheckout()" class="mt-2 w-full">
       Cancelar
     </button>
 

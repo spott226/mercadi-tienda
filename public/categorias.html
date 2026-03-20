@@ -14,13 +14,13 @@
 
 </head>
 
-<body class="bg-gray-100">
+<body>
 
 <!-- =========================
 NAVBAR
 ========================= -->
 
-<header class="bg-white shadow sticky top-0 z-50">
+<header class="shadow sticky top-0 z-50">
 
 <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
 
@@ -56,7 +56,7 @@ Tienda
 
 <!-- BOTON CARRITO -->
 
-<button onclick="openCart()" class="relative bg-black text-white w-12 h-12 rounded flex items-center justify-center">
+<button onclick="openCart()" class="relative w-12 h-12 rounded flex items-center justify-center">
 
 <span class="text-lg">🛒</span>
 
@@ -82,7 +82,7 @@ class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 rounded
 
 <!-- MENU MOBILE -->
 
-<div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+<div id="mobile-menu" class="hidden md:hidden border-t">
 
 <a href="/index.html" class="block p-4 border-b">Inicio</a>
 <a href="/products.html" class="block p-4 border-b">Productos</a>
@@ -116,7 +116,7 @@ class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
 FOOTER
 ========================= -->
 
-<footer class="bg-black text-white mt-20">
+<footer class="mt-20">
 
 <div class="max-w-7xl mx-auto p-8 text-center opacity-80">
 
@@ -142,7 +142,7 @@ CARRITO MODAL
 
 <div id="cart-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-<div class="bg-white p-6 rounded w-[400px] max-w-[90%]">
+<div class="p-6 rounded w-[400px] max-w-[90%]">
 
 <h2 class="text-xl font-bold mb-4">Tu carrito</h2>
 
@@ -161,7 +161,7 @@ CARRITO MODAL
 Cerrar
 </button>
 
-<button onclick="checkout()" class="flex-1 bg-black text-white p-2 rounded">
+<button onclick="checkout()" class="flex-1 p-2 rounded">
 Enviar pedido
 </button>
 
@@ -218,7 +218,7 @@ const categorySlug = encodeURIComponent(cat);
 container.innerHTML += `
 
 <a href="/products.html?category=${categorySlug}" 
-class="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer transition text-center block">
+class="p-6 rounded shadow hover:shadow-lg cursor-pointer transition text-center block">
 
 <h3 class="text-lg font-semibold">${cat}</h3>
 
