@@ -448,3 +448,25 @@ body.theme-luxury{
 background:var(--background);
 color:var(--text);
 }
+
+/* MODAL PRODUCTO */
+.product-modal{
+background:var(--card);
+color:var(--text);
+border:1px solid var(--border);
+}
+
+/* SELECTS */
+.product-modal select{
+appearance:none;
+-webkit-appearance:none;
+-moz-appearance:none;
+
+background:var(--background);
+color:var(--text);
+border:1px solid var(--border);
+
+padding:10px;
+border-radius:6px;
+width:100%;
+}

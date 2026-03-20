@@ -57,7 +57,7 @@ function openVariantModal(product){
     }
 
     overlay.innerHTML = `
-    <div class="bg-white p-6 rounded w-[420px] max-w-[90%]">
+    <div class="product-modal p-6 rounded w-[420px] max-w-[90%]">
 
       <h2 class="text-lg font-bold mb-4">${product.name}</h2>
 
