@@ -93,7 +93,8 @@ const validThemes = [
 "luxury",
 "modern",
 "street",
-"minimal"
+"minimal",
+"black"
 ];
 
 if(store.theme && validThemes.includes(store.theme)){
