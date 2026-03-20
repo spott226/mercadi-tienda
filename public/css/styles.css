@@ -146,20 +146,15 @@ display:none;
 background:var(--card);
 width:420px;
 max-width:92%;
-
-/* 🔥 FIX CLAVE */
 max-height:90vh;
 display:flex;
 flex-direction:column;
-
 border-radius:10px;
-padding:0; /* quitamos padding para controlar mejor layout */
-
+padding:0;
 box-shadow:0 20px 40px rgba(0,0,0,.2);
 color:var(--text);
 }
 
-/* HEADER */
 .cart-title{
 font-size:20px;
 font-weight:600;
@@ -167,14 +162,12 @@ padding:20px;
 border-bottom:1px solid var(--border);
 }
 
-/* ITEMS SCROLL */
 #cart-items{
 flex:1;
 overflow-y:auto;
 padding:16px;
 }
 
-/* ITEMS */
 .cart-item{
 display:flex;
 justify-content:space-between;
@@ -183,7 +176,6 @@ padding:10px 0;
 color:var(--text);
 }
 
-/* FOOTER FIJO */
 .cart-footer{
 padding:16px;
 border-top:1px solid var(--border);
@@ -222,8 +214,6 @@ border-radius:6px;
 cursor:pointer;
 }
 
-
-/* 📱 FIX iPhone */
 @supports (height: 100dvh){
   .cart-box{
     max-height:90dvh;
@@ -286,20 +276,14 @@ THEME DARK MODERN
 
 }
 
-/* NAVBAR */
 .theme-dark header{
 background:#1f1f1f;
 border-bottom:1px solid var(--border);
 }
 
-/* PRODUCT CARDS */
 .theme-dark .product-card{
 background:var(--card);
 border:1px solid var(--border);
-}
-
-.theme-dark .product-card:hover{
-box-shadow:0 10px 20px rgba(0,0,0,.5);
 }
 
 .theme-dark .product-title{
@@ -315,25 +299,14 @@ background:#555;
 color:white;
 }
 
-.theme-dark .product-btn:hover{
-background:#777;
-}
-
-/* CATEGORIES */
 .theme-dark .category-card{
 background:var(--card);
 border:1px solid var(--border);
 color:var(--text);
 }
 
-/* CART */
 .theme-dark .cart-box{
 background:var(--card);
-color:var(--text);
-}
-
-.theme-dark .cart-close{
-border:1px solid var(--border);
 color:var(--text);
 }
 
@@ -342,7 +315,6 @@ background:#555;
 color:white;
 }
 
-/* CHATBOT */
 .theme-dark .chatbot-fab{
 background:#555;
 color:white;
@@ -384,4 +356,72 @@ background:#161616;
 
 .theme-luxury .cart-close{
 border:1px solid rgba(200,169,106,.2);
+}
+
+
+/* =====================================================
+THEME BLACK (REAL OVERRIDE)
+===================================================== */
+
+body.theme-black{
+--background:#000;
+--card:#0d0d0d;
+--text:#ffffff;
+--border:#222;
+}
+
+/* FORZAMOS OVERRIDE REAL */
+body.theme-black{
+background:#000;
+color:#fff;
+}
+
+body.theme-black header{
+background:#000;
+border-bottom:1px solid #222;
+}
+
+body.theme-black header a{
+color:#fff;
+}
+
+body.theme-black .product-card{
+background:#0d0d0d;
+border:1px solid #222;
+}
+
+body.theme-black .product-title,
+body.theme-black .product-price{
+color:#fff;
+}
+
+body.theme-black .product-btn{
+background:#fff;
+color:#000;
+}
+
+body.theme-black .category-card{
+background:#0d0d0d;
+border:1px solid #222;
+color:#fff;
+}
+
+body.theme-black .cart-box{
+background:#0d0d0d;
+color:#fff;
+}
+
+body.theme-black .cart-checkout{
+background:#fff;
+color:#000;
+}
+
+body.theme-black .chatbot-fab{
+background:#fff;
+color:#000;
+}
+
+body.theme-black .chatbot-box{
+background:#0d0d0d;
+color:#fff;
 }
