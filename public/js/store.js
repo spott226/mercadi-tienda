@@ -86,7 +86,7 @@ document.title = store.name || "Mercadia";
 
 
 // =================================
-// THEME DESDE DATABASE
+// THEME DESDE DATABASE (FIX REAL)
 // =================================
 
 const validThemes = [
@@ -97,6 +97,12 @@ const validThemes = [
 "black"
 ];
 
+// 🔥 LIMPIAR THEMES ANTES
+validThemes.forEach(t => {
+document.body.classList.remove(`theme-${t}`);
+});
+
+// 🔥 APLICAR SOLO UNO
 if(store.theme && validThemes.includes(store.theme)){
 
 document.body.classList.add(`theme-${store.theme}`);
