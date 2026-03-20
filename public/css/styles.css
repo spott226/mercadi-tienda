@@ -27,7 +27,7 @@ font-family:system-ui,-apple-system,Segoe UI,Roboto;
 
 
 /* =====================================================
-GLOBAL FIXES (CRÍTICO)
+GLOBAL FIXES
 ===================================================== */
 
 button{
@@ -40,6 +40,10 @@ color:var(--text);
 border:1px solid var(--border);
 border-radius:6px;
 outline:none;
+}
+
+input::placeholder{
+color:var(--text-muted);
 }
 
 a{
@@ -169,8 +173,11 @@ z-index:999;
 display:none;
 }
 
-.cart-box{
-background:var(--card-elevated);
+.cart-box,
+#cart-modal > div{
+background:var(--card);
+color:var(--text);
+border:1px solid var(--border);
 width:420px;
 max-width:92%;
 max-height:90vh;
@@ -178,7 +185,6 @@ display:flex;
 flex-direction:column;
 border-radius:10px;
 box-shadow:0 20px 40px rgba(0,0,0,.3);
-color:var(--text);
 }
 
 .cart-title{
@@ -255,6 +261,29 @@ border:none;
 .cart-box{
 max-height:90dvh;
 }
+}
+
+
+/* =====================================================
+CHECKOUT MODAL
+===================================================== */
+
+#checkout-modal > div{
+background:var(--card);
+color:var(--text);
+border:1px solid var(--border);
+border-radius:10px;
+}
+
+#checkout-modal input{
+background:var(--background);
+color:var(--text);
+border:1px solid var(--border);
+}
+
+#checkout-modal button:first-of-type{
+background:var(--primary);
+color:var(--text-inverse);
 }
 
 
@@ -356,16 +385,4 @@ THEMES
 
 --primary:#e6c88c;
 --border:rgba(200,169,106,.2);
-}
-
-.cart-box,
-#cart-modal > div{
-background:var(--card);
-color:var(--text);
-border:1px solid var(--border);
-}
-
-.cart-checkout{
-background:var(--primary);
-color:var(--text-inverse);
 }
