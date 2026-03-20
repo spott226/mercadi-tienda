@@ -125,7 +125,7 @@ box-shadow:0 6px 14px rgba(0,0,0,.08);
 
 
 /* =====================================================
-CART MODAL (FIX REAL)
+CART MODAL
 ===================================================== */
 
 .cart-modal{
@@ -262,7 +262,42 @@ display:none;
 
 
 /* =====================================================
-THEME DARK MODERN
+THEME MODERN
+===================================================== */
+
+.theme-modern{
+
+--primary:#111;
+--background:#f5f5f5;
+--card:#ffffff;
+--text:#111;
+--border:#e5e5e5;
+--accent:#666;
+
+}
+
+.theme-modern header{
+background:var(--card);
+border-bottom:1px solid var(--border);
+}
+
+.theme-modern .product-card{
+background:var(--card);
+border:1px solid var(--border);
+}
+
+.theme-modern .product-btn{
+background:#111;
+color:white;
+}
+
+.theme-modern .cart-box{
+background:var(--card);
+}
+
+
+/* =====================================================
+THEME DARK
 ===================================================== */
 
 .theme-dark{
@@ -274,55 +309,6 @@ THEME DARK MODERN
 --border:#444;
 --accent:#999;
 
-}
-
-.theme-dark header{
-background:#1f1f1f;
-border-bottom:1px solid var(--border);
-}
-
-.theme-dark .product-card{
-background:var(--card);
-border:1px solid var(--border);
-}
-
-.theme-dark .product-title{
-color:var(--text);
-}
-
-.theme-dark .product-price{
-color:#ffffff;
-}
-
-.theme-dark .product-btn{
-background:#555;
-color:white;
-}
-
-.theme-dark .category-card{
-background:var(--card);
-border:1px solid var(--border);
-color:var(--text);
-}
-
-.theme-dark .cart-box{
-background:var(--card);
-color:var(--text);
-}
-
-.theme-dark .cart-checkout{
-background:#555;
-color:white;
-}
-
-.theme-dark .chatbot-fab{
-background:#555;
-color:white;
-}
-
-.theme-dark .chatbot-box{
-background:var(--card);
-color:var(--text);
 }
 
 
@@ -338,156 +324,9 @@ THEME LUXURY
 --accent:#e6c88c;
 }
 
-.theme-luxury header{
-background:#111;
-}
-
-.theme-luxury .product-card{
-background:#161616;
-}
-
-.theme-luxury .category-card{
-background:#161616;
-}
-
-.theme-luxury .cart-box{
-background:#161616;
-}
-
-.theme-luxury .cart-close{
-border:1px solid rgba(200,169,106,.2);
-}
-
 
 /* =====================================================
-THEME BLACK (REAL OVERRIDE)
-===================================================== */
-
-body.theme-black{
---background:#000;
---card:#0d0d0d;
---text:#ffffff;
---border:#222;
-}
-
-/* FORZAMOS OVERRIDE REAL */
-body.theme-black{
-background:#000;
-color:#fff;
-}
-
-body.theme-black header{
-background:#000;
-border-bottom:1px solid #222;
-}
-
-body.theme-black header a{
-color:#fff;
-}
-
-body.theme-black .product-card{
-background:#0d0d0d;
-border:1px solid #222;
-}
-
-body.theme-black .product-title,
-body.theme-black .product-price{
-color:#fff;
-}
-
-body.theme-black .product-btn{
-background:#fff;
-color:#000;
-}
-
-body.theme-black .category-card{
-background:#0d0d0d;
-border:1px solid #222;
-color:#fff;
-}
-
-body.theme-black .cart-box{
-background:#0d0d0d;
-color:#fff;
-}
-
-body.theme-black .cart-checkout{
-background:#fff;
-color:#000;
-}
-
-body.theme-black .chatbot-fab{
-background:#fff;
-color:#000;
-}
-
-body.theme-black .chatbot-box{
-background:#0d0d0d;
-color:#fff;
-}
-
-/* =====================================================
-GLOBAL MODALS FIX (THEME BLACK)
-===================================================== */
-
-body.theme-black .cart-box,
-body.theme-black .modal,
-body.theme-black .modal-box{
-
-background:#0d0d0d !important;
-color:#fff !important;
-}
-
-/* TEXTOS */
-body.theme-black label,
-body.theme-black p,
-body.theme-black span,
-body.theme-black h1,
-body.theme-black h2,
-body.theme-black h3{
-color:#fff !important;
-}
-
-/* INPUTS */
-body.theme-black input,
-body.theme-black select{
-background:#111 !important;
-color:#fff !important;
-border:1px solid #333 !important;
-}
-
-/* PLACEHOLDER */
-body.theme-black input::placeholder{
-color:#777;
-}
-
-/* BOTONES SECUNDARIOS */
-body.theme-black button{
-color:inherit;
-}
-
-/* BOTÓN CANCELAR */
-body.theme-black button.bg-gray-200{
-background:#1a1a1a !important;
-color:#fff !important;
-border:1px solid #333;
-}
-
-/* BOTÓN PRINCIPAL */
-body.theme-black button.bg-black{
-background:#fff !important;
-color:#000 !important;
-}
-
-/* BORDES GENERALES */
-body.theme-black hr,
-body.theme-black .border,
-body.theme-black .border-b{
-border-color:#222 !important;
-}
-
-/* =====================================================
-THEME BLACK FIX COMPLETO
+THEME BLACK
 ===================================================== */
 
 body.theme-black{
@@ -498,63 +337,21 @@ body.theme-black{
 --primary:#fff;
 }
 
-/* FORZAR FONDOS */
-body.theme-black,
-body.theme-black .cart-box,
-body.theme-black .modal,
-body.theme-black .modal-box,
+body.theme-black{
+background:#000;
+color:#fff;
+}
+
+body.theme-black .product-card,
 body.theme-black .category-card,
-body.theme-black header{
-background:var(--card) !important;
-color:var(--text) !important;
+body.theme-black .cart-box,
+body.theme-black .chatbot-box{
+background:var(--card);
+color:#fff;
 }
 
-/* NAV MOBILE */
-body.theme-black nav,
-body.theme-black .mobile-menu{
-background:#0d0d0d !important;
-color:#fff !important;
-}
-
-/* PRODUCTOS */
-body.theme-black .product-card{
-background:#0d0d0d !important;
-border:1px solid #222;
-}
-
-/* INPUTS */
-body.theme-black input,
-body.theme-black select{
-background:#111 !important;
-color:#fff !important;
-border:1px solid #333 !important;
-}
-
-/* BOTONES */
-body.theme-black button{
-border-radius:6px;
-}
-
-/* BOTÓN PRINCIPAL */
 body.theme-black .product-btn,
 body.theme-black .cart-checkout{
-background:#fff !important;
-color:#000 !important;
-}
-
-/* BOTÓN SECUNDARIO */
-body.theme-black .cart-close{
-background:#111 !important;
-color:#fff !important;
-border:1px solid #333;
-}
-
-/* TEXTOS */
-body.theme-black h1,
-body.theme-black h2,
-body.theme-black h3,
-body.theme-black p,
-body.theme-black span,
-body.theme-black label{
-color:#fff !important;
+background:#fff;
+color:#000;
 }
