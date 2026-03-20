@@ -17,7 +17,8 @@ buttonsHTML += `
 class="chatbot-option w-full text-left border border-gray-200 rounded-xl p-3 hover:bg-gray-50"
 data-action="${opt.action || "whatsapp"}"
 data-message="${opt.message || ""}"
-data-response="${opt.response || ""}">
+data-response="${opt.response || ""}"
+data-type="${opt.type || ""}">
 ${opt.label}
 </button>
 `;
@@ -102,7 +103,25 @@ return;
 
 const phone = String(window.store.whatsapp).replace(/\D/g,"");
 
-const text = encodeURIComponent(button.dataset.message);
+// 🔥 AQUÍ ESTÁ EL CAMBIO (mensaje dinámico)
+let message = "";
+
+const storeName = window.store?.name || "la tienda";
+const productName = window.store?.product_name || "productos";
+
+const type = button.dataset.type;
+
+if(type === "asesor"){
+message = `Hola ${storeName}, quiero hablar con un asesor sobre tus ${productName} disponibles`;
+}
+else if(type === "duda"){
+message = `Hola ${storeName}, tengo una duda sobre los ${productName} que venden`;
+}
+else{
+message = button.dataset.message || "Hola, quiero información";
+}
+
+const text = encodeURIComponent(message);
 
 window.open(`https://wa.me/${phone}?text=${text}`,"_blank");
 

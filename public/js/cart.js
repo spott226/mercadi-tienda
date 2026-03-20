@@ -228,7 +228,9 @@ export function sendCheckout(){
     return;
   }
 
-  let message = "Hola, quiero pedir:%0A%0A";
+  const storeName = window.store?.name || "la tienda";
+
+  let message = `Hola ${storeName}, mi pedido es:%0A%0A`;
   let total = 0;
 
   cart.forEach(p=>{
