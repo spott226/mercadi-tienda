@@ -485,3 +485,76 @@ body.theme-black .border,
 body.theme-black .border-b{
 border-color:#222 !important;
 }
+
+/* =====================================================
+THEME BLACK FIX COMPLETO
+===================================================== */
+
+body.theme-black{
+--background:#000;
+--card:#0d0d0d;
+--text:#fff;
+--border:#222;
+--primary:#fff;
+}
+
+/* FORZAR FONDOS */
+body.theme-black,
+body.theme-black .cart-box,
+body.theme-black .modal,
+body.theme-black .modal-box,
+body.theme-black .category-card,
+body.theme-black header{
+background:var(--card) !important;
+color:var(--text) !important;
+}
+
+/* NAV MOBILE */
+body.theme-black nav,
+body.theme-black .mobile-menu{
+background:#0d0d0d !important;
+color:#fff !important;
+}
+
+/* PRODUCTOS */
+body.theme-black .product-card{
+background:#0d0d0d !important;
+border:1px solid #222;
+}
+
+/* INPUTS */
+body.theme-black input,
+body.theme-black select{
+background:#111 !important;
+color:#fff !important;
+border:1px solid #333 !important;
+}
+
+/* BOTONES */
+body.theme-black button{
+border-radius:6px;
+}
+
+/* BOTÓN PRINCIPAL */
+body.theme-black .product-btn,
+body.theme-black .cart-checkout{
+background:#fff !important;
+color:#000 !important;
+}
+
+/* BOTÓN SECUNDARIO */
+body.theme-black .cart-close{
+background:#111 !important;
+color:#fff !important;
+border:1px solid #333;
+}
+
+/* TEXTOS */
+body.theme-black h1,
+body.theme-black h2,
+body.theme-black h3,
+body.theme-black p,
+body.theme-black span,
+body.theme-black label{
+color:#fff !important;
+}
