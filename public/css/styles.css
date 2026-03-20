@@ -357,3 +357,15 @@ THEMES
 --primary:#e6c88c;
 --border:rgba(200,169,106,.2);
 }
+
+.cart-box,
+#cart-modal > div{
+background:var(--card);
+color:var(--text);
+border:1px solid var(--border);
+}
+
+.cart-checkout{
+background:var(--primary);
+color:var(--text-inverse);
+}
