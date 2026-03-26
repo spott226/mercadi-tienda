@@ -435,6 +435,19 @@ THEMES
 --border:#bdbdbd;
 }
 
+/* EARTH / NATURAL */
+.theme-earth{
+--background:#102601;
+--card:#1B5948;
+--card-elevated:#245f4e;
+
+--text:#D9BFA0;
+--text-muted:#C09465;
+--text-inverse:#102601;
+
+--primary:#C09465;
+--border:#5F432E;
+}
 
 /* =====================================================
 FORCE THEME
