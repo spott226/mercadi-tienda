@@ -95,7 +95,8 @@ const validThemes = [
 "street",
 "minimal",
 "black",
-"gray"
+"gray",
+"earth"
 ];
 
 // 🔥 LIMPIAR THEMES ANTES
