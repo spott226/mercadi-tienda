@@ -44,12 +44,13 @@ function openImageZoom(src){
 
 
 /* =================================
-GALERÍA (🔥 NUEVO swipe/flechas)
+GALERÍA (🔥 swipe + flechas)
 ================================= */
 
 function openImageGallery(images){
 
   let currentIndex = 0;
+  let startX = 0;
 
   const overlay = document.createElement("div");
   overlay.className = "fixed inset-0 bg-black/95 flex items-center justify-center z-50";
@@ -97,6 +98,25 @@ function openImageGallery(images){
       }
     };
   }
+
+  // 🔥 SWIPE MÓVIL
+  overlay.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+  });
+
+  overlay.addEventListener("touchend", (e) => {
+    let endX = e.changedTouches[0].clientX;
+
+    if(startX - endX > 50){
+      currentIndex = (currentIndex + 1) % images.length;
+      render();
+    }
+
+    if(endX - startX > 50){
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      render();
+    }
+  });
 
   render();
 
@@ -358,7 +378,7 @@ export async function loadProducts(slug){
 
       container.appendChild(card);
 
-      // 🔥 CLICK EN IMAGEN (ZOOM O GALERÍA)
+      // 🔥 CLICK IMAGEN
       const img = card.querySelector("img");
 
       img.addEventListener("click", (e) => {
@@ -371,7 +391,7 @@ export async function loadProducts(slug){
         }
       });
 
-      // 🔥 BOTÓN NORMAL
+      // 🔥 BOTÓN
       const btn = card.querySelector(".add-cart");
 
       btn.addEventListener("click", () => {
