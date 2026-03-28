@@ -476,6 +476,7 @@ body.theme-black,
 body.theme-dark,
 body.theme-earth,
 body.theme-modern,
+body.theme-velour,
 body.theme-luxury{
 background:var(--background);
 color:var(--text);
