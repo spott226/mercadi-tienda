@@ -421,6 +421,24 @@ THEMES
 --border:rgba(200,169,106,.2);
 }
 
+/* VELOUR NOIR — Urban Premium */
+
+.theme-velour{
+--background:#0a0f0d;          /* negro con matiz verde profundo */
+--card:#121917;               /* elegante, no plano */
+--card-elevated:#18221f;      /* capas sutiles premium */
+
+--text:#f4f1e8;               /* beige claro fino */
+--text-muted:#9e8f6b;         /* arena elegante */
+--text-inverse:#000000;
+
+--primary:#c2a46f;            /* oro mate moderno (no chillón) */
+--secondary:#1b3a33;          /* verde profundo de marca */
+--accent:#5f432e;             /* café sofisticado */
+
+--border:rgba(194,164,111,.18);
+--glow:rgba(194,164,111,.25); /* para efectos glow premium */
+}
 /* GRAY */
 .theme-gray{
 --background:#e5e5e5;
