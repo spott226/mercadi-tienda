@@ -11,6 +11,100 @@ function getQueryParam(name){
 
 
 /* =================================
+ZOOM IMAGEN (sin variantes)
+================================= */
+
+function openImageZoom(src){
+
+  const overlay = document.createElement("div");
+  overlay.className = "fixed inset-0 bg-black/90 flex items-center justify-center z-50";
+
+  overlay.innerHTML = `
+    <div class="relative">
+      <span id="closeZoom"
+        style="position:absolute;top:-40px;right:0;color:white;font-size:30px;cursor:pointer;">
+        ✕
+      </span>
+
+      <img src="${src}"
+        style="max-width:90vw;max-height:90vh;border-radius:12px;">
+    </div>
+  `;
+
+  overlay.querySelector("#closeZoom").onclick = () => overlay.remove();
+
+  overlay.onclick = (e) => {
+    if(e.target === overlay){
+      overlay.remove();
+    }
+  };
+
+  document.body.appendChild(overlay);
+}
+
+
+/* =================================
+GALERÍA (🔥 NUEVO swipe/flechas)
+================================= */
+
+function openImageGallery(images){
+
+  let currentIndex = 0;
+
+  const overlay = document.createElement("div");
+  overlay.className = "fixed inset-0 bg-black/95 flex items-center justify-center z-50";
+
+  function render(){
+    overlay.innerHTML = `
+      <div class="relative flex items-center justify-center">
+
+        <span id="close"
+          style="position:absolute;top:-50px;right:0;color:white;font-size:30px;cursor:pointer;">
+          ✕
+        </span>
+
+        <span id="prev"
+          style="position:absolute;left:-50px;color:white;font-size:40px;cursor:pointer;">
+          ‹
+        </span>
+
+        <img src="${images[currentIndex].image_url}"
+          style="max-width:90vw;max-height:90vh;border-radius:12px;">
+
+        <span id="next"
+          style="position:absolute;right:-50px;color:white;font-size:40px;cursor:pointer;">
+          ›
+        </span>
+
+      </div>
+    `;
+
+    overlay.querySelector("#close").onclick = () => overlay.remove();
+
+    overlay.querySelector("#prev").onclick = () => {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      render();
+    };
+
+    overlay.querySelector("#next").onclick = () => {
+      currentIndex = (currentIndex + 1) % images.length;
+      render();
+    };
+
+    overlay.onclick = (e)=>{
+      if(e.target === overlay){
+        overlay.remove();
+      }
+    };
+  }
+
+  render();
+
+  document.body.appendChild(overlay);
+}
+
+
+/* =================================
 AGRUPAR VARIANTES
 ================================= */
 
@@ -264,6 +358,20 @@ export async function loadProducts(slug){
 
       container.appendChild(card);
 
+      // 🔥 CLICK EN IMAGEN (ZOOM O GALERÍA)
+      const img = card.querySelector("img");
+
+      img.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        if(product.images && product.images.length > 0){
+          openImageGallery(product.images);
+        }else{
+          openImageZoom(img.src);
+        }
+      });
+
+      // 🔥 BOTÓN NORMAL
       const btn = card.querySelector(".add-cart");
 
       btn.addEventListener("click", () => {
