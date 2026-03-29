@@ -96,7 +96,9 @@ const validThemes = [
 "minimal",
 "black",
 "gray",
-"earth"
+"earth",
+"tenis",
+"velour"
 ];
 
 // 🔥 LIMPIAR THEMES ANTES

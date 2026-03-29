@@ -421,23 +421,43 @@ THEMES
 --border:rgba(200,169,106,.2);
 }
 
-/* VELOUR NOIR — Urban Premium */
+/* =====================================================
+VELOUR NOIR — Urban Premium (FIX COMPLETO)
+===================================================== */
 
 .theme-velour{
---background:#0a0f0d;          /* negro con matiz verde profundo */
---card:#121917;               /* elegante, no plano */
---card-elevated:#18221f;      /* capas sutiles premium */
 
---text:#f4f1e8;               /* beige claro fino */
---text-muted:#9e8f6b;         /* arena elegante */
+/* BASE */
+--background:#0a0f0d;
+--card:#121917;
+--card-elevated:#18221f;
+
+/* TEXTOS */
+--text:#f4f1e8;
+--text-muted:#9e8f6b;
 --text-inverse:#000000;
 
---primary:#c2a46f;            /* oro mate moderno (no chillón) */
---secondary:#1b3a33;          /* verde profundo de marca */
---accent:#5f432e;             /* café sofisticado */
+/* COLORES PRINCIPALES */
+--primary:#c2a46f;
+--secondary:#1b3a33;
+--accent:#5f432e;
 
+/* UI */
 --border:rgba(194,164,111,.18);
---glow:rgba(194,164,111,.25); /* para efectos glow premium */
+--glow:rgba(194,164,111,.25);
+
+/* 🔥 FIX HERO OVERLAY */
+--overlay-start: rgba(10,15,13,.4);
+--overlay-end: rgba(10,15,13,.7);
+
+/* 🔥 FIX BOTONES / CONTRASTE */
+--button-bg: var(--primary);
+--button-text: #000;
+
+/* 🔥 FIX INPUTS */
+--input-bg: #121917;
+--input-border: rgba(194,164,111,.2);
+
 }
 /* GRAY */
 .theme-gray{
@@ -512,6 +532,41 @@ rgba(0,0,0,.7)
 );
 }
 
-body[class^="theme-"] main{
-background:var(--background);
+/* =====================================================
+🔥 TENIS GAMA MX — STREET PREMIUM
+===================================================== */
+
+.theme-tenis{
+
+/* BASE */
+--background:#0a0a0f;
+--card:#12121a;
+--card-elevated:#1a1a24;
+
+/* TEXTOS */
+--text:#f5f7fa;
+--text-muted:#9aa3b2;
+--text-inverse:#000;
+
+/* COLORES PRINCIPALES */
+--primary:#1e6bff;   /* azul fuerte tipo deportivo */
+--secondary:#ff2d2d; /* rojo Nike vibe */
+--accent:#00d4ff;    /* brillo moderno */
+
+/* UI */
+--border:rgba(255,255,255,.06);
+--glow:rgba(30,107,255,.3);
+
+/* HERO */
+--overlay-start: rgba(0,0,0,.3);
+--overlay-end: rgba(0,0,0,.75);
+
+/* BOTONES */
+--button-bg: linear-gradient(135deg,#1e6bff,#00d4ff);
+--button-text:#fff;
+
+/* INPUTS */
+--input-bg:#12121a;
+--input-border:rgba(255,255,255,.08);
+
 }
