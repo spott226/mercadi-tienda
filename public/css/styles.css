@@ -580,26 +580,26 @@ rgba(0,0,0,.7)
 .theme-lujo{
 
 /* BASE */
---background:#0a0a0a;
---card:#141414;
---card-elevated:#1c1c1c;
+--background:#070707;
+--card:#121212;
+--card-elevated:#1a1a1a;
 
 /* TEXTOS */
---text:#f5f5f5;
---text-muted:#a1a1a1;
+--text:#f8f8f8;
+--text-muted:#b0b0b0;
 --text-inverse:#000;
 
 /* COLORES */
---primary:#d4af37;   /* dorado elegante */
---secondary:#ffffff; /* blanco limpio */
---accent:#2f80ff;    /* toque moderno */
+--primary:#d4af37;
+--secondary:#ffffff;
+--accent:#2f80ff;
 
 /* UI */
---border:rgba(255,255,255,.08);
---glow:rgba(212,175,55,.25);
+--border:rgba(255,255,255,.12);
+--glow:rgba(212,175,55,.35);
 
 /* HERO */
---overlay-start: rgba(0,0,0,.4);
+--overlay-start: rgba(0,0,0,.3);
 --overlay-end: rgba(0,0,0,.85);
 
 /* BOTONES */
@@ -608,6 +608,6 @@ rgba(0,0,0,.7)
 
 /* INPUTS */
 --input-bg:#141414;
---input-border:rgba(255,255,255,.1);
+--input-border:rgba(255,255,255,.15);
 
 }
