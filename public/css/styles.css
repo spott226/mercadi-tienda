@@ -580,34 +580,45 @@ rgba(0,0,0,.7)
 .theme-lujo{
 
 /* BASE */
---background:#070707;
---card:#121212;
---card-elevated:#1a1a1a;
+--background:#050505;
+--card:#181818;          /* MÁS CLARO */
+--card-elevated:#222222; /* AÚN MÁS CLARO */
 
 /* TEXTOS */
---text:#f8f8f8;
---text-muted:#b0b0b0;
+--text:#ffffff;
+--text-muted:#bfbfbf;
 --text-inverse:#000;
 
 /* COLORES */
 --primary:#d4af37;
 --secondary:#ffffff;
---accent:#2f80ff;
+--accent:#3a86ff;
 
 /* UI */
---border:rgba(255,255,255,.12);
---glow:rgba(212,175,55,.35);
+--border:rgba(255,255,255,.18); /* MÁS VISIBLE */
+--glow:rgba(212,175,55,.45);
 
 /* HERO */
---overlay-start: rgba(0,0,0,.3);
---overlay-end: rgba(0,0,0,.85);
+--overlay-start: rgba(0,0,0,.2); /* MÁS LUZ */
+--overlay-end: rgba(0,0,0,.7);
 
 /* BOTONES */
 --button-bg: linear-gradient(135deg,#d4af37,#f5d97a);
 --button-text:#000;
 
 /* INPUTS */
---input-bg:#141414;
---input-border:rgba(255,255,255,.15);
+--input-bg:#1c1c1c;
+--input-border:rgba(255,255,255,.2);
 
+}
+
+.theme-lujo .product-card{
+background:var(--card-elevated); /* 🔥 usa elevated */
+border:1px solid var(--border);
+box-shadow:0 10px 40px rgba(0,0,0,.8);
+}
+
+.theme-lujo .product-card:hover{
+transform:translateY(-6px);
+box-shadow:0 20px 60px rgba(212,175,55,.25);
 }
