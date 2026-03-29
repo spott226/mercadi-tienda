@@ -98,7 +98,7 @@ const validThemes = [
 "gray",
 "earth",
 "tenis",
-"tenis-luxury",
+"lujo",
 "velour"
 ];
 

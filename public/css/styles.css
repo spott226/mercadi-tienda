@@ -497,7 +497,7 @@ body.theme-dark,
 body.theme-earth,
 body.theme-modern,
 body.theme-velour,
-body.tenis-luxury,
+body.lujo,
 body.tenis,
 body.theme-luxury{
 background:var(--background);
@@ -577,7 +577,7 @@ rgba(0,0,0,.7)
 🔥 TENIS ELEGANTE — LUXURY STREET
 ===================================================== */
 
-.theme-tenis-luxury{
+.theme-lujo{
 
 /* BASE */
 --background:#0a0a0a;
