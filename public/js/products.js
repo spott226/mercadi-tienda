@@ -401,9 +401,9 @@ export async function loadProducts(slug){
           return;
         }
 
-        const cartProduct = {
-  id: variant.id,
-  product_id: product.id,
+       const cartProduct = {
+  id: product.id,
+  variant_id: variant.id,
   name: product.name,
   price: variant?.price || product.price,
   image: imgByColor?.image_url || product.image,
