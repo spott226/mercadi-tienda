@@ -255,13 +255,14 @@ function openVariantModal(product){
       const imgByColor = product.images?.find(i => i.color === currentColor);
 
       const cartProduct = {
-        id: product.id,
-        name: product.name,
-        price: variant?.price || product.price,
-        image: imgByColor?.image_url || product.image,
-        color: currentColor,
-        size: currentSize
-      };
+  id: product.id,
+  variant_id: variant.id,
+  name: product.name,
+  price: variant?.price || product.price,
+  image: imgByColor?.image_url || product.image,
+  color: currentColor,
+  size: currentSize
+};
 
       addToCart(cartProduct);
 
@@ -401,14 +402,11 @@ export async function loadProducts(slug){
           return;
         }
 
-       const cartProduct = {
+        const cartProduct = {
   id: product.id,
-  variant_id: variant.id,
   name: product.name,
-  price: variant?.price || product.price,
-  image: imgByColor?.image_url || product.image,
-  color: currentColor,
-  size: currentSize
+  price: product.price,
+  image: imageUrl
 };
 
         addToCart(cartProduct);
