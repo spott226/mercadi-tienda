@@ -294,11 +294,11 @@ export async function sendCheckout(){
 
     const items = cart.map(p => ({
 
-      variant_id: p.id,
+  variant_id: p.variant_id,
 
-      quantity: p.qty
+  quantity: p.qty
 
-    }));
+}));
 
 
     // =======================
