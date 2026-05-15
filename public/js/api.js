@@ -96,14 +96,35 @@ export async function getProducts(slug) {
     return [];
   }
 
-  // 🔥 NORMALIZAR IMÁGENES (CLAVE)
+  // 🔥 NORMALIZAR IMÁGENES
   return products.map(p => {
 
-    // asegurar estructura
     p.images = p.images || [];
     p.variants = p.variants || [];
 
     return p;
+
+  });
+
+}
+
+
+// ================================
+// CREATE ORDER ERP
+// ================================
+
+export async function createOrder(orderData){
+
+  if(!orderData){
+    console.error("ORDER ERROR: datos vacíos");
+    return null;
+  }
+
+  return await apiRequest("/orders", {
+
+    method: "POST",
+
+    body: JSON.stringify(orderData)
 
   });
 

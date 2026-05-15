@@ -1,3 +1,5 @@
+import { createOrder } from "./api.js";
+
 const CART_KEY = "mercadia_cart";
 
 function getCart(){
@@ -25,8 +27,11 @@ export function addToCart(product){
   );
 
   if(existing){
+
     existing.qty += 1;
+
   }else{
+
     cart.push({
       id: product.id,
       name: product.name,
@@ -36,10 +41,13 @@ export function addToCart(product){
       size: product.size || null,
       image: product.image || null
     });
+
   }
 
   saveCart(cart);
+
   updateCartCount();
+
 }
 
 
@@ -50,12 +58,16 @@ CONTADOR
 export function updateCartCount(){
 
   const cart = getCart();
+
   const counter = document.getElementById("cart-count");
 
   if(!counter) return;
 
-  const totalItems = cart.reduce((acc,item)=>acc + item.qty,0);
+  const totalItems =
+    cart.reduce((acc,item)=>acc + item.qty,0);
+
   counter.textContent = totalItems;
+
 }
 
 
@@ -66,7 +78,9 @@ MOSTRAR CARRITO
 export function openCart(){
 
   const cart = getCart();
-  const container = document.getElementById("cart-items");
+
+  const container =
+    document.getElementById("cart-items");
 
   if(!container) return;
 
@@ -75,16 +89,19 @@ export function openCart(){
   let total = 0;
 
   if(cart.length === 0){
+
     container.innerHTML = `
     <p class="text-center text-gray-500 py-4">
       Tu carrito está vacío
     </p>
     `;
+
   }
 
   cart.forEach((p,index)=>{
 
     const subtotal = p.price * p.qty;
+
     total += subtotal;
 
     container.innerHTML += `
@@ -125,16 +142,22 @@ export function openCart(){
 
   });
 
-  const totalElement = document.getElementById("cart-total");
+  const totalElement =
+    document.getElementById("cart-total");
 
   if(totalElement){
+
     totalElement.innerText = "$" + total;
+
   }
 
-  const modal = document.getElementById("cart-modal");
+  const modal =
+    document.getElementById("cart-modal");
 
   if(modal){
+
     modal.classList.remove("hidden");
+
   }
 
 }
@@ -146,10 +169,13 @@ CERRAR CARRITO
 
 export function closeCart(){
 
-  const modal = document.getElementById("cart-modal");
+  const modal =
+    document.getElementById("cart-modal");
 
   if(modal){
+
     modal.classList.add("hidden");
+
   }
 
 }
@@ -166,7 +192,9 @@ export function removeItem(index){
   cart.splice(index,1);
 
   saveCart(cart);
+
   updateCartCount();
+
   openCart();
 
 }
@@ -181,14 +209,20 @@ export function checkout(){
   const cart = getCart();
 
   if(cart.length === 0){
+
     alert("Carrito vacío");
+
     return;
+
   }
 
-  const modal = document.getElementById("checkout-modal");
+  const modal =
+    document.getElementById("checkout-modal");
 
   if(modal){
+
     modal.classList.remove("hidden");
+
   }
 
 }
@@ -199,87 +233,203 @@ CERRAR FORM
 ======================= */
 
 export function closeCheckout(){
-  const modal = document.getElementById("checkout-modal");
+
+  const modal =
+    document.getElementById("checkout-modal");
+
   if(modal){
+
     modal.classList.add("hidden");
+
   }
+
 }
 
 
 /* =======================
-ENVIAR A WHATSAPP
+ENVIAR PEDIDO ERP + WHATSAPP
 ======================= */
 
-export function sendCheckout(){
+export async function sendCheckout(){
 
-  const cart = getCart();
+  try {
 
-  const name = document.getElementById("c-name").value;
-  const phoneClient = document.getElementById("c-phone").value;
-  const address = document.getElementById("c-address").value;
-  const colony = document.getElementById("c-colony").value;
-  const city = document.getElementById("c-city").value;
-  const state = document.getElementById("c-state").value;
-  const postal = document.getElementById("c-postal").value;
-  const reference = document.getElementById("c-ref").value;
+    const cart = getCart();
 
-  if(!name || !phoneClient || !address){
-    alert("Completa los datos obligatorios");
-    return;
-  }
+    const name =
+      document.getElementById("c-name").value;
 
-  const storeName = window.store?.name || "la tienda";
+    const phoneClient =
+      document.getElementById("c-phone").value;
 
-  let message = `Hola ${storeName}, mi pedido es:%0A%0A`;
-  let total = 0;
+    const address =
+      document.getElementById("c-address").value;
 
-  cart.forEach(p=>{
+    const colony =
+      document.getElementById("c-colony").value;
 
-    const subtotal = p.price * p.qty;
-    total += subtotal;
+    const city =
+      document.getElementById("c-city").value;
 
-    message += `• ${p.name}%0A`;
+    const state =
+      document.getElementById("c-state").value;
 
-    if(p.color){
-      message += `Color: ${p.color}%0A`;
+    const postal =
+      document.getElementById("c-postal").value;
+
+    const reference =
+      document.getElementById("c-ref").value;
+
+    if(!name || !phoneClient || !address){
+
+      alert("Completa los datos obligatorios");
+
+      return;
+
     }
 
-    if(p.size){
-      message += `Talla: ${p.size}%0A`;
+    // =======================
+    // ITEMS ERP
+    // =======================
+
+    const items = cart.map(p => ({
+
+      variant_id: p.id,
+
+      quantity: p.qty
+
+    }));
+
+
+    // =======================
+    // CREAR PEDIDO ERP
+    // =======================
+
+    const data = await createOrder({
+
+      customer_name: name,
+
+      customer_phone: phoneClient,
+
+      customer_address:
+        `${address}, ${colony}, ${city}, ${state}, ${postal}`,
+
+      items
+
+    });
+
+    if(!data || !data.success){
+
+      alert("Error creando pedido");
+
+      return;
+
     }
 
-    message += `Cantidad: ${p.qty}%0A`;
-    message += `Subtotal: $${subtotal}%0A%0A`;
 
-  });
+    // =======================
+    // WHATSAPP
+    // =======================
 
-  message += `TOTAL: $${total}%0A%0A`;
+    const storeName =
+      window.store?.name || "la tienda";
 
-  message += `DATOS DE ENVÍO%0A`;
-  message += `Nombre: ${name}%0A`;
-  message += `Teléfono: ${phoneClient}%0A`;
-  message += `Dirección: ${address}%0A`;
-  message += `Colonia: ${colony}%0A`;
-  message += `Ciudad: ${city}%0A`;
-  message += `Estado: ${state}%0A`;
-  message += `CP: ${postal}%0A`;
+    let message =
+      `Hola ${storeName}, mi pedido es:%0A%0A`;
 
-  if(reference){
-    message += `Referencia: ${reference}%0A`;
+    let total = 0;
+
+    cart.forEach(p=>{
+
+      const subtotal = p.price * p.qty;
+
+      total += subtotal;
+
+      message += `• ${p.name}%0A`;
+
+      if(p.color){
+        message += `Color: ${p.color}%0A`;
+      }
+
+      if(p.size){
+        message += `Talla: ${p.size}%0A`;
+      }
+
+      message += `Cantidad: ${p.qty}%0A`;
+
+      message += `Subtotal: $${subtotal}%0A%0A`;
+
+    });
+
+    message += `TOTAL: $${total}%0A%0A`;
+
+    message += `Pedido ERP: #${data.order_id}%0A%0A`;
+
+    message += `DATOS DE ENVÍO%0A`;
+
+    message += `Nombre: ${name}%0A`;
+
+    message += `Teléfono: ${phoneClient}%0A`;
+
+    message += `Dirección: ${address}%0A`;
+
+    message += `Colonia: ${colony}%0A`;
+
+    message += `Ciudad: ${city}%0A`;
+
+    message += `Estado: ${state}%0A`;
+
+    message += `CP: ${postal}%0A`;
+
+    if(reference){
+
+      message += `Referencia: ${reference}%0A`;
+
+    }
+
+    const whatsapp = window.store?.whatsapp;
+
+    if(!whatsapp){
+
+      alert("Número de WhatsApp no configurado.");
+
+      return;
+
+    }
+
+    const phone =
+      String(whatsapp).replace(/\D/g,"");
+
+    const url =
+      `https://wa.me/${phone}?text=${message}`;
+
+
+    // =======================
+    // LIMPIAR CARRITO
+    // =======================
+
+    localStorage.removeItem(CART_KEY);
+
+    updateCartCount();
+
+    closeCheckout();
+
+    closeCart();
+
+
+    // =======================
+    // ABRIR WHATSAPP
+    // =======================
+
+    window.open(url,"_blank");
+
+  } catch(err){
+
+    console.error(err);
+
+    alert("Error procesando pedido");
+
   }
-
-  const whatsapp = window.store?.whatsapp;
-
-  if(!whatsapp){
-    alert("Número de WhatsApp no configurado.");
-    return;
-  }
-
-  const phone = String(whatsapp).replace(/\D/g,"");
-
-  const url = `https://wa.me/${phone}?text=${message}`;
-
-  window.open(url,"_blank");
 
 }
 
@@ -288,7 +438,10 @@ export function sendCheckout(){
 INIT
 ======================= */
 
-document.addEventListener("DOMContentLoaded",updateCartCount);
+document.addEventListener(
+  "DOMContentLoaded",
+  updateCartCount
+);
 
 window.openCart = openCart;
 window.closeCart = closeCart;
