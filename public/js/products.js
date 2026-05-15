@@ -402,11 +402,14 @@ export async function loadProducts(slug){
         }
 
         const cartProduct = {
-          id:product.id,
-          name:product.name,
-          price:product.price,
-          image:imageUrl
-        };
+  id: variant.id,
+  product_id: product.id,
+  name: product.name,
+  price: variant?.price || product.price,
+  image: imgByColor?.image_url || product.image,
+  color: currentColor,
+  size: currentSize
+};
 
         addToCart(cartProduct);
 
