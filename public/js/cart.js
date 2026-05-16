@@ -33,14 +33,15 @@ export function addToCart(product){
   }else{
 
     cart.push({
-      id: product.id,
-      name: product.name,
-      price: Number(product.price),
-      qty: 1,
-      color: product.color || null,
-      size: product.size || null,
-      image: product.image || null
-    });
+  id: product.id,
+  variant_id: product.variant_id || null,
+  name: product.name,
+  price: Number(product.price),
+  qty: 1,
+  color: product.color || null,
+  size: product.size || null,
+  image: product.image || null
+});
 
   }
 
@@ -293,11 +294,8 @@ export async function sendCheckout(){
     // =======================
 
     const items = cart.map(p => ({
-
   variant_id: p.variant_id,
-
   quantity: p.qty
-
 }));
 
 
