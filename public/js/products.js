@@ -1,6 +1,5 @@
 import { getProducts } from "./api.js";
 import { addToCart } from "./cart.js";
-import { openVariantModal } from "./variants.js";
 
 
 // ================================
@@ -183,7 +182,6 @@ export async function loadProducts(slug){
 
         e.stopPropagation();
 
-        // 🔥 ABRIR GALERIA
         if(
           product.images &&
           product.images.length > 0 &&
@@ -218,12 +216,20 @@ export async function loadProducts(slug){
           product.variants.length > 0
         ){
 
-          console.log(
-            "OPENING VARIANTS:",
-            product.variants
-          );
+          const variant = product.variants[0];
 
-          openVariantModal(product);
+          const cartProduct = {
+
+            id: product.id,
+            variantId: variant.id,
+            name: `${product.name} - ${variant.name}`,
+            price: variant.price || product.price,
+            image: imageUrl,
+            quantity: 1
+
+          };
+
+          addToCart(cartProduct);
 
           return;
 
