@@ -37,7 +37,7 @@ export function addToCart(product){
   variant_id: product.variant_id || null,
   name: product.name,
   price: Number(product.price),
-  qty: 1,
+  qty: product.qty || 1,
   color: product.color || null,
   size: product.size || null,
   image: product.image || null
