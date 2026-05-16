@@ -1,5 +1,23 @@
 import { getProducts } from "./api.js";
 
+
+// ================================
+// GET QUERY PARAM
+// ================================
+
+function getQueryParam(param){
+
+  const params = new URLSearchParams(window.location.search);
+
+  return params.get(param);
+
+}
+
+
+// ================================
+// LOAD PRODUCTS
+// ================================
+
 export async function loadProducts(slug){
 
   const featuredContainer = document.getElementById("products");
@@ -13,7 +31,7 @@ export async function loadProducts(slug){
 
   try{
 
-    // 🔥 FIX REAL
+    // 🔥 OBTENER PRODUCTOS
     const products = await getProducts(slug);
 
     if(!products || products.length === 0){
@@ -32,25 +50,44 @@ export async function loadProducts(slug){
 
     let productsToShow = products;
 
+    // ================================
+    // FEATURED
+    // ================================
+
     if(featuredContainer){
 
       const featured = products.filter(p => p.featured === true);
 
-      productsToShow = featured.length
-        ? featured
-        : products.slice(0,4);
+      productsToShow =
+        featured.length > 0
+          ? featured
+          : products.slice(0,4);
 
     }
+
+    // ================================
+    // FILTRO CATEGORIA
+    // ================================
 
     const categoryFilter = getQueryParam("category");
 
     if(categoryFilter){
 
-      productsToShow = products.filter(p =>
-        String(p.category).toLowerCase() === categoryFilter.toLowerCase()
-      );
+      productsToShow = products.filter(p => {
+
+        if(!p.category) return false;
+
+        return String(p.category)
+          .toLowerCase()
+          .trim() === categoryFilter.toLowerCase().trim();
+
+      });
 
     }
+
+    // ================================
+    // SIN PRODUCTOS
+    // ================================
 
     if(productsToShow.length === 0){
 
@@ -64,35 +101,47 @@ export async function loadProducts(slug){
 
     }
 
+    // ================================
+    // RENDER
+    // ================================
+
     productsToShow.forEach(product => {
 
       const card = document.createElement("div");
 
       card.className = "product-card";
 
+      // 🔥 IMAGEN
       let imageUrl =
         product.image ||
         product.images?.[0] ||
         "/assets/images/default.jpg";
 
+      // 🔥 PRECIO
+      const price =
+        Number(product.price || 0).toLocaleString();
+
       card.innerHTML = `
 
         <div class="product-image">
+
           <img
             src="${imageUrl}"
+            alt="${product.name}"
             loading="lazy"
             onerror="this.src='/assets/images/default.jpg'"
           >
+
         </div>
 
         <div class="product-info">
 
           <div class="product-title">
-            ${product.name}
+            ${product.name || "Producto"}
           </div>
 
           <div class="product-price">
-            $${Number(product.price).toLocaleString()}
+            $${price}
           </div>
 
           <button class="product-btn add-cart">
@@ -105,17 +154,25 @@ export async function loadProducts(slug){
 
       container.appendChild(card);
 
+      // ================================
+      // IMAGE CLICK
+      // ================================
+
       const img = card.querySelector("img");
 
       img.addEventListener("click", (e) => {
 
         e.stopPropagation();
 
-        if(product.images && product.images.length > 0){
+        if(
+          product.images &&
+          product.images.length > 0 &&
+          typeof openImageGallery === "function"
+        ){
 
           openImageGallery(product.images);
 
-        }else{
+        }else if(typeof openImageZoom === "function"){
 
           openImageZoom(img.src);
 
@@ -123,11 +180,20 @@ export async function loadProducts(slug){
 
       });
 
+      // ================================
+      // ADD CART
+      // ================================
+
       const btn = card.querySelector(".add-cart");
 
       btn.addEventListener("click", () => {
 
-        if(product.variants && product.variants.length){
+        // 🔥 VARIANTES
+        if(
+          product.variants &&
+          product.variants.length > 0 &&
+          typeof openVariantModal === "function"
+        ){
 
           openVariantModal(product);
 
@@ -135,6 +201,7 @@ export async function loadProducts(slug){
 
         }
 
+        // 🔥 PRODUCTO CARRITO
         const cartProduct = {
 
           id: product.id,
@@ -144,7 +211,16 @@ export async function loadProducts(slug){
 
         };
 
-        addToCart(cartProduct);
+        // 🔥 ADD CART
+        if(typeof addToCart === "function"){
+
+          addToCart(cartProduct);
+
+        }else{
+
+          console.warn("addToCart no existe");
+
+        }
 
       });
 
