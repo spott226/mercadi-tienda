@@ -224,11 +224,10 @@ export async function loadProducts(slug){
 
   variantId: variant.id || null,
 
-  name: variant.name
-    ? `${product.name} - ${variant.name}`
-    : product.name,
+  name:
+  `${product.name} - ${variant.size.toUpperCase()} - ${variant.color}`,
 
-  price: variant.price || product.price,
+  price: Number(variant.price || product.price),
 
   image: imageUrl,
 
