@@ -361,8 +361,6 @@ export async function sendCheckout(){
 
     message += `TOTAL: $${total}%0A%0A`;
 
-    message += `Pedido ERP: #${data.order_id}%0A%0A`;
-
     message += `DATOS DE ENVÍO%0A`;
 
     message += `Nombre: ${name}%0A`;
