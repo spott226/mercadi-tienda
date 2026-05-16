@@ -486,30 +486,29 @@ export async function loadProducts(slug){
 
                     const cartProduct = {
 
-  id:
-    product.id,
+  id: product.id,
 
-  variantId:
-    variant.id,
+  variant_id: Number(variant.id),
 
-  variant_id:
-    variant.id,
+  color: variant.color,
 
-                      name:
-                        `${product.name} - ${variant.size.toUpperCase()} - ${variant.color}`,
+  size: variant.size,
 
-                      price:
-                        Number(
-                          variant.price ||
-                          product.price
-                        ),
+  name:
+    `${product.name} - ${variant.size.toUpperCase()} - ${variant.color}`,
 
-                      image:
-                        variantImage,
+  price:
+    Number(
+      variant.price ||
+      product.price
+    ),
 
-                      quantity: 1
+  image:
+    variantImage,
 
-                    };
+  qty: 1
+
+};
 
                     addToCart(
                       cartProduct
