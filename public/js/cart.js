@@ -305,16 +305,19 @@ export async function sendCheckout(){
 
     const data = await createOrder({
 
-      customer_name: name,
+  store_id:
+    window.STORE?.id,
 
-      customer_phone: phoneClient,
+  customer_name: name,
 
-      customer_address:
-        `${address}, ${colony}, ${city}, ${state}, ${postal}`,
+  customer_phone: phoneClient,
 
-      items
+  customer_address:
+    `${address}, ${colony}, ${city}, ${state}, ${postal}`,
 
-    });
+  items
+
+});
 
     if(!data || !data.success){
 

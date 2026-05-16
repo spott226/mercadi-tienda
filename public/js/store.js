@@ -72,6 +72,8 @@ storeData = store;
 // =================================
 
 window.store = store;
+window.STORE = store;
+
 window.store_id = store.id;
 window.store_whatsapp = store.whatsapp;
 
