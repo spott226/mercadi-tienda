@@ -622,8 +622,9 @@ if(isMobile){
     console.error(err);
 
     alert(
-      "Error procesando pedido"
-    );
+  err.message ||
+  "Error procesando pedido"
+);
 
   }
 

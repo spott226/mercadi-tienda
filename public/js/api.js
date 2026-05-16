@@ -31,13 +31,20 @@ async function apiRequest(endpoint, options = {}) {
 
     if (!response.ok) {
 
-      const text = await response.text();
+  const text =
+    await response.text();
 
-      console.error("HTTP ERROR:", response.status, text);
+  console.error(
+    "HTTP ERROR:",
+    response.status,
+    text
+  );
 
-      return null;
+  throw new Error(
+    text || "Error API"
+  );
 
-    }
+}
 
     const data = await response.json();
 
