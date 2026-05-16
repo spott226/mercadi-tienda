@@ -361,6 +361,8 @@ export async function sendCheckout(){
 
     message += `TOTAL: $${total}%0A%0A`;
 
+    message += `Pedido ERP: #${data.order_id}%0A%0A`;
+
     message += `DATOS DE ENVÍO%0A`;
 
     message += `Nombre: ${name}%0A`;
@@ -397,7 +399,7 @@ export async function sendCheckout(){
       String(whatsapp).replace(/\D/g,"");
 
     const url =
-      `https://wa.me/${phone}?text=${message}`;
+  `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
 
     // =======================
