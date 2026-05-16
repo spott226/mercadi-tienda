@@ -1,147 +1,281 @@
+import { getProducts } from "./api.js";
+import { addToCart } from "./cart.js";
+
+import {
+  getQueryParam
+} from "./utils.js";
+
+
+
+/* =================================
+ZOOM IMAGEN (sin variantes)
+================================= */
+
+function openImageZoom(src){
+
+  const overlay = document.createElement("div");
+  overlay.className = "fixed inset-0 bg-black/90 flex items-center justify-center z-50";
+
+  overlay.innerHTML = `
+    <div class="relative">
+      <span id="closeZoom"
+        style="position:absolute;top:-40px;right:0;color:white;font-size:30px;cursor:pointer;">
+        ✕
+      </span>
+
+      <img src="${src}"
+        style="max-width:90vw;max-height:90vh;border-radius:12px;">
+    </div>
+  `;
+
+  overlay.querySelector("#closeZoom").onclick = () => overlay.remove();
+
+  overlay.onclick = (e) => {
+    if(e.target === overlay){
+      overlay.remove();
+    }
+  };
+
+  document.body.appendChild(overlay);
+}
+
+
+
+/* =================================
+GALERÍA
+================================= */
+
+function openImageGallery(images){
+
+  let currentIndex = 0;
+
+  const overlay = document.createElement("div");
+  overlay.className = "fixed inset-0 bg-black/95 flex items-center justify-center z-50";
+
+  function render(){
+
+    overlay.innerHTML = `
+      <div class="relative flex items-center justify-center">
+
+        <span id="close"
+          style="position:absolute;top:-50px;right:0;color:white;font-size:30px;cursor:pointer;">
+          ✕
+        </span>
+
+        <span id="prev"
+          style="position:absolute;left:-50px;color:white;font-size:40px;cursor:pointer;">
+          ‹
+        </span>
+
+        <img src="${images[currentIndex].image_url}"
+          style="max-width:90vw;max-height:90vh;border-radius:12px;">
+
+        <span id="next"
+          style="position:absolute;right:-50px;color:white;font-size:40px;cursor:pointer;">
+          ›
+        </span>
+
+      </div>
+    `;
+
+    overlay.querySelector("#close").onclick = () => overlay.remove();
+
+    overlay.querySelector("#prev").onclick = () => {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      render();
+    };
+
+    overlay.querySelector("#next").onclick = () => {
+      currentIndex = (currentIndex + 1) % images.length;
+      render();
+    };
+
+  }
+
+  render();
+
+  document.body.appendChild(overlay);
+}
+
+
+
+/* =================================
+VARIANTES
+================================= */
+
+function openVariantModal(product){
+
+  const overlay = document.createElement("div");
+  overlay.className = "fixed inset-0 bg-black/40 flex items-center justify-center z-50";
+
+  let currentColor = null;
+  let currentSize = null;
+
+  const grouped = {};
+
+  (product.variants || []).forEach(v=>{
+    if(!grouped[v.color]) grouped[v.color] = [];
+    grouped[v.color].push(v);
+  });
+
+  const colors = Object.keys(grouped);
+
+  function render(){
+
+    let image = product.image;
+    let sizes = [];
+
+    if(currentColor){
+      sizes = grouped[currentColor].map(v => v.size);
+    }
+
+    overlay.innerHTML = `
+      <div class="product-modal p-6 rounded w-[420px] max-w-[90%]">
+
+        <h2 class="text-lg font-bold mb-4">${product.name}</h2>
+
+        <div class="mb-4 text-center">
+          <img src="${image}" style="max-height:180px;margin:auto;">
+        </div>
+
+        <div class="mb-4">
+          <select id="color">
+            <option value="">Color</option>
+            ${colors.map(c=>`<option value="${c}">${c}</option>`).join("")}
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <select id="size">
+            <option value="">Talla</option>
+            ${sizes.map(s=>`<option value="${s}">${s}</option>`).join("")}
+          </select>
+        </div>
+
+        <button id="add">Añadir</button>
+
+      </div>
+    `;
+
+    overlay.querySelector("#color").onchange = (e)=>{
+      currentColor = e.target.value;
+      currentSize = null;
+      render();
+    };
+
+    overlay.querySelector("#size").onchange = (e)=>{
+      currentSize = e.target.value;
+    };
+
+    overlay.querySelector("#add").onclick = ()=>{
+
+      if(!currentColor || !currentSize){
+        alert("Selecciona color y talla");
+        return;
+      }
+
+      const variant = grouped[currentColor].find(v => v.size === currentSize);
+
+      addToCart({
+        id: product.id,
+        variant_id: variant.id,
+        name: product.name,
+        price: variant.price,
+        image: product.image,
+        color: currentColor,
+        size: currentSize
+      });
+
+      overlay.remove();
+    };
+
+  }
+
+  render();
+
+  document.body.appendChild(overlay);
+}
+
+
+
+/* =================================
+LOAD PRODUCTS
+================================= */
+
 export async function loadProducts(slug){
 
-  const featuredContainer = document.getElementById("products");
-  const allContainer = document.getElementById("products-list");
-
-  const container = featuredContainer || allContainer;
+  const container =
+    document.getElementById("products-list") ||
+    document.getElementById("products");
 
   if(!container) return;
 
-  container.innerHTML = "Cargando productos...";
+  container.innerHTML = "Cargando...";
 
   try{
 
     const response = await getProducts(slug);
 
-    // 🔥 FIX: extraer array real
     const products = response?.products || [];
 
-    if(!products || products.length === 0){
-
-      container.innerHTML = `
-      <div class="text-center p-10 opacity-60">
-        No hay productos disponibles
-      </div>
-      `;
-
+    if(!products.length){
+      container.innerHTML = "No hay productos";
       return;
-
     }
 
     container.innerHTML = "";
 
-    let productsToShow = products;
+    const category = getQueryParam("category");
 
-    if(featuredContainer){
+    let filtered = products;
 
-      const featured = products.filter(p => p.featured === true);
-      productsToShow = featured.length ? featured : products.slice(0,4);
-
-    }
-
-    const categoryFilter = getQueryParam("category");
-
-    if(categoryFilter){
-
-      productsToShow = products.filter(p =>
-        String(p.category).toLowerCase() === categoryFilter.toLowerCase()
+    if(category){
+      filtered = products.filter(p =>
+        String(p.category).toLowerCase() === category.toLowerCase()
       );
-
     }
 
-    if(productsToShow.length === 0){
-
-      container.innerHTML = `
-      <div class="text-center p-10 opacity-60">
-        No hay productos en esta categoría
-      </div>
-      `;
-
-      return;
-
-    }
-
-    productsToShow.forEach(product => {
+    filtered.forEach(product => {
 
       const card = document.createElement("div");
       card.className = "product-card";
 
-      let imageUrl = product.image || "/assets/images/default.jpg";
+      const image = product.image || "/assets/images/default.jpg";
 
       card.innerHTML = `
-
-        <div class="product-image">
-          <img
-            src="${imageUrl}"
-            loading="lazy"
-            onerror="this.src='/assets/images/default.jpg'"
-          >
-        </div>
-
-        <div class="product-info">
-
-          <div class="product-title">
-            ${product.name}
-          </div>
-
-          <div class="product-price">
-            $${Number(product.price).toLocaleString()}
-          </div>
-
-          <button class="product-btn add-cart">
-            Añadir
-          </button>
-
-        </div>
-
+        <img src="${image}" />
+        <h3>${product.name}</h3>
+        <p>$${product.price}</p>
+        <button>Añadir</button>
       `;
 
       container.appendChild(card);
 
-      const img = card.querySelector("img");
+      card.querySelector("img").onclick = () => {
+        openImageZoom(image);
+      };
 
-      img.addEventListener("click", (e) => {
-        e.stopPropagation();
+      card.querySelector("button").onclick = () => {
 
-        if(product.images && product.images.length > 0){
-          openImageGallery(product.images);
-        }else{
-          openImageZoom(img.src);
-        }
-      });
-
-      const btn = card.querySelector(".add-cart");
-
-      btn.addEventListener("click", () => {
-
-        if(product.variants && product.variants.length){
+        if(product.variants?.length){
           openVariantModal(product);
           return;
         }
 
-        const cartProduct = {
+        addToCart({
           id: product.id,
           name: product.name,
           price: product.price,
-          image: imageUrl
-        };
+          image
+        });
 
-        addToCart(cartProduct);
-
-      });
+      };
 
     });
 
-  }catch(error){
-
-    console.error("Error cargando productos:",error);
-
-    container.innerHTML = `
-    <div class="text-center p-10 text-red-500">
-      Error cargando productos
-    </div>
-    `;
-
+  }catch(err){
+    console.error(err);
+    container.innerHTML = "Error cargando productos";
   }
 
 }
