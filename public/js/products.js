@@ -1,3 +1,5 @@
+import { getProducts } from "./api.js";
+
 export async function loadProducts(slug){
 
   const featuredContainer = document.getElementById("products");
@@ -11,10 +13,8 @@ export async function loadProducts(slug){
 
   try{
 
-    const response = await getProducts(slug);
-
-    // 🔥 FIX: extraer array real
-    const products = response?.products || [];
+    // 🔥 FIX REAL
+    const products = await getProducts(slug);
 
     if(!products || products.length === 0){
 
@@ -35,7 +35,10 @@ export async function loadProducts(slug){
     if(featuredContainer){
 
       const featured = products.filter(p => p.featured === true);
-      productsToShow = featured.length ? featured : products.slice(0,4);
+
+      productsToShow = featured.length
+        ? featured
+        : products.slice(0,4);
 
     }
 
@@ -64,9 +67,13 @@ export async function loadProducts(slug){
     productsToShow.forEach(product => {
 
       const card = document.createElement("div");
+
       card.className = "product-card";
 
-      let imageUrl = product.image || "/assets/images/default.jpg";
+      let imageUrl =
+        product.image ||
+        product.images?.[0] ||
+        "/assets/images/default.jpg";
 
       card.innerHTML = `
 
@@ -101,13 +108,19 @@ export async function loadProducts(slug){
       const img = card.querySelector("img");
 
       img.addEventListener("click", (e) => {
+
         e.stopPropagation();
 
         if(product.images && product.images.length > 0){
+
           openImageGallery(product.images);
+
         }else{
+
           openImageZoom(img.src);
+
         }
+
       });
 
       const btn = card.querySelector(".add-cart");
@@ -115,15 +128,20 @@ export async function loadProducts(slug){
       btn.addEventListener("click", () => {
 
         if(product.variants && product.variants.length){
+
           openVariantModal(product);
+
           return;
+
         }
 
         const cartProduct = {
+
           id: product.id,
           name: product.name,
           price: product.price,
           image: imageUrl
+
         };
 
         addToCart(cartProduct);
@@ -134,7 +152,7 @@ export async function loadProducts(slug){
 
   }catch(error){
 
-    console.error("Error cargando productos:",error);
+    console.error("Error cargando productos:", error);
 
     container.innerHTML = `
     <div class="text-center p-10 text-red-500">
