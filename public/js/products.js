@@ -8,9 +8,57 @@ import { addToCart } from "./cart.js";
 
 function getQueryParam(param){
 
-  const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(
+    window.location.search
+  );
 
   return params.get(param);
+
+}
+
+
+// ================================
+// IMAGE ZOOM
+// ================================
+
+function openImageZoom(image){
+
+  const modal =
+    document.createElement("div");
+
+  modal.style = `
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.92);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:999999;
+    cursor:zoom-out;
+    padding:30px;
+  `;
+
+  modal.innerHTML = `
+
+    <img
+      src="${image}"
+      style="
+        max-width:95%;
+        max-height:95%;
+        object-fit:contain;
+        border-radius:14px;
+        box-shadow:0 0 40px rgba(255,255,255,.12);
+      "
+    >
+
+  `;
+
+  modal.addEventListener(
+    "click",
+    () => modal.remove()
+  );
+
+  document.body.appendChild(modal);
 
 }
 
@@ -112,7 +160,7 @@ export async function loadProducts(slug){
     }
 
     // ================================
-    // EMPTY CATEGORY
+    // EMPTY
     // ================================
 
     if(productsToShow.length === 0){
@@ -139,6 +187,15 @@ export async function loadProducts(slug){
       card.className =
         "product-card";
 
+      card.style = `
+        background:#0f0f0f;
+        border-radius:18px;
+        overflow:hidden;
+        border:1px solid rgba(255,255,255,.08);
+        transition:.25s;
+        box-shadow:0 10px 30px rgba(0,0,0,.35);
+      `;
+
       // ================================
       // IMAGE
       // ================================
@@ -163,28 +220,85 @@ export async function loadProducts(slug){
 
       card.innerHTML = `
 
-        <div class="product-image">
+        <div
+          class="product-image"
+          style="
+            height:340px;
+            overflow:hidden;
+            background:#111;
+            cursor:zoom-in;
+          "
+        >
 
           <img
             src="${imageUrl}"
             alt="${product.name}"
             loading="lazy"
-            onerror="this.src='/assets/images/default.jpg'"
+            style="
+              width:100%;
+              height:100%;
+              object-fit:cover;
+              transition:.35s;
+            "
+            onmouseover="
+              this.style.transform='scale(1.06)'
+            "
+            onmouseout="
+              this.style.transform='scale(1)'
+            "
+            onerror="
+              this.src='/assets/images/default.jpg'
+            "
           >
 
         </div>
 
-        <div class="product-info">
+        <div
+          class="product-info"
+          style="
+            padding:18px;
+          "
+        >
 
-          <div class="product-title">
+          <div
+            class="product-title"
+            style="
+              font-size:22px;
+              font-weight:700;
+              margin-bottom:10px;
+              color:white;
+            "
+          >
             ${product.name || "Producto"}
           </div>
 
-          <div class="product-price">
+          <div
+            class="product-price"
+            style="
+              font-size:28px;
+              font-weight:800;
+              color:white;
+              margin-bottom:18px;
+            "
+          >
             $${price}
           </div>
 
-          <button class="product-btn add-cart">
+          <button
+            class="product-btn add-cart"
+            style="
+              width:100%;
+              padding:14px;
+              border:none;
+              border-radius:12px;
+              background:white;
+              color:black;
+              font-size:17px;
+              font-weight:700;
+              cursor:pointer;
+              transition:.25s;
+            "
+          >
             Añadir
           </button>
 
@@ -195,7 +309,7 @@ export async function loadProducts(slug){
       container.appendChild(card);
 
       // ================================
-      // IMAGE CLICK
+      // IMAGE CLICK ZOOM
       // ================================
 
       const img =
@@ -203,29 +317,9 @@ export async function loadProducts(slug){
 
       img.addEventListener(
         "click",
-        (e) => {
+        () => {
 
-          e.stopPropagation();
-
-          if(
-            product.images &&
-            product.images.length > 0 &&
-            typeof openImageGallery === "function"
-          ){
-
-            openImageGallery(
-              product.images
-            );
-
-          }else if(
-            typeof openImageZoom === "function"
-          ){
-
-            openImageZoom(
-              img.src
-            );
-
-          }
+          openImageZoom(img.src);
 
         }
       );
@@ -264,24 +358,90 @@ export async function loadProducts(slug){
               product.variants
                 .map((v, index) => {
 
+                  const variantImage =
+
+                    product.images?.find(
+                      img =>
+                        img.color?.toLowerCase()
+                        ===
+                        v.color?.toLowerCase()
+                    )?.image_url ||
+
+                    imageUrl;
+
                   return `
+
                     <button
                       class="variant-option"
                       data-index="${index}"
                       style="
-                        padding:10px;
-                        margin:5px;
-                        border:1px solid #fff;
-                        background:black;
-                        color:white;
-                        cursor:pointer;
                         width:100%;
+                        display:flex;
+                        align-items:center;
+                        gap:14px;
+                        padding:14px;
+                        margin-bottom:12px;
+                        border:1px solid rgba(255,255,255,.1);
+                        background:#181818;
+                        color:white;
+                        border-radius:14px;
+                        cursor:pointer;
+                        transition:.25s;
                       "
                     >
-                      ${v.size.toUpperCase()}
-                      -
-                      ${v.color}
+
+                      <img
+                        src="${variantImage}"
+                        style="
+                          width:70px;
+                          height:70px;
+                          object-fit:cover;
+                          border-radius:12px;
+                        "
+                      >
+
+                      <div
+                        style="
+                          text-align:left;
+                        "
+                      >
+
+                        <div
+                          style="
+                            font-size:18px;
+                            font-weight:700;
+                            margin-bottom:5px;
+                          "
+                        >
+                          ${v.size.toUpperCase()}
+                        </div>
+
+                        <div
+                          style="
+                            opacity:.7;
+                            font-size:14px;
+                            margin-bottom:4px;
+                          "
+                        >
+                          ${v.color}
+                        </div>
+
+                        <div
+                          style="
+                            font-size:18px;
+                            font-weight:700;
+                          "
+                        >
+                          $${Number(
+                            v.price ||
+                            product.price
+                          ).toLocaleString()}
+                        </div>
+
+                      </div>
+
                     </button>
+
                   `;
 
                 })
@@ -292,56 +452,84 @@ export async function loadProducts(slug){
 
             modal.style = `
               position:fixed;
-              top:0;
-              left:0;
-              width:100%;
-              height:100%;
-              background:rgba(0,0,0,.85);
+              inset:0;
+              background:rgba(0,0,0,.88);
               display:flex;
               align-items:center;
               justify-content:center;
               z-index:99999;
+              padding:20px;
+              backdrop-filter:blur(8px);
             `;
 
             modal.innerHTML = `
 
               <div style="
-                background:#111;
-                padding:30px;
-                border-radius:12px;
+                background:#0f0f0f;
+                border-radius:24px;
+                width:100%;
+                max-width:460px;
+                padding:28px;
+                border:1px solid rgba(255,255,255,.08);
+                box-shadow:0 20px 60px rgba(0,0,0,.55);
                 color:white;
-                min-width:320px;
-                max-width:90%;
               ">
 
-                <h2 style="
-                  margin-bottom:20px;
-                  font-size:22px;
-                ">
-                  Selecciona talla
-                </h2>
+                <div
+                  style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    margin-bottom:24px;
+                  "
+                >
+
+                  <div>
+
+                    <div
+                      style="
+                        font-size:28px;
+                        font-weight:800;
+                        margin-bottom:5px;
+                      "
+                    >
+                      ${product.name}
+                    </div>
+
+                    <div
+                      style="
+                        opacity:.6;
+                      "
+                    >
+                      Selecciona talla
+                    </div>
+
+                  </div>
+
+                  <button
+                    id="closeVariantModal"
+                    style="
+                      background:none;
+                      border:none;
+                      color:white;
+                      font-size:30px;
+                      cursor:pointer;
+                    "
+                  >
+                    ×
+                  </button>
+
+                </div>
 
                 <div
                   class="variants-container"
+                  style="
+                    max-height:420px;
+                    overflow:auto;
+                  "
                 >
                   ${options}
                 </div>
-
-                <button
-                  id="closeVariantModal"
-                  style="
-                    margin-top:20px;
-                    padding:12px;
-                    width:100%;
-                    background:white;
-                    color:black;
-                    border:none;
-                    cursor:pointer;
-                    border-radius:8px;
-                  "
-                >
-                  Cerrar
-                </button>
 
               </div>
 
@@ -371,6 +559,17 @@ export async function loadProducts(slug){
                     const variant =
                       product.variants[index];
 
+                    const variantImage =
+
+                      product.images?.find(
+                        img =>
+                          img.color?.toLowerCase()
+                          ===
+                          variant.color?.toLowerCase()
+                      )?.image_url ||
+
+                      imageUrl;
+
                     const cartProduct = {
 
                       id:
@@ -389,7 +588,7 @@ export async function loadProducts(slug){
                         ),
 
                       image:
-                        imageUrl,
+                        variantImage,
 
                       quantity: 1
 
@@ -468,7 +667,9 @@ export async function loadProducts(slug){
     );
 
     container.innerHTML = `
-    <div class="text-center p-10 text-red-500">
+    <div
+      class="text-center p-10 text-red-500"
+    >
       Error cargando productos
     </div>
     `;
