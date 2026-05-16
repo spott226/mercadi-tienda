@@ -8,9 +8,10 @@ import { addToCart } from "./cart.js";
 
 function getQueryParam(param){
 
-  const params = new URLSearchParams(
-    window.location.search
-  );
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
 
   return params.get(param);
 
@@ -35,7 +36,7 @@ function openImageZoom(image){
     justify-content:center;
     z-index:999999;
     cursor:zoom-out;
-    padding:30px;
+    padding:20px;
   `;
 
   modal.innerHTML = `
@@ -47,7 +48,6 @@ function openImageZoom(image){
         max-height:95%;
         object-fit:contain;
         border-radius:14px;
-        box-shadow:0 0 40px rgba(255,255,255,.12);
       "
     >
 
@@ -85,10 +85,6 @@ export async function loadProducts(slug){
 
   try{
 
-    // ================================
-    // GET PRODUCTS
-    // ================================
-
     const products =
       await getProducts(slug);
 
@@ -103,9 +99,9 @@ export async function loadProducts(slug){
     ){
 
       container.innerHTML = `
-      <div class="text-center p-10 opacity-60">
-        No hay productos disponibles
-      </div>
+        <div class="text-center p-10 opacity-60">
+          No hay productos disponibles
+        </div>
       `;
 
       return;
@@ -128,7 +124,7 @@ export async function loadProducts(slug){
         );
 
       productsToShow =
-        featured.length > 0
+        featured.length
           ? featured
           : products.slice(0,4);
 
@@ -146,7 +142,8 @@ export async function loadProducts(slug){
       productsToShow =
         products.filter(p => {
 
-          if(!p.category) return false;
+          if(!p.category)
+            return false;
 
           return String(p.category)
             .toLowerCase()
@@ -160,15 +157,15 @@ export async function loadProducts(slug){
     }
 
     // ================================
-    // EMPTY
+    // EMPTY CATEGORY
     // ================================
 
     if(productsToShow.length === 0){
 
       container.innerHTML = `
-      <div class="text-center p-10 opacity-60">
-        No hay productos en esta categoría
-      </div>
+        <div class="text-center p-10 opacity-60">
+          No hay productos en esta categoría
+        </div>
       `;
 
       return;
@@ -187,27 +184,10 @@ export async function loadProducts(slug){
       card.className =
         "product-card";
 
-      card.style = `
-        background:#0f0f0f;
-        border-radius:18px;
-        overflow:hidden;
-        border:1px solid rgba(255,255,255,.08);
-        transition:.25s;
-        box-shadow:0 10px 30px rgba(0,0,0,.35);
-      `;
-
-      // ================================
-      // IMAGE
-      // ================================
-
       let imageUrl =
         product.image ||
         product.images?.[0]?.image_url ||
         "/assets/images/default.jpg";
-
-      // ================================
-      // PRICE
-      // ================================
 
       const price =
         Number(
@@ -220,32 +200,12 @@ export async function loadProducts(slug){
 
       card.innerHTML = `
 
-        <div
-          class="product-image"
-          style="
-            height:340px;
-            overflow:hidden;
-            background:#111;
-            cursor:zoom-in;
-          "
-        >
+        <div class="product-image">
 
           <img
             src="${imageUrl}"
             alt="${product.name}"
             loading="lazy"
-            style="
-              width:100%;
-              height:100%;
-              object-fit:cover;
-              transition:.35s;
-            "
-            onmouseover="
-              this.style.transform='scale(1.06)'
-            "
-            onmouseout="
-              this.style.transform='scale(1)'
-            "
             onerror="
               this.src='/assets/images/default.jpg'
             "
@@ -253,52 +213,17 @@ export async function loadProducts(slug){
 
         </div>
 
-        <div
-          class="product-info"
-          style="
-            padding:18px;
-          "
-        >
+        <div class="product-info">
 
-          <div
-            class="product-title"
-            style="
-              font-size:22px;
-              font-weight:700;
-              margin-bottom:10px;
-              color:white;
-            "
-          >
+          <div class="product-title">
             ${product.name || "Producto"}
           </div>
 
-          <div
-            class="product-price"
-            style="
-              font-size:28px;
-              font-weight:800;
-              color:white;
-              margin-bottom:18px;
-            "
-          >
+          <div class="product-price">
             $${price}
           </div>
 
-          <button
-            class="product-btn add-cart"
-            style="
-              width:100%;
-              padding:14px;
-              border:none;
-              border-radius:12px;
-              background:white;
-              color:black;
-              font-size:17px;
-              font-weight:700;
-              cursor:pointer;
-              transition:.25s;
-            "
-          >
+          <button class="product-btn add-cart">
             Añadir
           </button>
 
@@ -319,7 +244,9 @@ export async function loadProducts(slug){
         "click",
         () => {
 
-          openImageZoom(img.src);
+          openImageZoom(
+            img.src
+          );
 
         }
       );
@@ -379,24 +306,23 @@ export async function loadProducts(slug){
                         display:flex;
                         align-items:center;
                         gap:14px;
-                        padding:14px;
+                        padding:12px;
                         margin-bottom:12px;
-                        border:1px solid rgba(255,255,255,.1);
-                        background:#181818;
+                        border:1px solid #2b2b2b;
+                        background:#111;
                         color:white;
                         border-radius:14px;
                         cursor:pointer;
-                        transition:.25s;
                       "
                     >
 
                       <img
                         src="${variantImage}"
                         style="
-                          width:70px;
-                          height:70px;
+                          width:65px;
+                          height:65px;
                           object-fit:cover;
-                          border-radius:12px;
+                          border-radius:10px;
                         "
                       >
 
@@ -410,7 +336,6 @@ export async function loadProducts(slug){
                           style="
                             font-size:18px;
                             font-weight:700;
-                            margin-bottom:5px;
                           "
                         >
                           ${v.size.toUpperCase()}
@@ -420,7 +345,6 @@ export async function loadProducts(slug){
                           style="
                             opacity:.7;
                             font-size:14px;
-                            margin-bottom:4px;
                           "
                         >
                           ${v.color}
@@ -428,7 +352,8 @@ export async function loadProducts(slug){
 
                         <div
                           style="
-                            font-size:18px;
+                            margin-top:5px;
+                            font-size:17px;
                             font-weight:700;
                           "
                         >
@@ -453,55 +378,47 @@ export async function loadProducts(slug){
             modal.style = `
               position:fixed;
               inset:0;
-              background:rgba(0,0,0,.88);
+              background:rgba(0,0,0,.82);
               display:flex;
               align-items:center;
               justify-content:center;
               z-index:99999;
               padding:20px;
-              backdrop-filter:blur(8px);
             `;
 
             modal.innerHTML = `
 
               <div style="
-                background:#0f0f0f;
-                border-radius:24px;
+                background:#090909;
+                border-radius:18px;
                 width:100%;
-                max-width:460px;
-                padding:28px;
-                border:1px solid rgba(255,255,255,.08);
-                box-shadow:0 20px 60px rgba(0,0,0,.55);
+                max-width:420px;
+                padding:24px;
                 color:white;
+                border:1px solid #1f1f1f;
               ">
 
-                <div
-                  style="
-                    display:flex;
-                    justify-content:space-between;
-                    align-items:center;
-                    margin-bottom:24px;
-                  "
-                >
+                <div style="
+                  display:flex;
+                  justify-content:space-between;
+                  align-items:center;
+                  margin-bottom:20px;
+                ">
 
                   <div>
 
-                    <div
-                      style="
-                        font-size:28px;
-                        font-weight:800;
-                        margin-bottom:5px;
-                      "
-                    >
+                    <div style="
+                      font-size:24px;
+                      font-weight:800;
+                    ">
                       ${product.name}
                     </div>
 
-                    <div
-                      style="
-                        opacity:.6;
-                      "
-                    >
-                      Selecciona talla
+                    <div style="
+                      opacity:.6;
+                      margin-top:3px;
+                    ">
+                      Selecciona variante
                     </div>
 
                   </div>
@@ -512,7 +429,7 @@ export async function loadProducts(slug){
                       background:none;
                       border:none;
                       color:white;
-                      font-size:30px;
+                      font-size:28px;
                       cursor:pointer;
                     "
                   >
@@ -521,13 +438,10 @@ export async function loadProducts(slug){
 
                 </div>
 
-                <div
-                  class="variants-container"
-                  style="
-                    max-height:420px;
-                    overflow:auto;
-                  "
-                >
+                <div style="
+                  max-height:420px;
+                  overflow:auto;
+                ">
                   ${options}
                 </div>
 
@@ -572,11 +486,14 @@ export async function loadProducts(slug){
 
                     const cartProduct = {
 
-                      id:
-                        product.id,
+  id:
+    product.id,
 
-                      variantId:
-                        variant.id,
+  variantId:
+    variant.id,
+
+  variant_id:
+    variant.id,
 
                       name:
                         `${product.name} - ${variant.size.toUpperCase()} - ${variant.color}`,
@@ -667,11 +584,9 @@ export async function loadProducts(slug){
     );
 
     container.innerHTML = `
-    <div
-      class="text-center p-10 text-red-500"
-    >
-      Error cargando productos
-    </div>
+      <div class="text-center p-10 text-red-500">
+        Error cargando productos
+      </div>
     `;
 
   }

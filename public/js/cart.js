@@ -306,7 +306,7 @@ export async function sendCheckout(){
     const data = await createOrder({
 
   store_id:
-    window.STORE?.id,
+  window.store?.id,
 
   customer_name: name,
 
