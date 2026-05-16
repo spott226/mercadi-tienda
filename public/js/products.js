@@ -1,4 +1,6 @@
 import { getProducts } from "./api.js";
+import { addToCart } from "./cart.js";
+import { openVariantModal } from "./variants.js";
 
 
 // ================================
@@ -34,6 +36,8 @@ export async function loadProducts(slug){
     // 🔥 OBTENER PRODUCTOS
     const products = await getProducts(slug);
 
+    console.log("PRODUCTS:", products);
+
     if(!products || products.length === 0){
 
       container.innerHTML = `
@@ -56,7 +60,9 @@ export async function loadProducts(slug){
 
     if(featuredContainer){
 
-      const featured = products.filter(p => p.featured === true);
+      const featured = products.filter(
+        p => p.featured === true
+      );
 
       productsToShow =
         featured.length > 0
@@ -66,7 +72,7 @@ export async function loadProducts(slug){
     }
 
     // ================================
-    // FILTRO CATEGORIA
+    // CATEGORY FILTER
     // ================================
 
     const categoryFilter = getQueryParam("category");
@@ -79,14 +85,16 @@ export async function loadProducts(slug){
 
         return String(p.category)
           .toLowerCase()
-          .trim() === categoryFilter.toLowerCase().trim();
+          .trim() === categoryFilter
+          .toLowerCase()
+          .trim();
 
       });
 
     }
 
     // ================================
-    // SIN PRODUCTOS
+    // NO PRODUCTS
     // ================================
 
     if(productsToShow.length === 0){
@@ -102,7 +110,7 @@ export async function loadProducts(slug){
     }
 
     // ================================
-    // RENDER
+    // RENDER PRODUCTS
     // ================================
 
     productsToShow.forEach(product => {
@@ -111,15 +119,26 @@ export async function loadProducts(slug){
 
       card.className = "product-card";
 
-      // 🔥 IMAGEN
+      // ================================
+      // IMAGE
+      // ================================
+
       let imageUrl =
         product.image ||
         product.images?.[0] ||
         "/assets/images/default.jpg";
 
-      // 🔥 PRECIO
+      // ================================
+      // PRICE
+      // ================================
+
       const price =
-        Number(product.price || 0).toLocaleString();
+        Number(product.price || 0)
+        .toLocaleString();
+
+      // ================================
+      // CARD HTML
+      // ================================
 
       card.innerHTML = `
 
@@ -164,6 +183,7 @@ export async function loadProducts(slug){
 
         e.stopPropagation();
 
+        // 🔥 ABRIR GALERIA
         if(
           product.images &&
           product.images.length > 0 &&
@@ -172,7 +192,9 @@ export async function loadProducts(slug){
 
           openImageGallery(product.images);
 
-        }else if(typeof openImageZoom === "function"){
+        }else if(
+          typeof openImageZoom === "function"
+        ){
 
           openImageZoom(img.src);
 
@@ -188,12 +210,18 @@ export async function loadProducts(slug){
 
       btn.addEventListener("click", () => {
 
-        // 🔥 VARIANTES
+        console.log("PRODUCT CLICK:", product);
+
+        // 🔥 SI TIENE VARIANTES
         if(
           product.variants &&
-          product.variants.length > 0 &&
-          typeof openVariantModal === "function"
+          product.variants.length > 0
         ){
+
+          console.log(
+            "OPENING VARIANTS:",
+            product.variants
+          );
 
           openVariantModal(product);
 
@@ -201,26 +229,19 @@ export async function loadProducts(slug){
 
         }
 
-        // 🔥 PRODUCTO CARRITO
+        // 🔥 PRODUCTO NORMAL
         const cartProduct = {
 
           id: product.id,
           name: product.name,
           price: product.price,
-          image: imageUrl
+          image: imageUrl,
+          quantity: 1
 
         };
 
-        // 🔥 ADD CART
-        if(typeof addToCart === "function"){
-
-          addToCart(cartProduct);
-
-        }else{
-
-          console.warn("addToCart no existe");
-
-        }
+        // 🔥 AGREGAR CARRITO
+        addToCart(cartProduct);
 
       });
 
@@ -228,7 +249,10 @@ export async function loadProducts(slug){
 
   }catch(error){
 
-    console.error("Error cargando productos:", error);
+    console.error(
+      "Error cargando productos:",
+      error
+    );
 
     container.innerHTML = `
     <div class="text-center p-10 text-red-500">
