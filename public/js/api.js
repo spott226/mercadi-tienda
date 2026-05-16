@@ -85,26 +85,29 @@ export async function getProducts(slug) {
 
   const store = await getStore(slug);
 
-  if(!store || !store.id){
+  if (!store || !store.id) {
     console.error("STORE NOT FOUND");
     return [];
   }
 
-  const products = await apiRequest(`/products/${store.id}`);
+  const response = await apiRequest(`/products/${store.id}`);
 
-  if(!products){
+  if (!response) {
     return [];
   }
 
-  // 🔥 NORMALIZAR IMÁGENES
-  return products.map(p => {
+  // 🔥 FIX: soportar backend nuevo (puede venir como {products: []} o directo [])
+  const products =
+    Array.isArray(response)
+      ? response
+      : (response.products || []);
 
-    p.images = p.images || [];
-    p.variants = p.variants || [];
-
-    return p;
-
-  });
+  // 🔥 NORMALIZAR IMÁGENES Y VARIANTES
+  return products.map(p => ({
+    ...p,
+    images: p.images || [],
+    variants: p.variants || []
+  }));
 
 }
 
