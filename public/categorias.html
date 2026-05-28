@@ -140,34 +140,81 @@ CHATBOT
 CARRITO MODAL
 ========================= -->
 
-<div id="cart-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+<div id="cart-modal" class="hidden modal-backdrop">
 
-<div class="p-6 rounded w-[400px] max-w-[90%]">
+  <div class="modal-panel cart-panel">
 
-<h2 class="text-xl font-bold mb-4">Tu carrito</h2>
+    <div class="modal-header">
+      <div>
+        <h2>Tu carrito</h2>
+        <p>Revisa tu pedido antes de enviarlo</p>
+      </div>
+      <button onclick="closeCart()" class="modal-icon-btn" aria-label="Cerrar carrito">x</button>
+    </div>
 
-<div id="cart-items"></div>
+    <div id="cart-items" class="modal-body"></div>
 
-<div class="flex justify-between mt-4 font-bold">
+    <div class="modal-footer">
 
-<span>Total</span>
-<span id="cart-total">$0</span>
+      <div class="modal-total">
+        <span>Total</span>
+        <span id="cart-total">$0</span>
+      </div>
+
+      <div class="modal-actions">
+        <button onclick="closeCart()" class="btn-secondary">
+          Cerrar
+        </button>
+
+        <button onclick="checkout()" class="btn-primary">
+          Enviar pedido
+        </button>
+      </div>
+
+    </div>
+
+  </div>
 
 </div>
 
-<div class="flex gap-3 mt-6">
+<!-- =========================
+FORMULARIO CHECKOUT
+========================= -->
 
-<button onclick="closeCart()" class="flex-1 border p-2 rounded">
-Cerrar
-</button>
+<div id="checkout-modal" class="hidden modal-backdrop modal-backdrop-strong">
 
-<button onclick="checkout()" class="flex-1 p-2 rounded">
-Enviar pedido
-</button>
+  <div class="modal-panel checkout-panel">
 
-</div>
+    <div class="modal-header">
+      <div>
+        <h2>Datos de envio</h2>
+        <p>Completa la informacion para coordinar tu pedido</p>
+      </div>
+      <button onclick="closeCheckout()" class="modal-icon-btn" aria-label="Cerrar checkout">x</button>
+    </div>
 
-</div>
+    <div class="checkout-grid">
+      <input id="c-name" placeholder="Nombre completo" class="checkout-input">
+      <input id="c-phone" placeholder="Telefono" class="checkout-input">
+      <input id="c-address" placeholder="Calle y numero" class="checkout-input checkout-wide">
+      <input id="c-colony" placeholder="Colonia" class="checkout-input">
+      <input id="c-city" placeholder="Ciudad" class="checkout-input">
+      <input id="c-state" placeholder="Estado" class="checkout-input">
+      <input id="c-postal" placeholder="Codigo postal" class="checkout-input">
+      <input id="c-ref" placeholder="Referencia (opcional)" class="checkout-input checkout-wide">
+    </div>
+
+    <div class="modal-actions modal-actions-stacked">
+      <button onclick="sendCheckout()" class="btn-primary" data-checkout-submit>
+        Enviar pedido
+      </button>
+
+      <button onclick="closeCheckout()" class="btn-secondary">
+        Cancelar
+      </button>
+    </div>
+
+  </div>
 
 </div>
 
@@ -186,6 +233,13 @@ SCRIPTS
 import { getProducts } from "/js/api.js";
 
 function getSlugFromDomain(){
+
+const params = new URLSearchParams(window.location.search);
+const slugParam = params.get("slug") || params.get("store");
+
+if(slugParam){
+return slugParam;
+}
 
 const host = window.location.hostname;
 
@@ -218,7 +272,7 @@ const categorySlug = encodeURIComponent(cat);
 container.innerHTML += `
 
 <a href="/products.html?category=${categorySlug}" 
-class="category-card"
+class="category-card">
 
 <h3 class="text-lg font-semibold">${cat}</h3>
 

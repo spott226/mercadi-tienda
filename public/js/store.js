@@ -13,6 +13,14 @@ const BACKEND_URL = "https://mercadia-back-production.up.railway.app/uploads/";
 
 function getSlugFromDomain(){
 
+const params = new URLSearchParams(window.location.search);
+const slugParam = params.get("slug") || params.get("store");
+
+if(slugParam){
+console.log("SLUG FROM URL:", slugParam);
+return slugParam;
+}
+
 const host = window.location.hostname;
 
 console.log("HOST:", host);
