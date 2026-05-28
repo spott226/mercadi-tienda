@@ -24,7 +24,7 @@ NAVBAR
 
 <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
 
-<div class="flex items-center gap-3">
+<a href="/index.html" class="brand-link flex items-center gap-3">
 
 <img
 id="store-logo"
@@ -36,7 +36,7 @@ class="h-10 w-auto"
 Tienda
 </h1>
 
-</div>
+</a>
 
 
 <!-- MENU DESKTOP -->
@@ -268,10 +268,18 @@ container.innerHTML = "";
 categorias.forEach(cat => {
 
 const categorySlug = encodeURIComponent(cat);
+const isLocal =
+window.location.hostname === "localhost" ||
+window.location.hostname === "127.0.0.1";
+
+const categoryUrl =
+isLocal
+? `/products.html?slug=${encodeURIComponent(slug)}&category=${categorySlug}`
+: `/products.html?category=${categorySlug}`;
 
 container.innerHTML += `
 
-<a href="/products.html?category=${categorySlug}" 
+<a href="${categoryUrl}" 
 class="category-card">
 
 <h3 class="text-lg font-semibold">${cat}</h3>

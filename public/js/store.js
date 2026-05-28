@@ -44,6 +44,35 @@ return slug;
 
 }
 
+function keepLocalSlugInLinks(slug){
+
+const host = window.location.hostname;
+const isLocal =
+host === "localhost" ||
+host === "127.0.0.1";
+
+if(!isLocal || !slug) return;
+
+document
+.querySelectorAll(
+  'a[href="/index.html"], a[href="/"], a[href="/products.html"], a[href="/categorias.html"]'
+)
+.forEach(link => {
+
+const url = new URL(
+  link.getAttribute("href"),
+  window.location.origin
+);
+
+url.searchParams.set("slug", slug);
+
+link.href =
+  url.pathname + url.search;
+
+});
+
+}
+
 
 // =================================
 // INICIALIZAR TIENDA
@@ -54,6 +83,8 @@ async function initStore(){
 try{
 
 const slug = getSlugFromDomain();
+
+keepLocalSlugInLinks(slug);
 
 console.log("LOADING STORE:", slug);
 
