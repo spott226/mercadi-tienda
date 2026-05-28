@@ -17,6 +17,25 @@ function getQueryParam(param){
 
 }
 
+function getProductUrl(product){
+
+  const params =
+    new URLSearchParams();
+
+  params.set("id", product.id);
+
+  const slug =
+    getQueryParam("slug") ||
+    getQueryParam("store");
+
+  if(slug){
+    params.set("slug", slug);
+  }
+
+  return `/product.html?${params.toString()}`;
+
+}
+
 
 // ================================
 // IMAGE ZOOM
@@ -184,6 +203,9 @@ export async function loadProducts(slug){
       card.className =
         "product-card";
 
+      card.tabIndex = 0;
+      card.setAttribute("role", "link");
+
       let imageUrl =
         product.image ||
         product.images?.[0]?.image_url ||
@@ -234,20 +256,22 @@ export async function loadProducts(slug){
       container.appendChild(card);
 
       // ================================
-      // IMAGE CLICK ZOOM
+      // OPEN PRODUCT DETAIL
       // ================================
 
-      const img =
-        card.querySelector("img");
-
-      img.addEventListener(
+      card.addEventListener(
         "click",
         () => {
+          window.location.href = getProductUrl(product);
+        }
+      );
 
-          openImageZoom(
-            img.src
-          );
-
+      card.addEventListener(
+        "keydown",
+        event => {
+          if(event.key === "Enter"){
+            window.location.href = getProductUrl(product);
+          }
         }
       );
 
@@ -260,7 +284,9 @@ export async function loadProducts(slug){
 
       btn.addEventListener(
         "click",
-        () => {
+        event => {
+
+          event.stopPropagation();
 
           console.log(
             "PRODUCT CLICK:",
