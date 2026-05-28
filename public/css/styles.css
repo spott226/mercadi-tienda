@@ -62,6 +62,12 @@ border-bottom:1px solid var(--border);
 color:var(--text);
 }
 
+header > div:first-child{
+max-width:none;
+min-height:72px;
+padding:14px clamp(18px,5vw,72px);
+}
+
 header a{
 color:var(--text);
 transition:opacity .2s;
@@ -78,6 +84,34 @@ text-decoration:none;
 
 .brand-link:hover{
 opacity:.86;
+}
+
+#store-logo{
+max-height:48px;
+object-fit:contain;
+}
+
+#store-name{
+letter-spacing:0;
+text-transform:uppercase;
+}
+
+header nav{
+position:absolute;
+left:50%;
+transform:translateX(-50%);
+}
+
+#mobile-menu{
+background:var(--card);
+border-color:var(--border);
+}
+
+#mobile-menu a{
+font-size:13px;
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:0;
 }
 
 
@@ -149,6 +183,82 @@ cursor:pointer;
 .product-card:focus{
 outline:2px solid var(--primary);
 outline-offset:4px;
+}
+
+.product-card{
+background:transparent;
+border:0;
+border-radius:0;
+box-shadow:none;
+overflow:visible;
+transition:opacity .2s;
+}
+
+.product-card:hover{
+transform:none;
+box-shadow:none;
+}
+
+.product-image{
+aspect-ratio:3 / 4;
+background:color-mix(in srgb, var(--background) 82%, var(--card));
+}
+
+.product-image img{
+transition:transform .42s ease, opacity .2s;
+}
+
+.product-card:hover .product-image img{
+transform:scale(1.025);
+}
+
+.product-info{
+padding:12px 0 0;
+}
+
+.product-title{
+font-size:13px;
+font-weight:600;
+line-height:1.35;
+text-transform:uppercase;
+letter-spacing:0;
+margin-bottom:4px;
+}
+
+.product-price{
+font-size:14px;
+font-weight:400;
+}
+
+.product-btn{
+margin-top:12px;
+background:transparent;
+color:var(--text);
+border:1px solid var(--text);
+border-radius:0;
+padding:11px 10px;
+font-size:12px;
+font-weight:700;
+text-transform:uppercase;
+}
+
+.product-btn:hover{
+background:var(--text);
+color:var(--background);
+opacity:1;
+}
+
+@media (min-width: 768px){
+.product-btn{
+opacity:0;
+transform:translateY(4px);
+}
+
+.product-card:hover .product-btn,
+.product-card:focus-within .product-btn{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 /* =====================================================
@@ -383,6 +493,38 @@ aspect-ratio:1;
 }
 }
 
+@media (max-width: 767px){
+header > div:first-child{
+min-height:66px;
+padding:12px 16px;
+}
+
+header nav{
+position:static;
+transform:none;
+}
+
+#store-logo{
+max-height:42px;
+}
+
+.product-info{
+padding-top:10px;
+}
+
+.product-title{
+font-size:12px;
+}
+
+.product-price{
+font-size:13px;
+}
+
+.product-btn{
+min-height:40px;
+}
+}
+
 
 /* =====================================================
 CATEGORIES
@@ -440,6 +582,40 @@ justify-content:center;
 padding:18px;
 background:rgba(0,0,0,.52);
 backdrop-filter:blur(8px);
+}
+
+#cart-modal{
+align-items:stretch;
+justify-content:flex-end;
+padding:0;
+background:rgba(0,0,0,.42);
+}
+
+#cart-modal .cart-panel{
+width:min(430px,100%);
+max-height:none;
+height:100vh;
+border-radius:0;
+border-top:0;
+border-right:0;
+border-bottom:0;
+box-shadow:-22px 0 60px rgba(0,0,0,.28);
+}
+
+#cart-modal .modal-header{
+padding:22px;
+}
+
+#cart-modal .modal-body{
+padding:4px 22px;
+}
+
+#cart-modal .modal-footer{
+padding:18px 22px 22px;
+}
+
+#cart-modal .modal-actions{
+grid-template-columns:1fr;
 }
 
 .modal-backdrop-strong{
@@ -636,6 +812,13 @@ border-radius:18px 18px 0 0;
 border-left:0;
 border-right:0;
 border-bottom:0;
+}
+
+#cart-modal .cart-panel{
+height:100dvh;
+max-height:none;
+border-radius:0;
+border-left:0;
 }
 
 .checkout-grid{
@@ -1091,4 +1274,22 @@ box-shadow:0 10px 40px rgba(0,0,0,.8);
 .theme-lujo .product-card:hover{
 transform:translateY(-6px);
 box-shadow:0 20px 60px rgba(212,175,55,.25);
+}
+
+/* =====================================================
+EDITORIAL CATALOG OVERRIDES
+===================================================== */
+
+body .product-card,
+body.theme-lujo .product-card{
+background:transparent;
+border:0;
+border-radius:0;
+box-shadow:none;
+}
+
+body .product-card:hover,
+body.theme-lujo .product-card:hover{
+transform:none;
+box-shadow:none;
 }
