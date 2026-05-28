@@ -100,7 +100,15 @@ export async function loadProducts(slug){
   if(!container) return;
 
   container.innerHTML =
-    "Cargando productos...";
+    Array.from({ length: 8 })
+      .map(() => `
+        <div class="product-skeleton">
+          <div></div>
+          <span></span>
+          <span></span>
+        </div>
+      `)
+      .join("");
 
   try{
 
@@ -327,62 +335,23 @@ export async function loadProducts(slug){
                     <button
                       class="variant-option"
                       data-index="${index}"
-                      style="
-                        width:100%;
-                        display:flex;
-                        align-items:center;
-                        gap:14px;
-                        padding:12px;
-                        margin-bottom:12px;
-                        border:1px solid #2b2b2b;
-                        background:#111;
-                        color:white;
-                        border-radius:14px;
-                        cursor:pointer;
-                      "
                     >
 
                       <img
                         src="${variantImage}"
-                        style="
-                          width:65px;
-                          height:65px;
-                          object-fit:cover;
-                          border-radius:10px;
-                        "
                       >
 
-                      <div
-                        style="
-                          text-align:left;
-                        "
-                      >
+                      <div>
 
-                        <div
-                          style="
-                            font-size:18px;
-                            font-weight:700;
-                          "
-                        >
+                        <div class="variant-option-title">
                           ${v.size.toUpperCase()}
                         </div>
 
-                        <div
-                          style="
-                            opacity:.7;
-                            font-size:14px;
-                          "
-                        >
+                        <div class="variant-option-meta">
                           ${v.color}
                         </div>
 
-                        <div
-                          style="
-                            margin-top:5px;
-                            font-size:17px;
-                            font-weight:700;
-                          "
-                        >
+                        <div class="variant-option-price">
                           $${Number(
                             v.price ||
                             product.price
@@ -401,49 +370,22 @@ export async function loadProducts(slug){
             const modal =
               document.createElement("div");
 
-            modal.style = `
-              position:fixed;
-              inset:0;
-              background:rgba(0,0,0,.82);
-              display:flex;
-              align-items:center;
-              justify-content:center;
-              z-index:99999;
-              padding:20px;
-            `;
+            modal.className =
+              "variant-modal";
 
             modal.innerHTML = `
 
-              <div style="
-                background:#090909;
-                border-radius:18px;
-                width:100%;
-                max-width:420px;
-                padding:24px;
-                color:white;
-                border:1px solid #1f1f1f;
-              ">
+              <div class="variant-panel">
 
-                <div style="
-                  display:flex;
-                  justify-content:space-between;
-                  align-items:center;
-                  margin-bottom:20px;
-                ">
+                <div class="variant-header">
 
                   <div>
 
-                    <div style="
-                      font-size:24px;
-                      font-weight:800;
-                    ">
+                    <div class="variant-title">
                       ${product.name}
                     </div>
 
-                    <div style="
-                      opacity:.6;
-                      margin-top:3px;
-                    ">
+                    <div class="variant-subtitle">
                       Selecciona variante
                     </div>
 
@@ -451,23 +393,15 @@ export async function loadProducts(slug){
 
                   <button
                     id="closeVariantModal"
-                    style="
-                      background:none;
-                      border:none;
-                      color:white;
-                      font-size:28px;
-                      cursor:pointer;
-                    "
+                    class="modal-icon-btn"
+                    aria-label="Cerrar variantes"
                   >
                     ×
                   </button>
 
                 </div>
 
-                <div style="
-                  max-height:420px;
-                  overflow:auto;
-                ">
+                <div class="variant-list">
                   ${options}
                 </div>
 

@@ -53,13 +53,6 @@ function getProductImage(product, variant){
   );
 }
 
-function getVariantLabel(variant){
-  return [
-    variant.color,
-    variant.size
-  ].filter(Boolean).join(" / ");
-}
-
 function createText(tag, text, className){
   const element = document.createElement(tag);
 
@@ -154,10 +147,21 @@ function renderProduct(product){
 
   const variantLabel = createText(
     "p",
-    selectedVariant
-      ? getVariantLabel(selectedVariant)
+    product.variants?.length
+      ? "Selecciona talla"
       : "Disponible",
     "product-detail-variant-label"
+  );
+
+  const selectedText = createText(
+    "p",
+    selectedVariant
+      ? [
+          selectedVariant.color,
+          selectedVariant.size
+        ].filter(Boolean).join(" / ")
+      : "",
+    "product-detail-selected-variant"
   );
 
   const variantGrid = document.createElement("div");
@@ -171,15 +175,27 @@ function renderProduct(product){
         index === 0
           ? "variant-pill variant-pill-active"
           : "variant-pill";
-      button.textContent =
-        getVariantLabel(variant) ||
-        `Variante ${index + 1}`;
+      const size = document.createElement("span");
+      size.className = "variant-pill-size";
+      size.textContent =
+        variant.size ||
+        `Opción ${index + 1}`;
+
+      const detail = document.createElement("span");
+      detail.className = "variant-pill-detail";
+      detail.textContent =
+        variant.color || "";
+
+      button.append(size, detail);
 
       button.addEventListener("click", () => {
         selectedVariant = variant;
         mainImage.src = getProductImage(product, selectedVariant);
         price.textContent = formatMoney(variant.price || product.price);
-        variantLabel.textContent = getVariantLabel(variant);
+        selectedText.textContent = [
+          variant.color,
+          variant.size
+        ].filter(Boolean).join(" / ");
 
         variantGrid
           .querySelectorAll(".variant-pill")
@@ -201,7 +217,10 @@ function renderProduct(product){
     const image = getProductImage(product, selectedVariant);
     const variantName =
       selectedVariant
-        ? getVariantLabel(selectedVariant)
+        ? [
+            selectedVariant.size,
+            selectedVariant.color
+          ].filter(Boolean).join(" - ")
         : "";
 
     addToCart({
@@ -247,6 +266,7 @@ function renderProduct(product){
     title,
     price,
     variantLabel,
+    selectedText,
     variantGrid,
     addButton,
     description,
