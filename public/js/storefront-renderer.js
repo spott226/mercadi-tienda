@@ -1,11 +1,18 @@
 import { getProducts } from "./api.js";
 import { loadProducts } from "./products.js";
 
+const BACKEND_ORIGIN =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:3000"
+    : "https://mercadia-back-production.up.railway.app";
+
 const DEFAULT_PRESETS = {
   ecommerce_default: [
     { type: "product_grid" }
   ],
   fashion_editorial_1: [
+    { type: "split_showcase", kicker: "Nueva temporada", title: "Piezas listas para elevar el look diario", text: "Una experiencia visual para tiendas de moda con enfoque elegante." },
     { type: "category_tiles", title: "Comprar por categoria" },
     { type: "editorial_banner", title: "Nueva seleccion", text: "Piezas elegidas para elevar tu estilo diario." },
     { type: "product_grid", title: "Nuevos productos" }
@@ -214,6 +221,29 @@ function createSection(className){
   return section;
 }
 
+function resolveAssetUrl(asset){
+  if(!asset) return "";
+
+  const value = String(asset).trim();
+
+  if(
+    value.startsWith("http://") ||
+    value.startsWith("https://")
+  ){
+    return value;
+  }
+
+  if(value.startsWith("/uploads/")){
+    return `${BACKEND_ORIGIN}${value}`;
+  }
+
+  if(value.startsWith("uploads/")){
+    return `${BACKEND_ORIGIN}/${value}`;
+  }
+
+  return value;
+}
+
 function renderSections({ store, slug, products, sections }){
   const insertionPoint = getInsertionPoint();
 
@@ -221,11 +251,17 @@ function renderSections({ store, slug, products, sections }){
     return;
   }
 
-  let anchor = insertionPoint;
+  const productSectionIndex =
+    sections.findIndex(section => section.type === "product_grid");
+
+  let afterAnchor = insertionPoint;
 
   sections
-    .filter(section => section.type !== "product_grid")
-    .forEach(sectionConfig => {
+    .forEach((sectionConfig, index) => {
+      if(sectionConfig.type === "product_grid"){
+        return;
+      }
+
       const section = renderSection({
         sectionConfig,
         store,
@@ -233,10 +269,21 @@ function renderSections({ store, slug, products, sections }){
         products
       });
 
-      if(section){
-        anchor.insertAdjacentElement("afterend", section);
-        anchor = section;
+      if(!section){
+        return;
       }
+
+      if(
+        productSectionIndex === -1 ||
+        index > productSectionIndex
+      ){
+        afterAnchor.insertAdjacentElement("afterend", section);
+        afterAnchor = section;
+
+        return;
+      }
+
+      insertionPoint.insertAdjacentElement("beforebegin", section);
     });
 
   const productSection =
@@ -265,6 +312,13 @@ function renderSection({ sectionConfig, store, slug, products }){
 
   if(sectionConfig.type === "editorial_banner"){
     return renderEditorialBanner(sectionConfig);
+  }
+
+  if(sectionConfig.type === "split_showcase"){
+    return renderSplitShowcase({
+      sectionConfig,
+      store
+    });
   }
 
   if(sectionConfig.type === "promo_strip"){
@@ -308,11 +362,32 @@ function renderImageBanner({ sectionConfig, store }){
 
   const section = createSection("storefront-image-banner");
   section.innerHTML = `
-    ${image ? `<img src="${image}" loading="lazy" alt="">` : ""}
+    ${image ? `<img src="${resolveAssetUrl(image)}" loading="lazy" alt="">` : ""}
     <div>
       <p>${sectionConfig.kicker || ""}</p>
       <h2>${sectionConfig.title || store?.name || ""}</h2>
       <span>${sectionConfig.text || sectionConfig.description || ""}</span>
+    </div>
+  `;
+
+  return section;
+}
+
+function renderSplitShowcase({ sectionConfig, store }){
+  const image =
+    sectionConfig.image_url ||
+    sectionConfig.image ||
+    store?.hero;
+
+  const section = createSection("storefront-split-showcase");
+  section.innerHTML = `
+    <div class="storefront-split-copy">
+      <p>${sectionConfig.kicker || sectionConfig.eyebrow || "Nueva seleccion"}</p>
+      <h2>${sectionConfig.title || store?.name || ""}</h2>
+      <span>${sectionConfig.text || sectionConfig.description || ""}</span>
+    </div>
+    <div class="storefront-split-image">
+      ${image ? `<img src="${resolveAssetUrl(image)}" loading="lazy" alt="">` : ""}
     </div>
   `;
 
