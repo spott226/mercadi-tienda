@@ -10,7 +10,7 @@ const API_BASE =
 
 
 // ================================
-// REQUEST GENERICO (MEJORADO)
+// REQUEST GENERICO
 // ================================
 
 async function apiRequest(endpoint, options = {}) {
@@ -31,20 +31,19 @@ async function apiRequest(endpoint, options = {}) {
 
     if (!response.ok) {
 
-  const text =
-    await response.text();
+      const text = await response.text();
 
-  console.error(
-    "HTTP ERROR:",
-    response.status,
-    text
-  );
+      console.error(
+        "HTTP ERROR:",
+        response.status,
+        text
+      );
 
-  throw new Error(
-    text || "Error API"
-  );
+      throw new Error(
+        text || "Error API"
+      );
 
-}
+    }
 
     const data = await response.json();
 
@@ -62,6 +61,25 @@ async function apiRequest(endpoint, options = {}) {
 
 }
 
+function normalizeProductsResponse(response){
+
+  if(!response){
+    return [];
+  }
+
+  const products =
+    Array.isArray(response)
+      ? response
+      : (response.products || []);
+
+  return products.map(p => ({
+    ...p,
+    images: p.images || [],
+    variants: p.variants || []
+  }));
+
+}
+
 
 // ================================
 // STORE
@@ -70,7 +88,7 @@ async function apiRequest(endpoint, options = {}) {
 export async function getStore(slug) {
 
   if (!slug) {
-    console.error("STORE ERROR: slug vacío");
+    console.error("STORE ERROR: slug vacio");
     return null;
   }
 
@@ -86,8 +104,15 @@ export async function getStore(slug) {
 export async function getProducts(slug) {
 
   if (!slug) {
-    console.error("PRODUCTS ERROR: slug vacío");
+    console.error("PRODUCTS ERROR: slug vacio");
     return [];
+  }
+
+  const storefrontResponse =
+    await apiRequest(`/stores/${slug}/products`);
+
+  if(storefrontResponse){
+    return normalizeProductsResponse(storefrontResponse);
   }
 
   const store = await getStore(slug);
@@ -97,24 +122,32 @@ export async function getProducts(slug) {
     return [];
   }
 
-  const response = await apiRequest(`/products/${store.id}`);
+  const legacyResponse =
+    await apiRequest(`/products/${store.id}`);
 
-  if (!response) {
-    return [];
+  return normalizeProductsResponse(legacyResponse);
+
+}
+
+
+// ================================
+// PROMOTION
+// ================================
+
+export async function getActivePromotion(slug){
+
+  if(!slug){
+    return null;
   }
 
-  // 🔥 FIX: soportar backend nuevo (puede venir como {products: []} o directo [])
-  const products =
-    Array.isArray(response)
-      ? response
-      : (response.products || []);
+  const response =
+    await apiRequest(`/stores/${slug}/promotion`);
 
-  // 🔥 NORMALIZAR IMÁGENES Y VARIANTES
-  return products.map(p => ({
-    ...p,
-    images: p.images || [],
-    variants: p.variants || []
-  }));
+  if(!response || !response.success){
+    return null;
+  }
+
+  return response.promotion || null;
 
 }
 
@@ -126,7 +159,7 @@ export async function getProducts(slug) {
 export async function createOrder(orderData){
 
   if(!orderData){
-    console.error("ORDER ERROR: datos vacíos");
+    console.error("ORDER ERROR: datos vacios");
     return null;
   }
 

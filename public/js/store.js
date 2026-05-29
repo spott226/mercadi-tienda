@@ -1,10 +1,29 @@
 import { getStore } from "./api.js";
-import { loadProducts } from "./products.js";
+import { renderStorefrontExperience } from "./storefront-renderer.js";
+import { initPromotionPopup } from "./promotion-popup.js";
 import { initChatbot } from "./chatbot.js";
 
 let storeData = null;
 
 const BACKEND_URL = "https://mercadia-back-production.up.railway.app/uploads/";
+
+function resolveAssetUrl(asset, fallback){
+
+if(!asset){
+return fallback;
+}
+
+if(
+String(asset).startsWith("http://") ||
+String(asset).startsWith("https://") ||
+String(asset).startsWith("/")
+){
+return asset;
+}
+
+return BACKEND_URL + asset;
+
+}
 
 
 // =================================
@@ -179,15 +198,11 @@ const logo = document.getElementById("store-logo");
 
 if(logo){
 
-if(store.logo){
-
-logo.src = BACKEND_URL + store.logo;
-
-}else{
-
-logo.src = "/assets/images/default-logo.png";
-
-}
+logo.src =
+resolveAssetUrl(
+  store.logo,
+  "/assets/images/default-logo.png"
+);
 
 }
 
@@ -220,24 +235,30 @@ const hero = document.getElementById("hero-image");
 
 if(hero){
 
-if(store.hero){
-
-hero.src = BACKEND_URL + store.hero;
-
-}else{
-
-hero.src = "/assets/images/hero-default.jpg";
-
-}
+hero.src =
+resolveAssetUrl(
+  store.hero,
+  "/assets/images/hero-default.jpg"
+);
 
 }
 
 
 // =================================
-// CARGAR PRODUCTOS
+// RENDER STOREFRONT
 // =================================
 
-await loadProducts(slug);
+await renderStorefrontExperience({
+store,
+slug
+});
+
+
+// =================================
+// PROMOCION ACTIVA
+// =================================
+
+initPromotionPopup(slug);
 
 
 // =================================
