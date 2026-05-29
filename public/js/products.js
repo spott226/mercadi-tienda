@@ -36,6 +36,16 @@ function getProductUrl(product){
 
 }
 
+function getVariantSize(variant, index = 0){
+  return (
+    variant?.size ||
+    variant?.name ||
+    variant?.variant_name ||
+    variant?.label ||
+    `Opción ${index + 1}`
+  );
+}
+
 
 // ================================
 // IMAGE ZOOM
@@ -169,12 +179,15 @@ export async function loadProducts(slug){
       productsToShow =
         products.filter(p => {
 
-          if(!p.category)
+          const productCategory =
+            p.category
+              ? String(p.category).toLowerCase().trim()
+              : "";
+
+          if(!productCategory)
             return false;
 
-          return String(p.category)
-            .toLowerCase()
-            .trim() ===
+          return productCategory ===
             categoryFilter
               .toLowerCase()
               .trim();
@@ -344,11 +357,11 @@ export async function loadProducts(slug){
                       <div>
 
                         <div class="variant-option-title">
-                          ${v.size.toUpperCase()}
+                          ${String(getVariantSize(v, index)).toUpperCase()}
                         </div>
 
                         <div class="variant-option-meta">
-                          ${v.color}
+                          Talla
                         </div>
 
                         <div class="variant-option-price">
@@ -386,7 +399,7 @@ export async function loadProducts(slug){
                     </div>
 
                     <div class="variant-subtitle">
-                      Selecciona variante
+                      Selecciona talla
                     </div>
 
                   </div>
@@ -448,14 +461,16 @@ export async function loadProducts(slug){
 
   id: product.id,
 
-  variant_id: Number(variant.id),
+  variant_id:
+    Number(variant.id || variant.variant_id),
 
   color: variant.color,
 
-  size: variant.size,
+  size:
+    getVariantSize(variant, index),
 
   name:
-    `${product.name} - ${variant.size.toUpperCase()} - ${variant.color}`,
+    `${product.name} - ${String(getVariantSize(variant, index)).toUpperCase()}`,
 
   price:
     Number(

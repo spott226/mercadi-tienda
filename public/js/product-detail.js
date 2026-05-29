@@ -53,6 +53,16 @@ function getProductImage(product, variant){
   );
 }
 
+function getVariantSize(variant, index = 0){
+  return (
+    variant?.size ||
+    variant?.name ||
+    variant?.variant_name ||
+    variant?.label ||
+    `Opción ${index + 1}`
+  );
+}
+
 function createText(tag, text, className){
   const element = document.createElement(tag);
 
@@ -156,10 +166,7 @@ function renderProduct(product){
   const selectedText = createText(
     "p",
     selectedVariant
-      ? [
-          selectedVariant.color,
-          selectedVariant.size
-        ].filter(Boolean).join(" / ")
+      ? getVariantSize(selectedVariant)
       : "",
     "product-detail-selected-variant"
   );
@@ -178,13 +185,11 @@ function renderProduct(product){
       const size = document.createElement("span");
       size.className = "variant-pill-size";
       size.textContent =
-        variant.size ||
-        `Opción ${index + 1}`;
+        getVariantSize(variant, index);
 
       const detail = document.createElement("span");
       detail.className = "variant-pill-detail";
-      detail.textContent =
-        variant.color || "";
+      detail.textContent = "Talla";
 
       button.append(size, detail);
 
@@ -192,10 +197,7 @@ function renderProduct(product){
         selectedVariant = variant;
         mainImage.src = getProductImage(product, selectedVariant);
         price.textContent = formatMoney(variant.price || product.price);
-        selectedText.textContent = [
-          variant.color,
-          variant.size
-        ].filter(Boolean).join(" / ");
+        selectedText.textContent = getVariantSize(variant, index);
 
         variantGrid
           .querySelectorAll(".variant-pill")
@@ -217,17 +219,17 @@ function renderProduct(product){
     const image = getProductImage(product, selectedVariant);
     const variantName =
       selectedVariant
-        ? [
-            selectedVariant.size,
-            selectedVariant.color
-          ].filter(Boolean).join(" - ")
+        ? getVariantSize(selectedVariant)
         : "";
 
     addToCart({
       id: product.id,
-      variant_id: selectedVariant?.id || null,
+      variant_id:
+        selectedVariant?.id ||
+        selectedVariant?.variant_id ||
+        null,
       color: selectedVariant?.color || null,
-      size: selectedVariant?.size || null,
+      size: selectedVariant ? getVariantSize(selectedVariant) : null,
       name: variantName
         ? `${product.name} - ${variantName}`
         : product.name,

@@ -8,6 +8,9 @@ const API_BASE =
     ? "http://localhost:3000/api"
     : "https://mercadia-back-production.up.railway.app/api";
 
+const storeCache = new Map();
+const productsCache = new Map();
+
 
 // ================================
 // REQUEST GENERICO
@@ -67,16 +70,68 @@ function normalizeProductsResponse(response){
     return [];
   }
 
-  const products =
-    Array.isArray(response)
-      ? response
-      : (response.products || []);
+  const products = Array.isArray(response)
+    ? response
+    : (
+      response.products ||
+      response.data ||
+      response.items ||
+      response.results ||
+      []
+    );
 
   return products.map(p => ({
     ...p,
+    category:
+      p.category ||
+      p.category_name ||
+      p.categoryName ||
+      p.category_title ||
+      p.categoryTitle ||
+      null,
     images: p.images || [],
-    variants: p.variants || []
+    variants:
+      p.variants ||
+      p.product_variants ||
+      p.productVariants ||
+      []
   }));
+
+}
+
+function mergeProducts(...productGroups){
+
+  const merged = new Map();
+
+  productGroups
+    .flat()
+    .filter(Boolean)
+    .forEach(product => {
+      const key =
+        product.id ||
+        product.product_id ||
+        product.slug ||
+        product.name;
+
+      if(!key){
+        return;
+      }
+
+      merged.set(String(key), {
+        ...(merged.get(String(key)) || {}),
+        ...product,
+        images:
+          product.images?.length
+            ? product.images
+            : (merged.get(String(key))?.images || []),
+        variants:
+          product.variants?.length
+            ? product.variants
+            : (merged.get(String(key))?.variants || [])
+      });
+    });
+
+  return Array.from(merged.values());
 
 }
 
@@ -92,7 +147,18 @@ export async function getStore(slug) {
     return null;
   }
 
-  return await apiRequest(`/stores/${slug}`);
+  if(storeCache.has(slug)){
+    return storeCache.get(slug);
+  }
+
+  const store =
+    await apiRequest(`/stores/${slug}`);
+
+  if(store){
+    storeCache.set(slug, store);
+  }
+
+  return store;
 
 }
 
@@ -108,24 +174,35 @@ export async function getProducts(slug) {
     return [];
   }
 
-  const storefrontResponse =
-    await apiRequest(`/stores/${slug}/products`);
-
-  if(storefrontResponse){
-    return normalizeProductsResponse(storefrontResponse);
+  if(productsCache.has(slug)){
+    return productsCache.get(slug);
   }
 
   const store = await getStore(slug);
 
-  if (!store || !store.id) {
+  const [
+    storefrontResponse,
+    legacyResponse
+  ] = await Promise.all([
+    apiRequest(`/stores/${slug}/products`),
+    store?.id
+      ? apiRequest(`/products/${store.id}`)
+      : Promise.resolve(null)
+  ]);
+
+  const products =
+    mergeProducts(
+      normalizeProductsResponse(storefrontResponse),
+      normalizeProductsResponse(legacyResponse)
+    );
+
+  if(!products.length && (!store || !store.id)){
     console.error("STORE NOT FOUND");
-    return [];
   }
 
-  const legacyResponse =
-    await apiRequest(`/products/${store.id}`);
+  productsCache.set(slug, products);
 
-  return normalizeProductsResponse(legacyResponse);
+  return products;
 
 }
 

@@ -259,7 +259,15 @@ const products = await getProducts(slug);
 
 if(!products) return;
 
-const categorias = [...new Set(products.map(p => p.category))];
+const categorias = [
+  ...new Set(
+    products
+      .map(p => p.category)
+      .filter(Boolean)
+      .map(cat => String(cat).trim())
+      .filter(Boolean)
+  )
+];
 
 const container = document.getElementById("categorias");
 
