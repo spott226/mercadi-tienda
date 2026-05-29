@@ -1,15 +1,27 @@
 import { getActivePromotion } from "./api.js";
 
 function hasClosedPromotion(slug, promotion){
+  const version =
+    promotion.updated_at ||
+    promotion.ends_at ||
+    promotion.starts_at ||
+    "current";
+
   const key =
-    `mercadia_promotion_closed_${slug}_${promotion.id}`;
+    `mercadia_promotion_closed_${slug}_${promotion.id}_${version}`;
 
   return sessionStorage.getItem(key) === "1";
 }
 
 function markPromotionClosed(slug, promotion){
+  const version =
+    promotion.updated_at ||
+    promotion.ends_at ||
+    promotion.starts_at ||
+    "current";
+
   const key =
-    `mercadia_promotion_closed_${slug}_${promotion.id}`;
+    `mercadia_promotion_closed_${slug}_${promotion.id}_${version}`;
 
   sessionStorage.setItem(key, "1");
 }
@@ -47,9 +59,13 @@ function renderPromotionPopup(slug, promotion){
     overlay.remove();
   });
 
-  if(promotion.image_url){
+  const imageUrl =
+    promotion.image_url ||
+    promotion.image;
+
+  if(imageUrl){
     const image = document.createElement("img");
-    image.src = promotion.image_url;
+    image.src = imageUrl;
     image.alt = promotion.title || "Promocion";
     image.loading = "lazy";
     image.className = "promotion-image";

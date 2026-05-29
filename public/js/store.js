@@ -5,7 +5,11 @@ import { initChatbot } from "./chatbot.js";
 
 let storeData = null;
 
-const BACKEND_URL = "https://mercadia-back-production.up.railway.app/uploads/";
+const BACKEND_ORIGIN =
+  "https://mercadia-back-production.up.railway.app";
+
+const BACKEND_UPLOADS_URL =
+  `${BACKEND_ORIGIN}/uploads/`;
 
 function resolveAssetUrl(asset, fallback){
 
@@ -13,15 +17,29 @@ if(!asset){
 return fallback;
 }
 
+const value =
+String(asset).trim();
+
 if(
-String(asset).startsWith("http://") ||
-String(asset).startsWith("https://") ||
-String(asset).startsWith("/")
+value.startsWith("http://") ||
+value.startsWith("https://")
 ){
-return asset;
+return value;
 }
 
-return BACKEND_URL + asset;
+if(value.startsWith("/uploads/")){
+return `${BACKEND_ORIGIN}${value}`;
+}
+
+if(value.startsWith("uploads/")){
+return `${BACKEND_ORIGIN}/${value}`;
+}
+
+if(value.startsWith("/")){
+return value;
+}
+
+return BACKEND_UPLOADS_URL + value;
 
 }
 

@@ -8,7 +8,6 @@ const API_BASE =
     ? "http://localhost:3000/api"
     : "https://mercadia-back-production.up.railway.app/api";
 
-const storeCache = new Map();
 const productsCache = new Map();
 
 
@@ -25,6 +24,7 @@ async function apiRequest(endpoint, options = {}) {
     console.log("API CALL:", url);
 
     const response = await fetch(url, {
+      cache: "no-store",
       headers: {
         "Content-Type": "application/json",
         ...(options.headers || {})
@@ -147,18 +147,7 @@ export async function getStore(slug) {
     return null;
   }
 
-  if(storeCache.has(slug)){
-    return storeCache.get(slug);
-  }
-
-  const store =
-    await apiRequest(`/stores/${slug}`);
-
-  if(store){
-    storeCache.set(slug, store);
-  }
-
-  return store;
+  return await apiRequest(`/stores/${slug}`);
 
 }
 

@@ -1579,3 +1579,160 @@ body.theme-lujo .product-card:hover{
 transform:none;
 box-shadow:none;
 }
+
+/* =====================================================
+STOREFRONT EXPERIENCE TEMPLATES
+===================================================== */
+
+body.storefront-restaurant{
+--background:#fbf7ef;
+--card:#fffdf8;
+--card-elevated:#fffaf0;
+--text:#20150f;
+--muted:#7a6758;
+--primary:#8a4b26;
+--border:#e7d8c4;
+}
+
+body.template-restaurant-1 header{
+background:#fffaf0;
+border-bottom:1px solid var(--border);
+box-shadow:none;
+}
+
+body.template-restaurant-1 .hero{
+height:460px;
+}
+
+body.template-restaurant-1 .hero-overlay{
+background:linear-gradient(
+to bottom,
+rgba(32,21,15,.12),
+rgba(32,21,15,.68)
+);
+}
+
+body.template-restaurant-1 .hero a,
+body.template-restaurant-1 .product-btn,
+body.template-restaurant-1 .promotion-button{
+background:#8a4b26;
+color:#fffaf0;
+border-radius:999px;
+}
+
+body.template-restaurant-2{
+--background:#11100d;
+--card:#171511;
+--card-elevated:#201d18;
+--text:#f7efe3;
+--muted:#c9bba7;
+--primary:#d9aa63;
+--border:#3a3024;
+}
+
+body.template-restaurant-2 header,
+body.template-restaurant-2 footer{
+background:#11100d;
+color:#f7efe3;
+border-color:#3a3024;
+box-shadow:none;
+}
+
+body.template-restaurant-2 .hero{
+height:500px;
+}
+
+body.template-restaurant-2 .hero-overlay{
+background:linear-gradient(
+to bottom,
+rgba(17,16,13,.1),
+rgba(17,16,13,.86)
+);
+}
+
+body.template-restaurant-2 .hero a,
+body.template-restaurant-2 .product-btn,
+body.template-restaurant-2 .promotion-button{
+background:#d9aa63;
+color:#11100d;
+border-radius:0;
+}
+
+body.storefront-appointments{
+--background:#f7f9f6;
+--card:#ffffff;
+--card-elevated:#f1f6ef;
+--text:#172016;
+--muted:#687560;
+--primary:#59745a;
+--border:#d8e1d3;
+}
+
+body.template-appointments-1 header{
+background:rgba(255,255,255,.92);
+backdrop-filter:blur(12px);
+box-shadow:none;
+border-bottom:1px solid var(--border);
+}
+
+body.template-appointments-1 .hero{
+height:440px;
+}
+
+body.template-appointments-1 .hero-overlay{
+background:linear-gradient(
+to bottom,
+rgba(23,32,22,.08),
+rgba(23,32,22,.55)
+);
+}
+
+body.template-appointments-1 .hero a,
+body.template-appointments-1 .product-btn,
+body.template-appointments-1 .promotion-button{
+background:#59745a;
+color:#fff;
+border-radius:6px;
+}
+
+body.storefront-restaurant .product-card,
+body.storefront-appointments .product-card{
+background:var(--card);
+border:1px solid var(--border);
+padding:10px;
+}
+
+body.storefront-restaurant .product-title,
+body.storefront-appointments .product-title{
+color:var(--text);
+}
+
+body.storefront-restaurant .product-price,
+body.storefront-appointments .product-price{
+color:var(--primary);
+}
+
+body.storefront-restaurant .promotion-panel,
+body.storefront-appointments .promotion-panel{
+background:var(--card);
+color:var(--text);
+border:1px solid var(--border);
+}
+
+body.storefront-restaurant .promotion-discount,
+body.storefront-appointments .promotion-discount{
+background:var(--primary);
+color:var(--background);
+}
+
+@media(max-width:700px){
+body.storefront-restaurant .hero,
+body.storefront-appointments .hero{
+height:390px;
+}
+
+body.storefront-restaurant .product-card,
+body.storefront-appointments .product-card{
+padding:7px;
+}
+}
