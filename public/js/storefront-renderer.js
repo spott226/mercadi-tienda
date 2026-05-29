@@ -52,6 +52,48 @@ const DEFAULT_PRESETS = {
   mobile_first_1: [
     { type: "product_grid", title: "Compra rapido" },
     { type: "image_banner", title: "Desde Instagram hasta tu carrito", text: "Una experiencia rapida y directa." }
+  ],
+  restaurant_1: [
+    { type: "category_tiles", title: "Categorias del menu" },
+    { type: "product_grid", title: "Especialidades" }
+  ],
+  restaurant_2: [
+    { type: "promo_strip", title: "Ordena directo", text: "Disponibilidad y entrega se confirman con la tienda." },
+    { type: "product_grid", title: "Recomendaciones" }
+  ],
+  restaurant_3: [
+    { type: "split_showcase", kicker: "Mesa lista", title: "Sabores para pedir hoy", text: "Una portada visual para restaurantes con menu directo y facil de explorar." },
+    { type: "category_tiles", title: "Explora el menu" },
+    { type: "product_grid", title: "Favoritos de la casa" }
+  ],
+  restaurant_4: [
+    { type: "image_banner", kicker: "Especial del dia", title: "Antojos que se ven y se piden rapido", text: "Ideal para comida rapida, cafes y restaurantes con promos activas." },
+    { type: "promo_strip", title: "Pedido por WhatsApp", text: "Confirma horario, disponibilidad y entrega directo con la tienda." },
+    { type: "product_grid", title: "Mas pedidos" }
+  ],
+  restaurant_5: [
+    { type: "editorial_banner", kicker: "Carta curada", title: "Menu corto, claro y elegante", text: "Pensado para restaurantes boutique, postres, cafes o cocina de autor." },
+    { type: "category_tiles", title: "Secciones de la carta" },
+    { type: "product_grid", title: "Seleccion del chef" }
+  ],
+  appointments_1: [
+    { type: "category_tiles", title: "Servicios" },
+    { type: "product_grid", title: "Servicios destacados" }
+  ],
+  appointments_2: [
+    { type: "split_showcase", kicker: "Agenda abierta", title: "Servicios listos para reservar", text: "Una experiencia clara para consultorios, belleza, wellness y servicios profesionales." },
+    { type: "category_tiles", title: "Areas de servicio" },
+    { type: "product_grid", title: "Reservar servicio" }
+  ],
+  appointments_3: [
+    { type: "image_banner", kicker: "Citas", title: "Elige servicio y coordina horario", text: "Ideal para negocios donde la confianza y el primer contacto importan." },
+    { type: "promo_strip", title: "Confirmacion por WhatsApp", text: "El horario final se coordina directamente con el negocio." },
+    { type: "product_grid", title: "Servicios populares" }
+  ],
+  appointments_4: [
+    { type: "editorial_banner", kicker: "Atencion personalizada", title: "Una agenda limpia para vender servicios", text: "Pensada para dentistas, clinicas, spas, barbers y asesores." },
+    { type: "category_tiles", title: "Categorias de servicio" },
+    { type: "product_grid", title: "Agenda tu cita" }
   ]
 };
 
@@ -138,6 +180,20 @@ class RestaurantTemplateTwo extends EcommerceTemplate{
   }
 }
 
+class RestaurantTemplate extends EcommerceTemplate{
+  applyShell(){
+    document.body.classList.add(
+      "storefront-restaurant",
+      `template-${this.getTemplateKey().replaceAll("_","-")}`
+    );
+
+    setText("storefront-featured-title","Menu destacado");
+    setText("storefront-primary-link","Menu");
+    setText("storefront-category-link","Categorias");
+    setText("storefront-hero-cta","Ver menu");
+  }
+}
+
 class AppointmentsTemplateOne extends EcommerceTemplate{
   applyShell(){
     document.body.classList.add(
@@ -148,6 +204,20 @@ class AppointmentsTemplateOne extends EcommerceTemplate{
     setText("storefront-featured-title","Servicios destacados");
     setText("storefront-primary-link","Servicios");
     setText("storefront-category-link","Categorías");
+    setText("storefront-hero-cta","Ver servicios");
+  }
+}
+
+class AppointmentsTemplate extends EcommerceTemplate{
+  applyShell(){
+    document.body.classList.add(
+      "storefront-appointments",
+      `template-${this.getTemplateKey().replaceAll("_","-")}`
+    );
+
+    setText("storefront-featured-title","Servicios destacados");
+    setText("storefront-primary-link","Servicios");
+    setText("storefront-category-link","Categorias");
     setText("storefront-hero-cta","Ver servicios");
   }
 }
@@ -444,6 +514,14 @@ export async function renderStorefrontExperience({ store, slug }){
     templateKey === "appointments_1"
   ){
     template = new AppointmentsTemplateOne({ store, slug });
+  }else if(
+    businessType === "restaurant"
+  ){
+    template = new RestaurantTemplate({ store, slug });
+  }else if(
+    businessType === "appointments"
+  ){
+    template = new AppointmentsTemplate({ store, slug });
   }else{
     template = new EcommerceTemplate({ store, slug });
   }
