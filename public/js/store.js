@@ -92,7 +92,7 @@ if(!isLocal || !slug) return;
 
 document
 .querySelectorAll(
-  'a[href="/index.html"], a[href="/"], a[href="/products.html"], a[href="/categorias.html"]'
+  'a[href="/index.html"], a[href="/"], a[href="/products.html"], a[href="/categorias.html"], a[href="/mi-cuenta.html"]'
 )
 .forEach(link => {
 

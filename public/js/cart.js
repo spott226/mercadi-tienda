@@ -1,4 +1,8 @@
 import { createOrder } from "./api.js";
+import {
+  getCustomerProfile,
+  saveCustomerProfile
+} from "./customer-session.js";
 
 const CART_KEY = "mercadia_cart";
 const DEFAULT_IMAGE = "/assets/images/default.jpg";
@@ -29,6 +33,39 @@ function formatMoney(value){
 
 function getInputValue(id){
   return document.getElementById(id)?.value.trim() || "";
+}
+
+function setInputValue(id, value){
+  const input =
+    document.getElementById(id);
+
+  if(!input || !value){
+    return;
+  }
+
+  if(!input.value.trim()){
+    input.value = value;
+  }
+}
+
+function prefillCheckoutForm(){
+  const profile =
+    getCustomerProfile(
+      window.store?.id
+    );
+
+  if(!profile){
+    return;
+  }
+
+  setInputValue("c-name", profile.name);
+  setInputValue("c-phone", profile.phone);
+  setInputValue("c-address", profile.address);
+  setInputValue("c-colony", profile.colony);
+  setInputValue("c-city", profile.city);
+  setInputValue("c-state", profile.state);
+  setInputValue("c-postal", profile.postal);
+  setInputValue("c-ref", profile.reference);
 }
 
 function appendText(parent, tag, text, className){
@@ -238,6 +275,7 @@ export function checkout(){
     return;
   }
 
+  prefillCheckoutForm();
   modal.classList.remove("hidden");
 }
 
@@ -326,6 +364,11 @@ export async function sendCheckout(){
       alert("Completa los datos obligatorios");
       return;
     }
+
+    saveCustomerProfile(
+      window.store?.id,
+      customer
+    );
 
     const items = cart.map(p => ({
       variant_id: p.variant_id,
